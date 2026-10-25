@@ -21,8 +21,8 @@ PAGE_DELAY = 0.5
 API_KEY_ENV = {"2gis": "TWOGIS_API_KEY", "yandex": "YANDEX_MAPS_API_KEY"}
 
 
-def fetch_2gis(query, city, api_key, limit):
-    page_size = 50
+def fetch_2gis(query, city, api_key, limit, notes=None):
+    page_size = 10  # демо-ключ 2ГИС принимает page_size только от 1 до 10
     page = 1
     while True:
         params = {
@@ -38,8 +38,13 @@ def fetch_2gis(query, city, api_key, limit):
         if meta.get("code") == 404:  # 2ГИС отвечает 404, когда по запросу ничего не нашлось
             return
         if meta.get("code") != 200:
-            message = meta.get("error", {}).get("message", meta)
-            raise RuntimeError(f"2ГИС, код {meta.get('code')}: {message}")
+            message = f"2ГИС, код {meta.get('code')}: {meta.get('error', {}).get('message', meta)}"
+            if page == 1:
+                raise RuntimeError(message)
+            # демо-ключ ограничивает глубину выдачи — отдаём то, что успели собрать
+            if notes is not None:
+                notes.append(f"2ГИС остановил выдачу на странице {page}: {message}")
+            return
         result = data["result"]
         for item in result.get("items", []):
             yield from_2gis(item)
@@ -61,10 +66,11 @@ def from_2gis(item):
         "phones": [c["value"] for c in contacts if c.get("type") == "phone"],
         "websites": [c.get("url") or c.get("text", "") for c in contacts if c.get("type") == "website"],
         "socials": sorted({c["type"] for c in contacts if c.get("type") in SOCIAL_TYPES}),
+        "has_contacts": bool(contacts),
     }
 
 
-def fetch_yandex(query, city, api_key, limit):
+def fetch_yandex(query, city, api_key, limit, notes=None):
     page_size = 50
     skip = 0
     while True:
@@ -103,6 +109,7 @@ def from_yandex(feature):
         "phones": [p.get("formatted", "") for p in meta.get("Phones", [])],
         "websites": [meta["url"]] if meta.get("url") else [],
         "socials": [],
+        "has_contacts": bool(meta.get("Phones") or meta.get("url")),
     }
 
 
@@ -123,8 +130,15 @@ def without_website(orgs, require_phone):
 
 
 def find_without_website(source, query, city, api_key, limit=500, require_phone=True):
+    """Возвращает (организации без сайта, статистика с предупреждениями)."""
     fetch = fetch_2gis if source == "2gis" else fetch_yandex
-    return list(without_website(fetch(query, city, api_key, limit), require_phone))
+    notes = []
+    orgs = list(fetch(query, city, api_key, limit, notes))
+    with_contacts = sum(org["has_contacts"] for org in orgs)
+    if orgs and not with_contacts:
+        notes.append("Источник не вернул контакты ни у одной организации — возможно, ключ не даёт к ним доступа.")
+    stats = {"fetched": len(orgs), "with_contacts": with_contacts, "notes": notes}
+    return list(without_website(orgs, require_phone)), stats
 
 
 def main():
@@ -138,9 +152,11 @@ def main():
     args = parser.parse_args()
 
     api_key = os.environ[API_KEY_ENV[args.source]]
-    rows = find_without_website(
+    rows, stats = find_without_website(
         args.source, args.query, args.city, api_key, args.limit, require_phone=not args.allow_no_phone
     )
+    for note in stats["notes"]:
+        print(note)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     write_csv(rows, args.out, FIELDS)
     print(f"Записано {len(rows)} организаций без сайта: {args.out}")

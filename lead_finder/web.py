@@ -78,9 +78,9 @@ def search_maps():
     city = form.get("city", "").strip()
     api_key = form.get("api_key", "").strip() or os.environ.get(maps.API_KEY_ENV.get(source, ""), "").strip()
     try:
-        limit = min(max(int(form.get("limit") or 500), 1), 5000)
+        limit = min(max(int(form.get("limit") or 100), 1), 5000)
     except ValueError:
-        limit = 500
+        limit = 100
     context = {"tab": "maps", "form": {k: v for k, v in form.items() if k != "api_key"}}
 
     if source not in maps.API_KEY_ENV or not query or not city:
@@ -89,7 +89,7 @@ def search_maps():
         return render(error="Нужен ключ API.", **context)
 
     try:
-        rows = maps.find_without_website(
+        rows, stats = maps.find_without_website(
             source, query, city, api_key, limit, require_phone=not form.get("allow_no_phone")
         )
     except (requests.RequestException, RuntimeError, ValueError) as exc:
@@ -99,7 +99,7 @@ def search_maps():
         return render(error=error, **context)
 
     result_id = store_result(f"{source}_{query}_{city}.csv", rows, maps.FIELDS)
-    return render(rows=rows, fields=maps.FIELDS, result_id=result_id, **context)
+    return render(rows=rows, fields=maps.FIELDS, result_id=result_id, stats=stats, **context)
 
 
 @app.post("/egrul")

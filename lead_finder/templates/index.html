@@ -44,6 +44,8 @@ th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rul
 th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-2); white-space: nowrap; }
 tr:last-child td { border-bottom: 0; }
 .empty { padding: 20px; color: var(--ink-2); }
+.sub { font-weight: 400; font-size: 14px; color: var(--ink-2); }
+.note { font-size: 14px; color: var(--ink-2); border-left: 3px solid var(--accent); padding: 4px 10px; margin: 0 0 10px; }
 </style>
 </head>
 <body>
@@ -77,7 +79,7 @@ tr:last-child td { border-bottom: 0; }
       </div>
       <div>
         <label for="limit">Максимум организаций</label>
-        <input type="number" id="limit" name="limit" min="1" max="5000" value="{{ form.limit or 500 }}">
+        <input type="number" id="limit" name="limit" min="1" max="5000" value="{{ form.limit or 100 }}">
       </div>
       <div>
         <label for="api_key">Ключ API</label>
@@ -112,9 +114,10 @@ tr:last-child td { border-bottom: 0; }
   {% if rows is defined %}
   <section class="results">
     <header>
-      <h2>Найдено: {{ rows|length }}</h2>
+      <h2>Найдено: {{ rows|length }}{% if stats %} <span class="sub">из {{ stats.fetched }} проверенных</span>{% endif %}</h2>
       {% if rows %}<a class="btn" href="/download/{{ result_id }}">Скачать CSV</a>{% endif %}
     </header>
+    {% for note in (stats.notes if stats else []) %}<p class="note">{{ note }}</p>{% endfor %}
     <div class="table-wrap">
       {% if rows %}
       <table>

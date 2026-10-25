@@ -5,7 +5,7 @@ import zipfile
 from unittest import mock
 
 from lead_finder.egrul import iter_legal_entities, matches
-from lead_finder.maps import fetch_2gis, from_2gis, from_yandex, without_website
+from lead_finder.maps import fetch_2gis, find_without_website, from_2gis, from_yandex, without_website
 
 EGRUL_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <Файл>
@@ -85,6 +85,25 @@ class MapsTest(unittest.TestCase):
         with mock.patch("lead_finder.maps.requests.get", return_value=response):
             with self.assertRaisesRegex(RuntimeError, "код 403: Authorization error"):
                 list(fetch_2gis("q", "c", "k", 100))
+
+    def test_2gis_uses_demo_page_size_and_keeps_results_when_later_page_fails(self):
+        ok = mock.Mock(json=lambda: {"meta": {"code": 200}, "result": {"total": 100, "items": [TWOGIS_ITEM]}})
+        limited = mock.Mock(json=lambda: {"meta": {"code": 400, "error": {"message": "page too large"}}})
+        with mock.patch("lead_finder.maps.requests.get", side_effect=[ok, limited]) as get, \
+                mock.patch("lead_finder.maps.time.sleep"):
+            rows, stats = find_without_website("2gis", "q", "c", "k", 100)
+        self.assertEqual(get.call_args_list[0].kwargs["params"]["page_size"], 10)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(stats["fetched"], 1)
+        self.assertIn("page too large", stats["notes"][0])
+
+    def test_warns_when_source_returns_no_contacts(self):
+        item = {**TWOGIS_ITEM, "contact_groups": []}
+        ok = mock.Mock(json=lambda: {"meta": {"code": 200}, "result": {"total": 1, "items": [item]}})
+        with mock.patch("lead_finder.maps.requests.get", return_value=ok):
+            rows, stats = find_without_website("2gis", "q", "c", "k", 100)
+        self.assertEqual(rows, [])
+        self.assertIn("не вернул контакты", stats["notes"][0])
 
 
 class EgrulTest(unittest.TestCase):

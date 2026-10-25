@@ -21,13 +21,15 @@ class WebTest(unittest.TestCase):
         self.assertIn('action="/egrul"', html)
 
     def test_maps_search_shows_rows_and_csv_download(self):
-        with mock.patch.object(web.maps, "find_without_website", return_value=[MAPS_ROW]) as find:
+        with mock.patch.object(web.maps, "find_without_website", return_value=([MAPS_ROW], {"fetched": 3, "with_contacts": 3, "notes": ["остановлено на странице 6"]})) as find:
             resp = self.client.post("/maps", data={
                 "source": "2gis", "query": "стоматология", "city": "Казань", "api_key": "k", "limit": "100",
             })
         html = resp.get_data(as_text=True)
         find.assert_called_once_with("2gis", "стоматология", "Казань", "k", 100, require_phone=True)
         self.assertIn("Найдено: 1", html)
+        self.assertIn("из 3 проверенных", html)
+        self.assertIn("остановлено на странице 6", html)
         self.assertIn("Улыбка", html)
         self.assertNotIn('value="k"', html)
 
