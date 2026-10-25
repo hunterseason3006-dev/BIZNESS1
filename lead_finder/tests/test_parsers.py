@@ -5,7 +5,7 @@ import zipfile
 from unittest import mock
 
 from lead_finder.egrul import iter_legal_entities, matches
-from lead_finder.maps import fetch_2gis, find_without_website, from_2gis, from_yandex, without_website
+from lead_finder.maps import fetch_2gis, fetch_yandex, find_without_website, from_2gis, from_yandex, without_website
 
 EGRUL_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <Файл>
@@ -104,6 +104,21 @@ class MapsTest(unittest.TestCase):
             rows, stats = find_without_website("2gis", "q", "c", "k", 100)
         self.assertEqual(rows, [])
         self.assertIn("не вернул контакты", stats["notes"][0])
+
+    def test_yandex_text_error_is_readable(self):
+        response = mock.Mock(status_code=403, text="Invalid key")
+        with mock.patch("lead_finder.maps.requests.get", return_value=response):
+            with self.assertRaisesRegex(RuntimeError, "Яндекс, код 403: Invalid key"):
+                list(fetch_yandex("q", "c", "k", 100))
+
+    def test_yandex_paginates_by_skip(self):
+        page = {"features": [YANDEX_FEATURE], "properties": {"ResponseMetaData": {"SearchResponse": {"found": 60}}}}
+        ok = mock.Mock(status_code=200, json=lambda: page)
+        with mock.patch("lead_finder.maps.requests.get", return_value=ok) as get, \
+                mock.patch("lead_finder.maps.time.sleep"):
+            orgs = list(fetch_yandex("q", "c", "k", 100))
+        self.assertEqual(len(orgs), 2)
+        self.assertEqual([c.kwargs["params"]["skip"] for c in get.call_args_list], [0, 50])
 
 
 class EgrulTest(unittest.TestCase):

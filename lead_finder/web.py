@@ -94,8 +94,11 @@ def search_maps():
         )
     except (requests.RequestException, RuntimeError, ValueError) as exc:
         error = f"Ошибка запроса к API: {exc}"
-        if "403" in str(exc):
-            error += ". Ключ не подошёл: проверь, что он скопирован целиком и активен в кабинете 2ГИС."
+        if "403" in str(exc) or "401" in str(exc):
+            error += (
+                ". Ключ не подошёл: проверь, что он скопирован целиком и подходит для этого источника."
+                " Новый ключ Яндекса начинает работать примерно через 15 минут."
+            )
         return render(error=error, **context)
 
     result_id = store_result(f"{source}_{query}_{city}.csv", rows, maps.FIELDS)

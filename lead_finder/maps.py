@@ -82,7 +82,16 @@ def fetch_yandex(query, city, api_key, limit, notes=None):
             "skip": skip,
             "apikey": api_key,
         }
-        data = requests.get(YANDEX_URL, params=params, timeout=15).json()
+        response = requests.get(YANDEX_URL, params=params, timeout=15)
+        if response.status_code != 200:
+            # Яндекс отвечает на ошибки обычным текстом, а не JSON
+            message = f"Яндекс, код {response.status_code}: {response.text.strip()[:300]}"
+            if skip == 0:
+                raise RuntimeError(message)
+            if notes is not None:
+                notes.append(f"Яндекс остановил выдачу после {skip} организаций: {message}")
+            return
+        data = response.json()
         features = data.get("features", [])
         for feature in features:
             yield from_yandex(feature)

@@ -84,7 +84,7 @@ tr:last-child td { border-bottom: 0; }
       <div>
         <label for="api_key">Ключ API</label>
         <input type="password" id="api_key" name="api_key" autocomplete="off"
-               placeholder="{{ 'задан в переменной окружения' if env_keys['2gis'] or env_keys['yandex'] else 'ключ 2ГИС или Яндекса' }}">
+               data-env-2gis="{{ 'true' if env_keys['2gis'] else '' }}" data-env-yandex="{{ 'true' if env_keys['yandex'] else '' }}">
       </div>
     </div>
     <label class="check"><input type="checkbox" name="allow_no_phone" {% if form.allow_no_phone %}checked{% endif %}> Показывать организации без телефона</label>
@@ -143,6 +143,15 @@ document.querySelectorAll('.tabs button').forEach(function (btn) {
     });
   });
 });
+var sourceSelect = document.getElementById('source');
+var keyInput = document.getElementById('api_key');
+function updateKeyPlaceholder() {
+  var source = sourceSelect.value;
+  var saved = keyInput.dataset[source === 'yandex' ? 'envYandex' : 'env2gis'];
+  keyInput.placeholder = saved ? 'сохранён на сервере, можно не вводить' : (source === 'yandex' ? 'ключ Яндекса' : 'ключ 2ГИС');
+}
+sourceSelect.addEventListener('change', updateKeyPlaceholder);
+updateKeyPlaceholder();
 document.querySelectorAll('form').forEach(function (form) {
   form.addEventListener('submit', function () {
     var btn = form.querySelector('button[type=submit]');
