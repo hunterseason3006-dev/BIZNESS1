@@ -67,5 +67,20 @@ class WebTest(unittest.TestCase):
         self.assertEqual(self.client.get("/download/nope").status_code, 404)
 
 
+class PasswordTest(unittest.TestCase):
+    def setUp(self):
+        self.client = web.app.test_client()
+
+    def test_site_is_open_without_password_env(self):
+        with mock.patch.dict(web.os.environ, {}, clear=True):
+            self.assertEqual(self.client.get("/").status_code, 200)
+
+    def test_site_requires_login_when_password_set(self):
+        with mock.patch.dict(web.os.environ, {"SITE_PASSWORD": "secret"}, clear=True):
+            self.assertEqual(self.client.get("/").status_code, 401)
+            self.assertEqual(self.client.get("/", auth=("admin", "wrong")).status_code, 401)
+            self.assertEqual(self.client.get("/", auth=("admin", "secret")).status_code, 200)
+
+
 if __name__ == "__main__":
     unittest.main()

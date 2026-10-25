@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: lead-finder
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # один процесс: результаты для скачивания CSV хранятся в памяти
+    startCommand: gunicorn lead_finder.web:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 600
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SITE_PASSWORD
+        sync: false
+      - key: TWOGIS_API_KEY
+        sync: false
+      - key: YANDEX_MAPS_API_KEY
+        sync: false

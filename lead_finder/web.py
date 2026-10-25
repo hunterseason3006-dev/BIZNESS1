@@ -2,7 +2,10 @@
 
 Запуск:
     python -m lead_finder.web        # http://127.0.0.1:5000
+
+Если задана переменная SITE_PASSWORD, сайт спрашивает логин (SITE_USER, по умолчанию admin) и пароль.
 """
+import hmac
 import os
 import tempfile
 import uuid
@@ -24,6 +27,22 @@ COLUMN_LABELS = {
 
 app = Flask(__name__)
 results = OrderedDict()
+
+
+@app.before_request
+def require_password():
+    password = os.environ.get("SITE_PASSWORD")
+    if not password:
+        return None
+    auth = request.authorization
+    user = os.environ.get("SITE_USER", "admin")
+    if (
+        auth
+        and hmac.compare_digest(auth.username or "", user)
+        and hmac.compare_digest(auth.password or "", password)
+    ):
+        return None
+    return Response("Нужен логин и пароль", 401, {"WWW-Authenticate": 'Basic realm="lead_finder", charset="UTF-8"'})
 
 
 def store_result(filename, rows, fieldnames):
