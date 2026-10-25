@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Поиск клиентов</title>
+<style>
+:root {
+  --bg: #f5f5f3; --card: #fff; --ink: #17191c; --ink-2: #5a6069; --rule: #dcdde0;
+  --accent: #2459d6; --accent-ink: #fff; --error-bg: #fdecec; --error-ink: #9b1c1c;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #121417; --card: #1a1d21; --ink: #e8e9ea; --ink-2: #a2a8b0; --rule: #2d3137;
+          --accent: #6f9bff; --accent-ink: #0d1117; --error-bg: #3a1d1d; --error-ink: #ffb4b4; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: 26px; margin: 0 0 4px; }
+.lead { color: var(--ink-2); margin: 0 0 24px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--rule); margin-bottom: 20px; }
+.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 14px; font: inherit; color: var(--ink-2); cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.panel { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; }
+.panel[hidden] { display: none; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+label { display: block; font-size: 13px; color: var(--ink-2); margin-bottom: 4px; }
+input[type=text], input[type=password], input[type=number], select, input[type=file] {
+  width: 100%; padding: 9px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); color: var(--ink); font: inherit;
+}
+.check { display: flex; align-items: center; gap: 8px; margin-top: 14px; color: var(--ink-2); }
+.hint { font-size: 13px; color: var(--ink-2); margin: 14px 0 0; }
+.actions { margin-top: 18px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.btn { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 6px; padding: 10px 18px; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn[disabled] { opacity: .6; cursor: progress; }
+.error { background: var(--error-bg); color: var(--error-ink); padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; }
+.results { margin-top: 28px; }
+.results header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.results h2 { font-size: 18px; margin: 0; }
+.table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.empty { padding: 20px; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Поиск клиентов</h1>
+  <p class="lead">Организации без сайта из 2ГИС и Яндекс Карт, юрлица из ЕГРЮЛ по ОКВЭД и региону.</p>
+
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" data-tab="maps" aria-selected="{{ 'true' if tab == 'maps' else 'false' }}">Карты: без сайта</button>
+    <button type="button" role="tab" data-tab="egrul" aria-selected="{{ 'true' if tab == 'egrul' else 'false' }}">ЕГРЮЛ</button>
+  </div>
+
+  <form class="panel" id="maps" method="post" action="/maps" {% if tab != 'maps' %}hidden{% endif %}>
+    <div class="grid">
+      <div>
+        <label for="source">Источник</label>
+        <select id="source" name="source">
+          <option value="2gis" {% if form.source != 'yandex' %}selected{% endif %}>2ГИС</option>
+          <option value="yandex" {% if form.source == 'yandex' %}selected{% endif %}>Яндекс Карты</option>
+        </select>
+      </div>
+      <div>
+        <label for="query">Категория</label>
+        <input type="text" id="query" name="query" placeholder="стоматология" value="{{ form.query or '' }}" required>
+      </div>
+      <div>
+        <label for="city">Город</label>
+        <input type="text" id="city" name="city" placeholder="Казань" value="{{ form.city or '' }}" required>
+      </div>
+      <div>
+        <label for="limit">Максимум организаций</label>
+        <input type="number" id="limit" name="limit" min="1" max="5000" value="{{ form.limit or 500 }}">
+      </div>
+      <div>
+        <label for="api_key">Ключ API</label>
+        <input type="password" id="api_key" name="api_key" autocomplete="off"
+               placeholder="{{ 'задан в переменной окружения' if env_keys['2gis'] or env_keys['yandex'] else 'ключ 2ГИС или Яндекса' }}">
+      </div>
+    </div>
+    <label class="check"><input type="checkbox" name="allow_no_phone" {% if form.allow_no_phone %}checked{% endif %}> Показывать организации без телефона</label>
+    <p class="hint">Ключ не сохраняется. Можно задать его заранее через TWOGIS_API_KEY / YANDEX_MAPS_API_KEY.</p>
+    <div class="actions"><button class="btn" type="submit">Найти</button></div>
+  </form>
+
+  <form class="panel" id="egrul" method="post" action="/egrul" enctype="multipart/form-data" {% if tab != 'egrul' %}hidden{% endif %}>
+    <div class="grid">
+      <div>
+        <label for="file">Файл ЕГРЮЛ (zip или xml)</label>
+        <input type="file" id="file" name="file" accept=".zip,.xml" required>
+      </div>
+      <div>
+        <label for="okved">Основной ОКВЭД</label>
+        <input type="text" id="okved" name="okved" placeholder="86.23 96.02" value="{{ form.okved or '' }}">
+      </div>
+      <div>
+        <label for="region">Коды регионов</label>
+        <input type="text" id="region" name="region" placeholder="16 77" value="{{ form.region or '' }}">
+      </div>
+    </div>
+    <p class="hint">Открытые данные — data.nalog.ru/opendata. ОКВЭД сравнивается по началу кода: «86.2» найдёт 86.21, 86.23 и т.д. ИП не выгружаются.</p>
+    <div class="actions"><button class="btn" type="submit">Отфильтровать</button></div>
+  </form>
+
+  {% if rows is defined %}
+  <section class="results">
+    <header>
+      <h2>Найдено: {{ rows|length }}</h2>
+      {% if rows %}<a class="btn" href="/download/{{ result_id }}">Скачать CSV</a>{% endif %}
+    </header>
+    <div class="table-wrap">
+      {% if rows %}
+      <table>
+        <thead><tr>{% for f in fields %}<th>{{ labels.get(f, f) }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for row in rows %}<tr>{% for f in fields %}<td>{{ row[f] }}</td>{% endfor %}</tr>{% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty">Ничего не нашлось. Попробуй другую категорию или город.</div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+</main>
+<script>
+document.querySelectorAll('.tabs button').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('.tabs button').forEach(function (b) {
+      var active = b === btn;
+      b.setAttribute('aria-selected', active);
+      document.getElementById(b.dataset.tab).hidden = !active;
+    });
+  });
+});
+document.querySelectorAll('form').forEach(function (form) {
+  form.addEventListener('submit', function () {
+    var btn = form.querySelector('button[type=submit]');
+    btn.disabled = true;
+    btn.textContent = 'Ищу…';
+  });
+});
+</script>
+</body>
+</html>

@@ -86,6 +86,10 @@ def matches(entity, okved_prefixes, regions):
     return True
 
 
+def find_entities(path, okved_prefixes=(), regions=()):
+    return [e for e in iter_legal_entities(path) if matches(e, okved_prefixes, regions)]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Юрлица из ЕГРЮЛ по ОКВЭД и региону")
     parser.add_argument("--source", required=True, help="zip или xml-файл открытых данных ЕГРЮЛ")
@@ -94,7 +98,7 @@ def main():
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
 
-    rows = [e for e in iter_legal_entities(args.source) if matches(e, args.okved, args.region)]
+    rows = find_entities(args.source, args.okved, args.region)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     write_csv(rows, args.out, FIELDS)
     print(f"Записано {len(rows)} юрлиц: {args.out}")

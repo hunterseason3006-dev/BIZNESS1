@@ -18,6 +18,7 @@ YANDEX_URL = "https://search-maps.yandex.ru/v1/"
 SOCIAL_TYPES = {"vkontakte", "instagram", "telegram", "whatsapp", "facebook", "ok", "youtube", "tiktok"}
 FIELDS = ["source", "source_id", "name", "category", "address", "phones", "socials"]
 PAGE_DELAY = 0.5
+API_KEY_ENV = {"2gis": "TWOGIS_API_KEY", "yandex": "YANDEX_MAPS_API_KEY"}
 
 
 def fetch_2gis(query, city, api_key, limit):
@@ -117,6 +118,11 @@ def without_website(orgs, require_phone):
         }
 
 
+def find_without_website(source, query, city, api_key, limit=500, require_phone=True):
+    fetch = fetch_2gis if source == "2gis" else fetch_yandex
+    return list(without_website(fetch(query, city, api_key, limit), require_phone))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Организации без сайта из 2ГИС или Яндекс Карт")
     parser.add_argument("--source", choices=["2gis", "yandex"], required=True)
@@ -127,12 +133,10 @@ def main():
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
 
-    if args.source == "2gis":
-        orgs = fetch_2gis(args.query, args.city, os.environ["TWOGIS_API_KEY"], args.limit)
-    else:
-        orgs = fetch_yandex(args.query, args.city, os.environ["YANDEX_MAPS_API_KEY"], args.limit)
-
-    rows = list(without_website(orgs, require_phone=not args.allow_no_phone))
+    api_key = os.environ[API_KEY_ENV[args.source]]
+    rows = find_without_website(
+        args.source, args.query, args.city, api_key, args.limit, require_phone=not args.allow_no_phone
+    )
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     write_csv(rows, args.out, FIELDS)
     print(f"Записано {len(rows)} организаций без сайта: {args.out}")
