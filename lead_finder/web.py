@@ -76,7 +76,7 @@ def search_maps():
     source = form.get("source", "2gis")
     query = form.get("query", "").strip()
     city = form.get("city", "").strip()
-    api_key = form.get("api_key", "").strip() or os.environ.get(maps.API_KEY_ENV.get(source, ""), "")
+    api_key = form.get("api_key", "").strip() or os.environ.get(maps.API_KEY_ENV.get(source, ""), "").strip()
     try:
         limit = min(max(int(form.get("limit") or 500), 1), 5000)
     except ValueError:
@@ -93,7 +93,10 @@ def search_maps():
             source, query, city, api_key, limit, require_phone=not form.get("allow_no_phone")
         )
     except (requests.RequestException, RuntimeError, ValueError) as exc:
-        return render(error=f"Ошибка запроса к API: {exc}", **context)
+        error = f"Ошибка запроса к API: {exc}"
+        if "403" in str(exc):
+            error += ". Ключ не подошёл: проверь, что он скопирован целиком и активен в кабинете 2ГИС."
+        return render(error=error, **context)
 
     result_id = store_result(f"{source}_{query}_{city}.csv", rows, maps.FIELDS)
     return render(rows=rows, fields=maps.FIELDS, result_id=result_id, **context)

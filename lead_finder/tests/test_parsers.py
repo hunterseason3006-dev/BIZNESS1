@@ -2,9 +2,10 @@ import os
 import tempfile
 import unittest
 import zipfile
+from unittest import mock
 
 from lead_finder.egrul import iter_legal_entities, matches
-from lead_finder.maps import from_2gis, from_yandex, without_website
+from lead_finder.maps import fetch_2gis, from_2gis, from_yandex, without_website
 
 EGRUL_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <Файл>
@@ -73,6 +74,17 @@ class MapsTest(unittest.TestCase):
         org = from_2gis({**TWOGIS_ITEM, "contact_groups": []})
         self.assertEqual(list(without_website([org], require_phone=True)), [])
         self.assertEqual(len(list(without_website([org], require_phone=False))), 1)
+
+    def test_2gis_not_found_returns_nothing(self):
+        response = mock.Mock(json=lambda: {"meta": {"code": 404, "error": {"type": "itemNotFound"}}})
+        with mock.patch("lead_finder.maps.requests.get", return_value=response):
+            self.assertEqual(list(fetch_2gis("q", "c", "k", 100)), [])
+
+    def test_2gis_bad_key_raises_readable_error(self):
+        response = mock.Mock(json=lambda: {"meta": {"code": 403, "error": {"message": "Authorization error, incorrect key."}}})
+        with mock.patch("lead_finder.maps.requests.get", return_value=response):
+            with self.assertRaisesRegex(RuntimeError, "код 403: Authorization error"):
+                list(fetch_2gis("q", "c", "k", 100))
 
 
 class EgrulTest(unittest.TestCase):

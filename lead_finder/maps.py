@@ -34,8 +34,12 @@ def fetch_2gis(query, city, api_key, limit):
             "page_size": page_size,
         }
         data = requests.get(TWOGIS_URL, params=params, timeout=15).json()
-        if data.get("meta", {}).get("code") != 200:
-            raise RuntimeError(f"2GIS: {data.get('meta')}")
+        meta = data.get("meta", {})
+        if meta.get("code") == 404:  # 2ГИС отвечает 404, когда по запросу ничего не нашлось
+            return
+        if meta.get("code") != 200:
+            message = meta.get("error", {}).get("message", meta)
+            raise RuntimeError(f"2ГИС, код {meta.get('code')}: {message}")
         result = data["result"]
         for item in result.get("items", []):
             yield from_2gis(item)
