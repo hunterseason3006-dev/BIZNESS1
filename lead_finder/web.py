@@ -17,7 +17,7 @@ from .common import csv_text
 
 COLUMN_LABELS = {
     "source": "Источник", "source_id": "ID", "name": "Название", "category": "Категория",
-    "address": "Адрес", "phones": "Телефоны", "socials": "Соцсети",
+    "address": "Адрес", "phones": "Телефоны", "socials": "Соцсети", "check_url": "Проверить",
     "inn": "ИНН", "ogrn": "ОГРН", "okved": "ОКВЭД", "region": "Регион",
 }
 

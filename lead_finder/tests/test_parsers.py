@@ -142,6 +142,25 @@ class MapsTest(unittest.TestCase):
         self.assertEqual(org["websites"], [])
         self.assertEqual(org["socials"], ["https://vk.com/smile"])
 
+    def test_chain_branches_without_site_are_excluded(self):
+        meta = YANDEX_FEATURE["properties"]["CompanyMetaData"]
+        branch_same_name = {"properties": {"CompanyMetaData": {
+            **meta, "id": "2", "name": "Стоматология", "url": None, "Phones": [{"formatted": "+7 843 999-99-99"}]}}}
+        branch_same_phone = {"properties": {"CompanyMetaData": {
+            **meta, "id": "3", "name": "ООО «Другое имя»", "url": None, "Phones": [{"formatted": "8 (843) 111-11-11"}]}}}
+        independent = {"properties": {"CompanyMetaData": {
+            **meta, "id": "4", "name": "Зубы и точка", "url": None, "Phones": [{"formatted": "+7 843 222-22-22"}]}}}
+        orgs = [from_yandex(f) for f in (YANDEX_FEATURE, branch_same_name, branch_same_phone, independent)]
+        rows = list(without_website(orgs, require_phone=True))
+        self.assertEqual([r["source_id"] for r in rows], ["4"])
+
+    def test_rows_get_search_link_for_manual_check(self):
+        ok = mock.Mock(json=lambda: {"meta": {"code": 200}, "result": {"total": 1, "items": [TWOGIS_ITEM]}})
+        with mock.patch("lead_finder.maps.requests.get", return_value=ok):
+            rows, _ = find_without_website("2gis", "q", "Казань", "k", 10)
+        self.assertTrue(rows[0]["check_url"].startswith("https://yandex.ru/search/?text="))
+        self.assertIn("%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%8C", rows[0]["check_url"])
+
 
 class EgrulTest(unittest.TestCase):
     def setUp(self):

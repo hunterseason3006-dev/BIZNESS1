@@ -6,9 +6,10 @@
 """
 import argparse
 import math
+import re
 import os
 import time
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 import requests
 
@@ -17,7 +18,8 @@ from .common import write_csv
 TWOGIS_URL = "https://catalog.api.2gis.com/3.0/items"
 YANDEX_URL = "https://search-maps.yandex.ru/v1/"
 SOCIAL_TYPES = {"vkontakte", "instagram", "telegram", "whatsapp", "facebook", "ok", "youtube", "tiktok"}
-FIELDS = ["source", "source_id", "name", "category", "address", "phones", "socials"]
+FIELDS = ["source", "source_id", "name", "category", "address", "phones", "socials", "check_url"]
+SEARCH_URL = "https://yandex.ru/search/?text="
 # ссылки на соцсети и конструкторы-визитки не считаем сайтом: у таких компаний своего сайта нет
 NOT_A_WEBSITE = {
     "vk.com": "vk", "vk.ru": "vk", "instagram.com": "instagram", "t.me": "telegram", "telegram.me": "telegram",
@@ -149,11 +151,28 @@ def from_yandex(feature):
     }
 
 
+def normalize_name(name):
+    name = name.lower().replace("ё", "е")
+    for form in ("ооо", "ип", "ао", "зао", "пао"):
+        name = re.sub(rf"\b{form}\b", " ", name)
+    return " ".join(re.sub(r"[^\w]+", " ", name).split())
+
+
+def digits(phone):
+    return re.sub(r"\D", "", phone)[-10:]
+
+
 def without_website(orgs, require_phone):
+    # филиалы сетей: сайт часто указан только у одной точки, поэтому сеть исключаем целиком —
+    # по совпадению названия или телефона с организацией, у которой сайт есть
+    chain_names = {normalize_name(o["name"]) for o in orgs if o["websites"]}
+    chain_phones = {digits(p) for o in orgs if o["websites"] for p in o["phones"]}
     seen = set()
     for org in orgs:
         key = (org["source"], org["source_id"] or org["name"])
         if key in seen or org["websites"]:
+            continue
+        if normalize_name(org["name"]) in chain_names or any(digits(p) in chain_phones for p in org["phones"]):
             continue
         if require_phone and not org["phones"]:
             continue
@@ -174,7 +193,10 @@ def find_without_website(source, query, city, api_key, limit=500, require_phone=
     if orgs and not with_contacts:
         notes.append("Источник не вернул контакты ни у одной организации — возможно, ключ не даёт к ним доступа.")
     stats = {"fetched": len(orgs), "with_contacts": with_contacts, "notes": notes}
-    return list(without_website(orgs, require_phone)), stats
+    rows = list(without_website(orgs, require_phone))
+    for row in rows:
+        row["check_url"] = SEARCH_URL + quote(f"{row['name']} {city}")
+    return rows, stats
 
 
 def main():

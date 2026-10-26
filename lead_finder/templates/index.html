@@ -44,6 +44,7 @@ th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rul
 th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-2); white-space: nowrap; }
 tr:last-child td { border-bottom: 0; }
 .empty { padding: 20px; color: var(--ink-2); }
+td a { color: var(--accent); }
 .sub { font-weight: 400; font-size: 14px; color: var(--ink-2); }
 .note { font-size: 14px; color: var(--ink-2); border-left: 3px solid var(--accent); padding: 4px 10px; margin: 0 0 10px; }
 </style>
@@ -123,7 +124,7 @@ tr:last-child td { border-bottom: 0; }
       <table>
         <thead><tr>{% for f in fields %}<th>{{ labels.get(f, f) }}</th>{% endfor %}</tr></thead>
         <tbody>
-          {% for row in rows %}<tr>{% for f in fields %}<td>{{ row[f] }}</td>{% endfor %}</tr>{% endfor %}
+          {% for row in rows %}<tr>{% for f in fields %}<td>{% if f == 'check_url' %}<a href="{{ row[f] }}" target="_blank" rel="noopener">поиск</a>{% else %}{{ row[f] }}{% endif %}</td>{% endfor %}</tr>{% endfor %}
         </tbody>
       </table>
       {% else %}
