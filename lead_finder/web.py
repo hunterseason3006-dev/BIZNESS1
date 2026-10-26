@@ -13,7 +13,7 @@ from collections import OrderedDict
 from urllib.parse import quote
 
 import requests
-from flask import Flask, Response, abort, render_template, request
+from flask import Flask, Response, abort, redirect, render_template, request
 
 from . import egrul, maps
 from .common import csv_text
@@ -68,6 +68,13 @@ def render(**context):
 @app.get("/")
 def index():
     return render()
+
+
+@app.get("/maps")
+@app.get("/egrul")
+def back_to_form():
+    # обновление страницы результатов или переход по ссылке — возвращаем на форму
+    return redirect("/")
 
 
 @app.post("/maps")

@@ -65,6 +65,12 @@ class WebTest(unittest.TestCase):
         }, content_type="multipart/form-data")
         self.assertIn("Укажи хотя бы ОКВЭД или регион", resp.get_data(as_text=True))
 
+    def test_get_on_search_urls_redirects_to_form(self):
+        for url in ("/maps", "/egrul"):
+            resp = self.client.get(url)
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.headers["Location"], "/")
+
     def test_unknown_download_is_404(self):
         self.assertEqual(self.client.get("/download/nope").status_code, 404)
 
