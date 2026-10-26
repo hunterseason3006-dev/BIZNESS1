@@ -8,17 +8,13 @@
 import hmac
 import os
 import tempfile
-import uuid
-from collections import OrderedDict
-from urllib.parse import quote
 
 import requests
-from flask import Flask, Response, abort, redirect, render_template, request
+from flask import Flask, Response, redirect, render_template, request
 
 from . import egrul, maps
 from .common import csv_text
 
-MAX_STORED_RESULTS = 20
 COLUMN_LABELS = {
     "source": "Источник", "source_id": "ID", "name": "Название", "category": "Категория",
     "address": "Адрес", "phones": "Телефоны", "socials": "Соцсети",
@@ -26,7 +22,6 @@ COLUMN_LABELS = {
 }
 
 app = Flask(__name__)
-results = OrderedDict()
 
 
 @app.before_request
@@ -45,12 +40,24 @@ def require_password():
     return Response("Нужен логин и пароль", 401, {"WWW-Authenticate": 'Basic realm="lead_finder", charset="UTF-8"'})
 
 
-def store_result(filename, rows, fieldnames):
-    result_id = uuid.uuid4().hex
-    results[result_id] = (filename, csv_text(rows, fieldnames))
-    while len(results) > MAX_STORED_RESULTS:
-        results.popitem(last=False)
-    return result_id
+TRANSLIT = dict(zip(
+    "абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
+    ["a", "b", "v", "g", "d", "e", "e", "zh", "z", "i", "y", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f",
+     "h", "ts", "ch", "sh", "sch", "", "y", "", "e", "yu", "ya"],
+))
+
+
+def safe_filename(*parts):
+    # браузеры заменяют имя файла с кириллицей на «download», поэтому переводим в латиницу
+    text = "_".join(parts).lower()
+    text = "".join(TRANSLIT.get(ch, ch) for ch in text)
+    text = "".join(ch if ch.isascii() and (ch.isalnum() or ch in "-_") else "_" for ch in text)
+    return "_".join(filter(None, text.split("_"))) + ".csv"
+
+
+def render_results(rows, fieldnames, filename, **context):
+    # CSV отдаём вместе со страницей: сервер на Render перезапускается и ничего не хранит
+    return render(rows=rows, fields=fieldnames, csv=csv_text(rows, fieldnames), csv_filename=filename, **context)
 
 
 def split_codes(value):
@@ -108,8 +115,7 @@ def search_maps():
             )
         return render(error=error, **context)
 
-    result_id = store_result(f"{source}_{query}_{city}.csv", rows, maps.FIELDS)
-    return render(rows=rows, fields=maps.FIELDS, result_id=result_id, stats=stats, **context)
+    return render_results(rows, maps.FIELDS, safe_filename(source, query, city), stats=stats, **context)
 
 
 @app.post("/egrul")
@@ -134,20 +140,7 @@ def search_egrul():
         except Exception as exc:  # битый архив или XML не того формата
             return render(error=f"Не удалось разобрать файл: {exc}", **context)
 
-    result_id = store_result("egrul.csv", rows, egrul.FIELDS)
-    return render(rows=rows, fields=egrul.FIELDS, result_id=result_id, **context)
-
-
-@app.get("/download/<result_id>")
-def download(result_id):
-    if result_id not in results:
-        abort(404)
-    filename, text = results[result_id]
-    return Response(
-        "\ufeff" + text,
-        mimetype="text/csv; charset=utf-8",
-        headers={"Content-Disposition": f"attachment; filename*=UTF-8''{quote(filename)}"},
-    )
+    return render_results(rows, egrul.FIELDS, safe_filename("egrul", *okved, *regions), **context)
 
 
 if __name__ == "__main__":

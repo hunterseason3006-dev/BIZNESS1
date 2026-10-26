@@ -115,7 +115,7 @@ tr:last-child td { border-bottom: 0; }
   <section class="results">
     <header>
       <h2>Найдено: {{ rows|length }}{% if stats %} <span class="sub">из {{ stats.fetched }} проверенных</span>{% endif %}</h2>
-      {% if rows %}<a class="btn" href="/download/{{ result_id }}">Скачать CSV</a>{% endif %}
+      {% if rows %}<button type="button" class="btn" id="download-csv" data-filename="{{ csv_filename }}">Скачать CSV</button>{% endif %}
     </header>
     {% for note in (stats.notes if stats else []) %}<p class="note">{{ note }}</p>{% endfor %}
     <div class="table-wrap">
@@ -131,6 +131,7 @@ tr:last-child td { border-bottom: 0; }
       {% endif %}
     </div>
   </section>
+  {% if rows %}<script type="application/json" id="csv-data">{{ csv|tojson }}</script>{% endif %}
   {% endif %}
 </main>
 <script>
@@ -143,6 +144,21 @@ document.querySelectorAll('.tabs button').forEach(function (btn) {
     });
   });
 });
+var downloadBtn = document.getElementById('download-csv');
+if (downloadBtn) {
+  downloadBtn.addEventListener('click', function () {
+    var csv = JSON.parse(document.getElementById('csv-data').textContent);
+    // BOM, чтобы Excel правильно показал кириллицу
+    var blob = new Blob(['\ufeff' + csv], {type: 'text/csv;charset=utf-8'});
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = downloadBtn.dataset.filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
+  });
+}
 var sourceSelect = document.getElementById('source');
 var keyInput = document.getElementById('api_key');
 function updateKeyPlaceholder() {

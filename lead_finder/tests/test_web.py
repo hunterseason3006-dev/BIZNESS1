@@ -1,4 +1,5 @@
 import io
+import json
 import unittest
 from unittest import mock
 
@@ -33,10 +34,11 @@ class WebTest(unittest.TestCase):
         self.assertIn("Улыбка", html)
         self.assertNotIn('value="k"', html)
 
-        result_id = html.split("/download/")[1].split('"')[0]
-        csv_resp = self.client.get(f"/download/{result_id}")
-        self.assertEqual(csv_resp.mimetype, "text/csv")
-        self.assertIn("Улыбка", csv_resp.get_data(as_text=True))
+        self.assertIn('data-filename="2gis_stomatologiya_kazan.csv"', html)
+        csv_json = html.split('<script type="application/json" id="csv-data">')[1].split("</script>")[0]
+        csv = json.loads(csv_json)
+        self.assertTrue(csv.startswith("source,source_id,name"))
+        self.assertIn("Улыбка", csv)
 
     def test_maps_search_requires_api_key(self):
         with mock.patch.dict(web.os.environ, {}, clear=True):
@@ -70,9 +72,6 @@ class WebTest(unittest.TestCase):
             resp = self.client.get(url)
             self.assertEqual(resp.status_code, 302)
             self.assertEqual(resp.headers["Location"], "/")
-
-    def test_unknown_download_is_404(self):
-        self.assertEqual(self.client.get("/download/nope").status_code, 404)
 
 
 class PasswordTest(unittest.TestCase):
