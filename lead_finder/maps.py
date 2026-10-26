@@ -8,6 +8,7 @@ import argparse
 import math
 import os
 import time
+from urllib.parse import urlparse
 
 import requests
 
@@ -17,8 +18,32 @@ TWOGIS_URL = "https://catalog.api.2gis.com/3.0/items"
 YANDEX_URL = "https://search-maps.yandex.ru/v1/"
 SOCIAL_TYPES = {"vkontakte", "instagram", "telegram", "whatsapp", "facebook", "ok", "youtube", "tiktok"}
 FIELDS = ["source", "source_id", "name", "category", "address", "phones", "socials"]
+# ссылки на соцсети и конструкторы-визитки не считаем сайтом: у таких компаний своего сайта нет
+NOT_A_WEBSITE = {
+    "vk.com": "vk", "vk.ru": "vk", "instagram.com": "instagram", "t.me": "telegram", "telegram.me": "telegram",
+    "wa.me": "whatsapp", "whatsapp.com": "whatsapp", "ok.ru": "ok", "facebook.com": "facebook",
+    "taplink.cc": "taplink", "taplink.ws": "taplink", "youtube.com": "youtube", "tiktok.com": "tiktok",
+    "dzen.ru": "dzen", "avito.ru": "avito",
+}
 PAGE_DELAY = 0.5
 API_KEY_ENV = {"2gis": "TWOGIS_API_KEY", "yandex": "YANDEX_MAPS_API_KEY"}
+
+
+def social_name(url):
+    host = urlparse(url if "//" in url else "//" + url).netloc.lower().split(":")[0]
+    host = host[4:] if host.startswith("www.") else host
+    for domain, name in NOT_A_WEBSITE.items():
+        if host == domain or host.endswith("." + domain):
+            return name
+    return None
+
+
+def split_links(urls):
+    """Делит ссылки на настоящие сайты и соцсети."""
+    websites, socials = [], []
+    for url in filter(None, urls):
+        (socials if social_name(url) else websites).append(url)
+    return websites, socials
 
 
 def fetch_2gis(query, city, api_key, limit, notes=None):
@@ -57,6 +82,7 @@ def fetch_2gis(query, city, api_key, limit, notes=None):
 
 def from_2gis(item):
     contacts = [c for group in item.get("contact_groups", []) for c in group.get("contacts", [])]
+    websites, social_links = split_links(c.get("url") or c.get("text", "") for c in contacts if c.get("type") == "website")
     return {
         "source": "2gis",
         "source_id": item.get("id", ""),
@@ -64,8 +90,8 @@ def from_2gis(item):
         "category": ", ".join(r.get("name", "") for r in item.get("rubrics", [])),
         "address": item.get("address_name", ""),
         "phones": [c["value"] for c in contacts if c.get("type") == "phone"],
-        "websites": [c.get("url") or c.get("text", "") for c in contacts if c.get("type") == "website"],
-        "socials": sorted({c["type"] for c in contacts if c.get("type") in SOCIAL_TYPES}),
+        "websites": websites,
+        "socials": sorted({c["type"] for c in contacts if c.get("type") in SOCIAL_TYPES}) + social_links,
         "has_contacts": bool(contacts),
     }
 
@@ -109,6 +135,7 @@ def fetch_yandex(query, city, api_key, limit, notes=None):
 
 def from_yandex(feature):
     meta = feature.get("properties", {}).get("CompanyMetaData", {})
+    websites, social_links = split_links([meta.get("url")])
     return {
         "source": "yandex",
         "source_id": meta.get("id", ""),
@@ -116,8 +143,8 @@ def from_yandex(feature):
         "category": ", ".join(c.get("name", "") for c in meta.get("Categories", [])),
         "address": meta.get("address", ""),
         "phones": [p.get("formatted", "") for p in meta.get("Phones", [])],
-        "websites": [meta["url"]] if meta.get("url") else [],
-        "socials": [],
+        "websites": websites,
+        "socials": social_links,
         "has_contacts": bool(meta.get("Phones") or meta.get("url")),
     }
 

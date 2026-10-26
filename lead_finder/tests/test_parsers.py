@@ -120,6 +120,28 @@ class MapsTest(unittest.TestCase):
         self.assertEqual(len(orgs), 2)
         self.assertEqual([c.kwargs["params"]["skip"] for c in get.call_args_list], [0, 50])
 
+    def test_social_links_are_not_websites(self):
+        for url in ("https://vk.com/smile", "http://www.instagram.com/smile", "taplink.cc/smile", "https://t.me/smile"):
+            feature = {"properties": {"CompanyMetaData": {**YANDEX_FEATURE["properties"]["CompanyMetaData"], "url": url}}}
+            org = from_yandex(feature)
+            self.assertEqual(org["websites"], [], url)
+            self.assertEqual(org["socials"], [url])
+        self.assertEqual(len(list(without_website([org], require_phone=True))), 1)
+
+    def test_real_site_with_vk_in_path_is_still_a_website(self):
+        feature = {"properties": {"CompanyMetaData": {**YANDEX_FEATURE["properties"]["CompanyMetaData"],
+                                                      "url": "https://smile-vk.com/vk.com"}}}
+        self.assertEqual(from_yandex(feature)["websites"], ["https://smile-vk.com/vk.com"])
+
+    def test_2gis_website_contact_pointing_to_vk_counts_as_social(self):
+        item = {**TWOGIS_ITEM, "contact_groups": [{"contacts": [
+            {"type": "phone", "value": "+7 843 000-00-00"},
+            {"type": "website", "url": "https://vk.com/smile", "text": "vk.com/smile"},
+        ]}]}
+        org = from_2gis(item)
+        self.assertEqual(org["websites"], [])
+        self.assertEqual(org["socials"], ["https://vk.com/smile"])
+
 
 class EgrulTest(unittest.TestCase):
     def setUp(self):
