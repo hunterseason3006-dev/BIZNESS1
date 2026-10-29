@@ -222,7 +222,7 @@ h2.sec { font-size: 20px; margin: 30px 0 12px; letter-spacing: -.01em; }
 
 @media (max-width: 1100px) { .acts .a { display: none; } }
 @media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; } .filters { display: none; position: static; } .filters.open { display: block; margin-bottom: 8px; } .f-btn { display: block; }
+  .layout { grid-template-columns: minmax(0, 1fr); } .filters { display: none; position: static; } .filters.open { display: block; margin-bottom: 8px; } .f-btn { display: block; }
   .cats { display: flex; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; } .cat { flex: 0 0 auto; }
   .item { grid-template-columns: 1fr; } .side-col { position: static; }
 }
@@ -234,6 +234,205 @@ h2.sec { font-size: 20px; margin: 30px 0 12px; letter-spacing: -.01em; }
   .page-h h1, .item h1 { font-size: 22px; }
   .terms, .facts { grid-template-columns: 1fr; }
   [data-style="amazon"] .results { padding: 12px; }
+}
+
+/* ===== ДВИЖЕНИЕ И ДИЗАЙН ===== */
+:root { --ease: cubic-bezier(.2, .7, .2, 1); --spring: cubic-bezier(.34, 1.56, .64, 1); }
+body, .top, .box, .cat, .sheet, .filters, .results, .item-main, .card, .term, .more, .toolbar select, .range input, .city-list button {
+  transition: background-color .3s, color .3s, border-color .3s, box-shadow .3s, transform .25s var(--ease);
+}
+
+/* Тёмная тема */
+[data-theme="dark"][data-style] {
+  --bg: #0f1115; --surface: #171a21; --ink: #eceef2; --ink-2: #a5aab4; --ink-3: #7c828d; --line: #2a2f38;
+  --head-bg: #12151b; --head-ink: #f2f3f5; --ph: #232731; --ph-ink: #5d6370; --chip: #1d2129; --btn-2-ink: #fff;
+  color-scheme: dark;
+}
+[data-theme="dark"][data-style="orig"] { color-scheme: light; }
+[data-theme="dark"] .orig input { background: #fff; color: #000; }
+[data-theme="dark"][data-style="amazon"] { --bg: #0b0e12; --head-bg: #131921; --sub-bg: #1c2633; --btn-2-ink: #0f1111; --shadow: 0 1px 3px rgba(0,0,0,.5); }
+[data-theme="dark"][data-style="amazon"] .ph { background: #1b1f26; }
+[data-theme="dark"][data-style="avito"] .cat[aria-pressed="true"] { background: #fff; color: #000; }
+[data-theme="dark"][data-style="avito"] .cat[aria-pressed="true"] .ic { background: #e9e9e9; color: #000; }
+[data-theme="dark"][data-style="avito"] .cat .ic { background: #2a2f38; }
+[data-theme="dark"][data-style="avito"] .box { box-shadow: 0 2px 14px rgba(0,0,0,.45); }
+[data-theme="dark"][data-style="avito"] .search input { background: var(--surface); color: var(--ink); }
+[data-theme="dark"] .ava { color: var(--bg); }
+[data-theme="dark"] .fav { background: rgba(23,26,33,.9); color: #eee; }
+[data-theme="dark"] .map { background-color: var(--ph); }
+.icon-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(127,127,127,.35); background: none; color: inherit; display: grid; place-items: center; flex-shrink: 0; }
+.icon-btn:hover { border-color: currentColor; }
+.icon-btn svg { transition: transform .5s var(--spring); }
+.icon-btn:active svg { transform: rotate(-35deg) scale(.85); }
+
+/* Шапка прилипает и уплотняется при прокрутке */
+.new .top { position: sticky; top: 0; z-index: 40; }
+.new .top .wrap { transition: padding .25s var(--ease); }
+.top.scrolled { box-shadow: 0 6px 24px rgba(0,0,0,.08); }
+.top.scrolled .wrap { padding-block: 7px; }
+[data-style="avito"] .top.scrolled { border-bottom-color: transparent; }
+.filters, .side-col { top: 84px; }
+
+/* Полоса прогресса прокрутки */
+#prog { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 45; pointer-events: none; }
+[data-style="orig"] #prog { display: none; }
+
+/* Появление страницы */
+.pg { animation: pgIn .45s var(--ease); }
+@keyframes pgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Карточки: появление, подъём, зум фото */
+.card.rv { opacity: 0; transform: translateY(18px) scale(.985); }
+.card.rv.in { opacity: 1; transform: none; transition: opacity .55s var(--ease) var(--d, 0s), transform .55s var(--ease) var(--d, 0s); }
+.card .ph img { transition: transform .6s var(--ease), opacity .45s; }
+.card:hover .ph img { transform: scale(1.07); }
+.card .ph { transition: box-shadow .3s var(--ease), transform .3s var(--ease); }
+.card:hover .ph { box-shadow: 0 14px 30px -12px rgba(0,0,0,.35); transform: translateY(-3px); }
+.card:active .ph { transform: scale(.98); }
+
+/* Фото проявляются, пока грузятся — мерцание */
+.ph img { opacity: 0; }
+.ph img.ok { opacity: 1; }
+.ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%); background-size: 200% 100%; animation: shim 1.2s linear infinite; pointer-events: none; }
+.ph.done::after { display: none; }
+@keyframes shim { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+
+/* Сердечко: «пульс» и всплеск */
+.fav { transition: transform .2s var(--ease); z-index: 1; }
+.fav:hover { transform: scale(1.1); }
+.fav.pop svg { animation: heart .5s var(--spring); }
+.fav.pop::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #e0245e; animation: burst .5s ease-out forwards; }
+@keyframes heart { 0% { transform: scale(1); } 35% { transform: scale(1.45); } 100% { transform: scale(1); } }
+@keyframes burst { from { opacity: 1; transform: scale(.6); } to { opacity: 0; transform: scale(1.6); } }
+.bump { display: inline-block; animation: bump .45s var(--spring); }
+@keyframes bump { 40% { transform: scale(1.25); } }
+
+/* Категории */
+.cat { position: relative; overflow: hidden; }
+.cat:hover { transform: translateY(-2px); }
+.cat:active { transform: scale(.97); }
+.cat:hover .ic svg { animation: wiggle .5s var(--ease); }
+@keyframes wiggle { 30% { transform: rotate(-12deg) scale(1.1); } 60% { transform: rotate(8deg); } }
+
+/* Волна от нажатия */
+.btn, .post-btn, .more, .search button, .promo .go { position: relative; overflow: hidden; }
+.btn:active, .post-btn:active, .more:active { transform: scale(.98); }
+.rip { position: absolute; border-radius: 50%; background: currentColor; opacity: .25; transform: scale(0); animation: rip .6s ease-out forwards; pointer-events: none; }
+@keyframes rip { to { transform: scale(1); opacity: 0; } }
+
+/* Промо-карусель */
+.promo { position: relative; height: 150px; border-radius: var(--radius); overflow: hidden; margin-bottom: 18px; }
+.slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 28px; background: linear-gradient(120deg, var(--p1), var(--p2)); color: #0b1a2a;
+  opacity: 0; transform: translateX(40px); transition: opacity .6s var(--ease), transform .6s var(--ease); pointer-events: none; }
+.slide.on { opacity: 1; transform: none; pointer-events: auto; }
+.slide.out { opacity: 0; transform: translateX(-40px); }
+.slide h3 { margin: 0 0 4px; font-size: 24px; letter-spacing: -.02em; }
+.slide p { margin: 0 0 12px; font-size: 14px; opacity: .8; }
+.slide .go { border: 0; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 14px; background: #0b1a2a; color: #fff; }
+.slide .art { width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,.55); display: grid; place-items: center; color: var(--pi); flex-shrink: 0; animation: float 4s ease-in-out infinite; }
+.slide.on h3, .slide.on p, .slide.on .go { animation: rise .6s var(--ease) both; }
+.slide.on p { animation-delay: .08s; } .slide.on .go { animation-delay: .16s; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes float { 50% { transform: translateY(-8px) rotate(-4deg); } }
+.s1 { --p1: #dff3ff; --p2: #b9e3ff; --pi: #0077cc; } .s2 { --p1: #e2fbe9; --p2: #b8f0cb; --pi: #079a46; }
+.s3 { --p1: #efe6ff; --p2: #d9c6ff; --pi: #7a3fe0; } .s4 { --p1: #fff1dc; --p2: #ffd9a3; --pi: #d47200; }
+[data-theme="dark"] .s1 { --p1: #0d2a40; --p2: #11466b; } [data-theme="dark"] .s2 { --p1: #0c2e1b; --p2: #11502d; }
+[data-theme="dark"] .s3 { --p1: #22163d; --p2: #3a2470; } [data-theme="dark"] .s4 { --p1: #3a2408; --p2: #6b400c; }
+[data-theme="dark"] .slide { color: #f2f3f5; } [data-theme="dark"] .slide .go { background: #fff; color: #111; } [data-theme="dark"] .slide .art { background: rgba(255,255,255,.12); }
+.dots { position: absolute; right: 28px; bottom: 12px; display: flex; gap: 6px; z-index: 2; }
+.dots button { width: 8px; height: 8px; border-radius: 99px; border: 0; padding: 0; background: rgba(0,0,0,.2); transition: width .35s var(--ease), background .35s; }
+.dots button.on { width: 26px; background: rgba(0,0,0,.6); }
+[data-theme="dark"] .dots button { background: rgba(255,255,255,.25); } [data-theme="dark"] .dots button.on { background: #fff; }
+
+/* Недавно просмотренные */
+.recent { margin-bottom: 22px; }
+.recent h4 { margin: 0 0 10px; font-size: 16px; }
+.strip { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
+.mini { flex: 0 0 150px; scroll-snap-align: start; font-size: 13px; animation: rise .5s var(--ease) both; }
+.mini .ph { aspect-ratio: 4/3; margin-bottom: 6px; }
+.mini b { display: block; font-size: 14px; }
+.mini span { color: var(--ink-2); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Вид: сетка / список */
+.results { min-width: 0; }
+.toolbar { flex-wrap: wrap; } .tb-r { margin-left: auto; }
+@media (max-width: 640px) { .toolbar > span { flex-basis: 100%; } .tb-r { margin-left: 0; width: 100%; } .tb-r select { flex: 1; min-width: 0; } }
+.vt { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.vt button { border: 0; background: var(--surface); color: var(--ink-3); padding: 5px 8px; display: grid; place-items: center; }
+.vt button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.grid.list { grid-template-columns: 1fr; gap: 12px; }
+.grid.list .card { flex-direction: row; gap: 18px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.grid.list .card:hover { box-shadow: 0 10px 28px -14px rgba(0,0,0,.3); }
+.grid.list .card:hover .ph { transform: none; box-shadow: none; }
+.grid.list .ph { width: 230px; flex-shrink: 0; }
+.grid.list .b { padding-top: 2px; flex: 1; min-width: 0; }
+.grid.list .t { font-size: 17px; }
+
+/* Мобильные фильтры выезжают */
+.filters.open { animation: drop .3s var(--ease); }
+@keyframes drop { from { opacity: 0; transform: translateY(-8px); } }
+
+/* Окно выбора города */
+.modal { opacity: 0; transition: opacity .22s; backdrop-filter: blur(2px); }
+.modal.open { opacity: 1; }
+.sheet { transform: translateY(16px) scale(.97); transition: transform .32s var(--spring); }
+.modal.open .sheet { transform: none; }
+.city-list button { transition: background .15s, transform .15s; }
+.city-list button:hover { transform: translateX(3px); }
+
+/* Уведомление */
+.toast { transition: transform .45s var(--spring); display: flex; gap: 8px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+
+/* Подсказки поиска */
+#sug { position: fixed; z-index: 55; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 40px -12px rgba(0,0,0,.35); overflow: hidden;
+  opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity .18s, transform .18s var(--ease); }
+#sug.show { opacity: 1; transform: none; pointer-events: auto; }
+#sug a { display: flex; gap: 10px; align-items: center; padding: 8px 12px; font-size: 14px; }
+#sug a:hover, #sug a.hl { background: var(--ph); }
+#sug .ph { width: 44px; aspect-ratio: 4/3; border-radius: 6px; flex-shrink: 0; }
+#sug .ph svg { width: 16px; }
+#sug b { margin-left: auto; white-space: nowrap; font-size: 13px; }
+#sug mark { background: none; color: var(--link); font-weight: 700; }
+
+/* Лайтбокс */
+.gal .main { cursor: zoom-in; }
+.gal .main:hover img { transform: scale(1.03); }
+.gal .main img { transition: transform .6s var(--ease), opacity .45s; }
+#lb { position: fixed; inset: 0; z-index: 80; background: rgba(0,0,0,.88); display: grid; place-items: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .25s; cursor: zoom-out; }
+#lb.open { opacity: 1; pointer-events: auto; }
+#lb img { max-width: min(1000px, 100%); max-height: 86vh; width: 100%; object-fit: contain; border-radius: 10px; transform: scale(.88); transition: transform .4s var(--spring); }
+#lb.open img { transform: none; }
+#lb p { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; color: #ccc; font-size: 13px; margin: 0; }
+
+/* Кнопка «наверх» */
+#toTop { position: fixed; right: 18px; bottom: 84px; z-index: 48; width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); display: grid; place-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  opacity: 0; transform: translateY(16px) scale(.8); pointer-events: none; transition: opacity .3s, transform .35s var(--spring); }
+#toTop.show { opacity: 1; transform: none; pointer-events: auto; }
+[data-style="orig"] #toTop { display: none; }
+
+/* Мобильная панель действий на странице объявления */
+.mbar { display: none; }
+@media (max-width: 900px) {
+  .mbar { display: flex; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 46; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--line); animation: up .45s var(--spring); }
+  .mbar .btn { flex: 1; padding: 11px; }
+  body.has-mbar .switch { bottom: 78px; }
+  body.has-mbar #toTop { bottom: 140px; }
+  .filters, .side-col { top: auto; }
+}
+@keyframes up { from { transform: translateY(100%); } }
+
+@media (max-width: 640px) {
+  .promo { height: 132px; } .slide { padding: 16px 18px 26px; } .slide h3 { font-size: 18px; } .slide p { font-size: 13px; margin-bottom: 8px; }
+  .slide .art { width: 64px; height: 64px; } .slide .art svg { width: 30px; height: 30px; } .dots { right: 18px; bottom: 9px; }
+  .post-btn .long { display: none; } .acts { gap: 10px; }
+  .grid.list .ph { width: 120px; } .grid.list .card { gap: 12px; padding: 10px; } .grid.list .t { font-size: 14px; }
+  .modal { place-items: end center; padding: 0; }
+  .sheet { border-radius: 18px 18px 0 0; width: 100%; transform: translateY(100%); transition-timing-function: var(--ease); }
+  .icon-btn { width: 34px; height: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .card.rv { opacity: 1; transform: none; }
 }
 </style>
 </head>
@@ -272,7 +471,8 @@ h2.sec { font-size: 20px; margin: 30px 0 12px; letter-spacing: -.01em; }
       <div class="acts">
         <span class="a"><small>Войти</small><b>Аккаунт</b></span>
         <a class="a" href="#/" id="favLink"><small>Сохранено</small><b id="favCount">Избранное · 0</b></a>
-        <button class="post-btn" onclick="toast('Размещение объявления доступно после входа')">Разместить объявление</button>
+        <button class="icon-btn" id="themeBtn" aria-label="Тёмная тема"></button>
+        <button class="post-btn" onclick="toast('Размещение объявления доступно после входа')">Разместить<span class="long"> объявление</span></button>
       </div>
     </div>
   </header>
@@ -287,6 +487,10 @@ h2.sec { font-size: 20px; margin: 30px 0 12px; letter-spacing: -.01em; }
   <button data-s="avito">Avito-стиль</button>
 </div>
 <div class="toast" id="toast"></div>
+<div id="prog"></div>
+<button id="toTop" aria-label="Наверх"></button>
+<div id="sug" role="listbox"></div>
+<div id="lb" aria-hidden="true"><img alt=""><p>Нажмите, чтобы закрыть</p></div>
 <div class="modal" id="cityModal" role="dialog" aria-modal="true" aria-labelledby="cityTitle" hidden>
   <div class="sheet">
     <div class="sheet-h"><h3 id="cityTitle">Выберите город</h3><button class="x" id="cityClose" aria-label="Закрыть">×</button></div>
@@ -323,6 +527,12 @@ const I = {
   back: '<path d="M15 5l-7 7 7 7"/>',
   doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/>',
   plug: '<path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0zM12 17v5"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  list: '<rect x="3" y="4" width="6" height="5" rx="1"/><rect x="3" y="15" width="6" height="5" rx="1"/><path d="M12 6h9M12 9h6M12 17h9M12 20h6"/>',
+  up: '<path d="M12 19V5M5 12l7-7 7 7"/>',
+  phone: '<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
   shirt: '<path d="M8 3l-5 3 2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>',
 };
 const ic = (n, s = 20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${I[n]}</svg>`;
@@ -361,7 +571,8 @@ const $ = (s, r = document) => r.querySelector(s);
 const fmt = (n) => "$" + n.toLocaleString("en-US");
 const catOf = (id) => CATS.find((c) => c.id === id);
 const favs = new Set();
-const state = { city: "nyc", cat: "all", q: "", sort: "new", min: "", max: "", types: new Set(), boros: new Set(), dlv: false, favOnly: false, shown: PAGE };
+const state = { city: "nyc", cat: "all", q: "", sort: "new", min: "", max: "", types: new Set(), boros: new Set(), dlv: false, favOnly: false, shown: PAGE, view: "grid", promo: 0, homeY: 0, lastCount: 0 };
+let recent = [];
 const resetPage = () => (state.shown = PAGE);
 const plural = (n) => { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? "объявление" : m >= 2 && m <= 4 && (h < 12 || h > 14) ? "объявления" : "объявлений"; };
 
@@ -391,7 +602,7 @@ function filtered() {
 }
 
 function cardHTML(i) {
-  return `<a class="card" href="#/item/${i.id}">
+  return `<a class="card rv" href="#/item/${i.id}">
     <div class="ph">${ic(catOf(i.cat).i, 40)}<img src="${IMG[i.img]}" alt="" loading="lazy" decoding="async">
       <button class="fav ${favs.has(i.id) ? "on" : ""}" data-fav="${i.id}" aria-label="В избранное">${ic("heart", 18)}</button>
     </div>
@@ -406,7 +617,7 @@ function cardHTML(i) {
   </a>`;
 }
 
-function renderHome() {
+function renderHome(y = window.scrollY) {
   const c = state.cat === "all" ? null : catOf(state.cat);
   const list = filtered();
   const city = cityOf(state.city);
@@ -414,10 +625,13 @@ function renderHome() {
   const pool = inCity.filter((i) => state.cat === "all" || i.cat === state.cat);
   const types = [...new Set(pool.map((i) => i.type))];
   const title = state.favOnly ? "Избранное" : (c ? c.n : "Объявления") + " " + city.p;
-  const y = window.scrollY;
+  const showPromo = !c && !state.favOnly && !state.q;
+  const rec = recent.map((id) => ITEMS.find((x) => x.id === id)).filter(Boolean);
   $("#app").innerHTML = `
     <div class="crumbs"><a href="#/" data-goto="all">${city.n}</a>${c ? ` / <span>${c.n}</span>` : ""}</div>
-    <div class="page-h"><h1>${title}</h1><span>${list.length.toLocaleString("ru-RU")} ${plural(list.length)}</span></div>
+    <div class="page-h"><h1>${title}</h1><span><span id="cnt">${list.length.toLocaleString("ru-RU")}</span> ${plural(list.length)}</span></div>
+    ${showPromo ? promoHTML(inCity) : ""}
+    ${showPromo && rec.length ? `<section class="recent"><h4>Вы недавно смотрели</h4><div class="strip">${rec.map((i, k) => `<a class="mini" href="#/item/${i.id}" style="animation-delay:${k * 40}ms">${pic(i)}<b>${priceText(i)}</b><span>${i.t}</span></a>`).join("")}</div></section>` : ""}
     <div class="cats">${CATS.map((k) => `
       <button class="cat" data-cat="${k.id}" aria-pressed="${state.cat === k.id}">
         <span class="ic">${ic(k.i)}</span><span class="n">${k.n}</span><span class="c">${inCity.filter((i) => i.cat === k.id).length} объявл.</span>
@@ -432,8 +646,8 @@ function renderHome() {
       </aside>
       <div class="results">
         <div class="toolbar"><span>${state.q ? `По запросу «${state.q}»` : "Все объявления"}</span>
-          <div class="tb-r"><button class="f-btn" id="fBtn">Фильтры</button><select id="sort"><option value="new">Сначала новые</option><option value="cheap">Дешевле</option><option value="exp">Дороже</option></select></div></div>
-        ${list.length ? `<div class="grid">${list.slice(0, state.shown).map(cardHTML).join("")}</div>` : `<div class="empty">Ничего не найдено. Попробуйте изменить фильтры.</div>`}
+          <div class="tb-r"><button class="f-btn" id="fBtn">Фильтры</button><div class="vt"><button data-view="grid" aria-pressed="${state.view === "grid"}" aria-label="Сеткой">${ic("grid", 16)}</button><button data-view="list" aria-pressed="${state.view === "list"}" aria-label="Списком">${ic("list", 16)}</button></div><select id="sort"><option value="new">Сначала новые</option><option value="cheap">Дешевле</option><option value="exp">Дороже</option></select></div></div>
+        ${list.length ? `<div class="grid ${state.view === "list" ? "list" : ""}" id="grid">${list.slice(0, state.shown).map(cardHTML).join("")}</div>` : `<div class="empty">Ничего не найдено. Попробуйте изменить фильтры.</div>`}
         ${list.length > state.shown ? `<button class="more" id="more">Показать ещё · осталось ${list.length - state.shown}</button>` : ""}
       </div>
     </div>`;
@@ -448,7 +662,91 @@ function renderHome() {
   $("#favOnly").onchange = (e) => { state.favOnly = e.target.checked; resetPage(); renderHome(); };
   $("#reset").onclick = () => { Object.assign(state, { q: "", min: "", max: "", dlv: false, favOnly: false }); state.types.clear(); state.boros.clear(); $("#q").value = ""; resetPage(); renderHome(); };
   $("#fBtn").onclick = () => { state.fOpen = !state.fOpen; $("#filters").classList.toggle("open", state.fOpen); };
-  if ($("#more")) $("#more").onclick = () => { state.shown += PAGE; renderHome(); };
+  if ($("#more")) $("#more").onclick = () => loadMore(list);
+  document.querySelectorAll("[data-view]").forEach((b) => (b.onclick = () => {
+    state.view = b.dataset.view; try { localStorage.setItem("cl-view", state.view); } catch (e) {}
+    document.querySelectorAll("[data-view]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    $("#grid") && $("#grid").classList.toggle("list", state.view === "list");
+    document.querySelectorAll("#grid .card").forEach((el) => el.classList.remove("in"));
+    reveal($("#app"));
+  }));
+  countUp($("#cnt"), state.lastCount, list.length); state.lastCount = list.length;
+  if (showPromo) startPromo();
+  reveal($("#app")); autoMore();
+}
+
+/* ---------- Анимации и мелкие функции ---------- */
+const motionOK = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+let io;
+function reveal(root) {
+  if (!("IntersectionObserver" in window) || !motionOK) { root.querySelectorAll(".rv").forEach((el) => el.classList.add("in")); markImgs(root); return; }
+  io = io || new IntersectionObserver((entries) => {
+    entries.filter((e) => e.isIntersecting).forEach((e, k) => {
+      e.target.style.setProperty("--d", Math.min(k, 10) * 45 + "ms");
+      e.target.classList.add("in"); io.unobserve(e.target);
+    });
+  }, { rootMargin: "0px 0px -30px 0px" });
+  root.querySelectorAll(".rv:not(.in)").forEach((el) => io.observe(el));
+  markImgs(root);
+}
+function markImgs(root) {
+  root.querySelectorAll(".ph img:not(.ok)").forEach((im) => {
+    const done = () => { im.classList.add("ok"); im.parentNode.classList.add("done"); };
+    im.complete && im.naturalWidth ? requestAnimationFrame(done) : im.addEventListener("load", done, { once: true });
+  });
+}
+function countUp(el, from, to) {
+  if (!el || !motionOK || from === to) return;
+  const t0 = performance.now(), d = 500;
+  const step = (t) => { const k = Math.min(1, (t - t0) / d), v = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+    el.textContent = v.toLocaleString("ru-RU"); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function loadMore(list) {
+  const from = state.shown; state.shown += PAGE;
+  const g = $("#grid"); if (!g) return;
+  g.insertAdjacentHTML("beforeend", list.slice(from, state.shown).map(cardHTML).join(""));
+  const m = $("#more");
+  if (list.length > state.shown) m.textContent = `Показать ещё · осталось ${list.length - state.shown}`; else m.remove();
+  reveal(g);
+}
+let moreIO;
+function autoMore() {
+  const m = $("#more"); if (!m || !("IntersectionObserver" in window)) return;
+  moreIO && moreIO.disconnect();
+  moreIO = new IntersectionObserver((e) => { if (e[0].isIntersecting && $("#more")) $("#more").click(); }, { rootMargin: "300px" });
+  moreIO.observe(m);
+}
+const PROMOS = [
+  { c: "s1", h: "Безопасная сделка", p: "Проверенные продавцы, честные отзывы и защита оплаты", b: "Подробнее", i: "shield", t: "toast" },
+  { c: "s2", h: "Отдают даром", p: "{free} вещей бесплатно — заберите сегодня", b: "Смотреть", i: "free", t: "free" },
+  { c: "s3", h: "Работа рядом с домом", p: "{jobs} вакансий с оплатой каждую неделю", b: "К вакансиям", i: "job", t: "jobs" },
+  { c: "s4", h: "Авто с историей", p: "{auto} машин — от первой до коллекционной", b: "Выбрать авто", i: "car", t: "auto" },
+];
+function promoHTML(pool) {
+  const n = (cat) => pool.filter((i) => i.cat === cat).length;
+  return `<div class="promo" id="promo">${PROMOS.map((x, k) => `<div class="slide ${x.c} ${k === state.promo ? "on" : ""}">
+    <div><h3>${x.h}</h3><p>${x.p.replace("{free}", n("free")).replace("{jobs}", n("jobs")).replace("{auto}", n("auto"))}</p>
+    <button class="go" ${x.t === "toast" ? `onclick="toast('Сделка с защитой — скоро во всех городах')"` : `data-goto="${x.t}"`}>${x.b}</button></div>
+    <div class="art">${ic(x.i, 48)}</div></div>`).join("")}
+    <div class="dots">${PROMOS.map((_, k) => `<button data-dot="${k}" class="${k === state.promo ? "on" : ""}" aria-label="Слайд ${k + 1}"></button>`).join("")}</div></div>`;
+}
+let promoT;
+function showSlide(n) {
+  const sl = document.querySelectorAll("#promo .slide"); if (!sl.length) return;
+  const prev = state.promo; state.promo = (n + PROMOS.length) % PROMOS.length;
+  sl.forEach((el, k) => { el.classList.toggle("on", k === state.promo); el.classList.toggle("out", k === prev && k !== state.promo); });
+  document.querySelectorAll("#promo [data-dot]").forEach((d, k) => d.classList.toggle("on", k === state.promo));
+}
+function startPromo() {
+  clearInterval(promoT);
+  const pr = $("#promo"); if (!pr) return;
+  pr.querySelectorAll("[data-dot]").forEach((d) => (d.onclick = () => { showSlide(+d.dataset.dot); startPromo(); }));
+  if (!motionOK) return;
+  promoT = setInterval(() => { if (!$("#promo")) return clearInterval(promoT); if (!pr.matches(":hover")) showSlide(state.promo + 1); }, 4500);
+  let x0 = null;
+  pr.ontouchstart = (e) => (x0 = e.touches[0].clientX);
+  pr.ontouchend = (e) => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) { showSlide(state.promo + (dx < 0 ? 1 : -1)); startPromo(); } x0 = null; };
 }
 
 /* ---------- Страница объявления ---------- */
@@ -464,6 +762,8 @@ function renderItem(id) {
   ];
   const similar = ITEMS.filter((x) => x.cat === i.cat && x.city === i.city && x.id !== i.id).slice(0, 4);
   const cta = i.cat === "jobs" ? "Откликнуться" : "Написать продавцу";
+  recent = [i.id, ...recent.filter((x) => x !== i.id)].slice(0, 12);
+  try { localStorage.setItem("cl-recent", JSON.stringify(recent)); } catch (e) {}
   $("#app").innerHTML = `
     <button class="back" onclick="history.length > 1 ? history.back() : (location.hash='#/')">${ic("back", 16)} Назад к объявлениям</button>
     <div class="crumbs" style="margin-top:0"><a href="#/" data-goto="all" data-city="${i.city}">${cityOf(i.city).n}</a> / <a href="#/" data-goto="${c.id}">${c.n}</a> / <span>${i.t}</span></div>
@@ -513,14 +813,22 @@ function renderItem(id) {
         </div>
       </aside>
     </div>
-    ${similar.length ? `<h2 class="sec" style="margin-top:0">Похожие объявления</h2><div class="grid" style="padding-bottom:110px">${similar.map(cardHTML).join("")}</div>` : ""}`;
+    ${similar.length ? `<h2 class="sec" style="margin-top:0">Похожие объявления</h2><div class="grid" style="padding-bottom:110px">${similar.map(cardHTML).join("")}</div>` : ""}
+    <div class="mbar"><button class="btn s" onclick="toast('Номер скрыт: свяжитесь через чат')">${i.cat === "jobs" ? "Позвонить" : "Показать телефон"}</button><button class="btn" onclick="toast('${i.cat === "jobs" ? "Отклик отправлен" : "Сообщение отправлено продавцу"}')">${cta}</button></div>`;
+  document.body.classList.add("has-mbar");
+  $(".gal .main").onclick = () => openLB(IMG[i.img]);
+  reveal($("#app"));
   window.scrollTo({ top: 0 });
 }
 
 /* ---------- Роутер и общие обработчики ---------- */
+let onHome = false;
 function route() {
   const m = location.hash.match(/^#\/item\/(\d+)/);
-  m ? renderItem(m[1]) : renderHome();
+  closeSug(); document.body.classList.remove("has-mbar");
+  if (m) { if (onHome) state.homeY = window.scrollY; onHome = false; renderItem(m[1]); }
+  else { const back = !onHome; onHome = true; renderHome(back ? state.homeY : window.scrollY); }
+  const a = $("#app"); a.classList.remove("pg"); void a.offsetWidth; a.classList.add("pg");
 }
 window.addEventListener("hashchange", route);
 
@@ -530,7 +838,8 @@ document.addEventListener("click", (e) => {
     e.preventDefault();
     if (g.dataset.city) setCity(g.dataset.city, false);
     Object.assign(state, { cat: g.dataset.goto, favOnly: false }); state.types.clear(); resetPage();
-    location.hash === "#/" || location.hash === "" ? (renderHome(), window.scrollTo({ top: 0 })) : (location.hash = "#/");
+    state.homeY = 0;
+    location.hash === "#/" || location.hash === "" ? (renderHome(0), window.scrollTo({ top: 0, behavior: "smooth" })) : (location.hash = "#/");
     return;
   }
   const f = e.target.closest("[data-fav]");
@@ -538,9 +847,16 @@ document.addEventListener("click", (e) => {
   e.preventDefault(); e.stopPropagation();
   const id = +f.dataset.fav;
   favs.has(id) ? favs.delete(id) : favs.add(id);
-  $("#favCount").textContent = "Избранное · " + favs.size;
-  toast(favs.has(id) ? "Добавлено в избранное" : "Удалено из избранного");
-  route();
+  const on = favs.has(id);
+  try { localStorage.setItem("cl-favs", JSON.stringify([...favs])); } catch (e) {}
+  $("#favCount").innerHTML = `Избранное · <span class="bump">${favs.size}</span>`;
+  toast(on ? "♥ Добавлено в избранное" : "Удалено из избранного");
+  document.querySelectorAll(`[data-fav="${id}"]`).forEach((b) => {
+    b.classList.toggle("on", on);
+    if (b.classList.contains("btn")) b.textContent = on ? "В избранном" : "Добавить в избранное";
+    else if (on) { b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); }
+  });
+  if (state.favOnly && onHome) renderHome();
 });
 
 $("#searchCat").innerHTML = `<option value="all">Все</option>` + CATS.map((c) => `<option value="${c.id}">${c.n}</option>`).join("");
@@ -550,6 +866,67 @@ $("#search").onsubmit = (e) => {
   if (getComputedStyle($("#searchCat")).display !== "none") state.cat = $("#searchCat").value;
   location.hash === "#/" || location.hash === "" ? renderHome() : (location.hash = "#/");
 };
+/* Подсказки поиска */
+let sugSel = -1;
+function closeSug() { $("#sug").classList.remove("show"); sugSel = -1; }
+function openSug() {
+  const q = $("#q").value.trim().toLowerCase();
+  if (q.length < 2) return closeSug();
+  const hits = ITEMS.filter((i) => (state.city === "all" || i.city === state.city) && i.t.toLowerCase().includes(q)).slice(0, 6);
+  if (!hits.length) return closeSug();
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const r = $("#search").getBoundingClientRect(), box = $("#sug");
+  Object.assign(box.style, { left: r.left + "px", top: r.bottom + 6 + "px", width: Math.max(r.width, 300) + "px" });
+  box.innerHTML = hits.map((i) => `<a href="#/item/${i.id}">${pic(i)}<span>${i.t.replace(new RegExp(esc, "i"), (m) => `<mark>${m}</mark>`)}</span><b>${priceText(i).replace(/<small>.*<\/small>/, "")}</b></a>`).join("");
+  markImgs(box); box.classList.add("show"); sugSel = -1;
+}
+$("#q").addEventListener("input", openSug);
+$("#q").addEventListener("focus", openSug);
+$("#q").addEventListener("blur", () => setTimeout(closeSug, 150));
+$("#q").addEventListener("keydown", (e) => {
+  const a = [...document.querySelectorAll("#sug.show a")]; if (!a.length) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sugSel = (sugSel + (e.key === "ArrowDown" ? 1 : -1) + a.length) % a.length; a.forEach((x, k) => x.classList.toggle("hl", k === sugSel)); }
+  else if (e.key === "Enter" && sugSel >= 0) { e.preventDefault(); location.hash = a[sugSel].getAttribute("href"); $("#q").blur(); }
+  else if (e.key === "Escape") closeSug();
+});
+$("#sug").addEventListener("click", () => closeSug());
+
+/* Волна от нажатия */
+document.addEventListener("pointerdown", (e) => {
+  const b = e.target.closest(".btn, .post-btn, .more, .search button, .cat, .go"); if (!b || !motionOK) return;
+  const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2, sp = document.createElement("span");
+  sp.className = "rip"; Object.assign(sp.style, { width: d + "px", height: d + "px", left: e.clientX - r.left - d / 2 + "px", top: e.clientY - r.top - d / 2 + "px" });
+  b.appendChild(sp); setTimeout(() => sp.remove(), 650);
+});
+
+/* Прокрутка: шапка, прогресс, «наверх» */
+let ticking = false;
+addEventListener("scroll", () => {
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(() => {
+    const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+    $(".top").classList.toggle("scrolled", y > 10);
+    $("#prog").style.transform = `scaleX(${h > 0 ? y / h : 0})`;
+    $("#toTop").classList.toggle("show", y > 900);
+    closeSug(); ticking = false;
+  });
+}, { passive: true });
+$("#toTop").innerHTML = ic("up", 20);
+$("#toTop").onclick = () => scrollTo({ top: 0, behavior: motionOK ? "smooth" : "auto" });
+
+/* Лайтбокс */
+function openLB(src) { const lb = $("#lb"); lb.querySelector("img").src = src; lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); }
+$("#lb").onclick = () => { $("#lb").classList.remove("open"); $("#lb").setAttribute("aria-hidden", "true"); };
+
+/* Тема */
+function setTheme(t) {
+  document.body.dataset.theme = t;
+  $("#themeBtn").innerHTML = ic(t === "dark" ? "sun" : "moon", 18);
+  $("#themeBtn").setAttribute("aria-label", t === "dark" ? "Светлая тема" : "Тёмная тема");
+  try { localStorage.setItem("cl-theme", t); } catch (e) {}
+}
+$("#themeBtn").onclick = () => { setTheme(document.body.dataset.theme === "dark" ? "light" : "dark"); toast(document.body.dataset.theme === "dark" ? "Тёмная тема" : "Светлая тема"); };
+
 $("#subnav").innerHTML = `<a href="#/" data-goto="all"><b>Все категории</b></a>` + CATS.map((c) => `<a href="#/" data-goto="${c.id}">${c.n}</a>`).join("");
 $("#favLink").onclick = (e) => { e.preventDefault(); state.favOnly = true; state.cat = "all"; resetPage(); location.hash === "#/" || location.hash === "" ? renderHome() : (location.hash = "#/"); };
 document.querySelectorAll("[data-i]").forEach((el) => (el.innerHTML = ic(el.dataset.i, 18)));
@@ -570,7 +947,8 @@ function setCity(id, render = true) {
   state.city = id; state.boros.clear(); state.types.clear(); resetPage();
   $("#cityName").textContent = $("#cityNameM").textContent = cityOf(id).n;
   try { localStorage.setItem("cl-city", id); } catch (e) {}
-  if (render) location.hash === "#/" || location.hash === "" ? (renderHome(), window.scrollTo({ top: 0 })) : (location.hash = "#/");
+  state.homeY = 0;
+  if (render) location.hash === "#/" || location.hash === "" ? (renderHome(0), window.scrollTo({ top: 0 })) : (location.hash = "#/");
 }
 function renderCities() {
   const q = $("#cityQ").value.trim().toLowerCase();
@@ -578,8 +956,8 @@ function renderCities() {
   $("#cityList").innerHTML = (q ? "" : row(ALL_CITIES, ITEMS.length, "all")) +
     CITIES.filter((c) => c.n.toLowerCase().includes(q)).map((c) => row(c, ITEMS.filter((i) => i.city === c.id).length)).join("");
 }
-const openCities = () => { $("#cityModal").hidden = false; $("#cityQ").value = ""; renderCities(); $("#cityQ").focus(); };
-const closeCities = () => { $("#cityModal").hidden = true; };
+const openCities = () => { const m = $("#cityModal"); m.hidden = false; $("#cityQ").value = ""; renderCities(); requestAnimationFrame(() => m.classList.add("open")); setTimeout(() => $("#cityQ").focus(), 50); };
+const closeCities = () => { const m = $("#cityModal"); m.classList.remove("open"); setTimeout(() => { if (!m.classList.contains("open")) m.hidden = true; }, 260); };
 $("#cityBtn").onclick = $("#cityBtnM").onclick = openCities;
 $("#cityClose").onclick = closeCities;
 $("#cityQ").oninput = renderCities;
@@ -603,6 +981,11 @@ function toast(m) { const el = $("#toast"); el.textContent = m; el.classList.add
 let saved = "avito";
 try { saved = localStorage.getItem("cl-style") || "avito"; } catch (e) {}
 setStyle(saved);
+let savedTheme = null;
+try { savedTheme = localStorage.getItem("cl-theme"); state.view = localStorage.getItem("cl-view") || "grid"; recent = JSON.parse(localStorage.getItem("cl-recent") || "[]");
+  JSON.parse(localStorage.getItem("cl-favs") || "[]").forEach((id) => favs.add(id)); } catch (e) {}
+setTheme(savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+$("#favCount").textContent = "Избранное · " + favs.size;
 let savedCity = "nyc";
 try { savedCity = localStorage.getItem("cl-city") || "nyc"; } catch (e) {}
 setCity(CITIES.some((c) => c.id === savedCity) || savedCity === "all" ? savedCity : "nyc", false);
