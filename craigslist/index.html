@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Craigslist Redesign</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/* Концепт-редизайн Craigslist в трёх режимах: оригинал / Amazon-стиль / Avito-стиль */
+:root {
+  --bg: #fff; --surface: #fff; --ink: #111; --ink-2: #555; --line: #ddd;
+  --head-bg: #fff; --head-ink: #111; --accent: #00c; --accent-ink: #fff;
+  --price: #111; --radius: 0px; --shadow: none;
+  --font: Times, "Times New Roman", serif;
+}
+[data-style="amazon"] {
+  --bg: #eaeded; --surface: #fff; --ink: #0f1111; --ink-2: #565959; --line: #d5d9d9;
+  --head-bg: #131921; --head-ink: #fff; --sub-bg: #232f3e; --accent: #febd69; --accent-ink: #0f1111;
+  --btn: #ffd814; --btn-2: #ffa41c; --link: #007185; --price: #0f1111; --deal: #cc0c39;
+  --radius: 8px; --shadow: 0 2px 5px rgba(15,17,17,.15);
+  --font: "Inter", Arial, sans-serif;
+}
+[data-style="avito"] {
+  --bg: #fff; --surface: #fff; --ink: #000; --ink-2: #757575; --line: #ebebeb;
+  --head-bg: #fff; --head-ink: #000; --accent: #00aaff; --accent-ink: #fff;
+  --green: #02d15c; --purple: #965eeb; --red: #ff4053; --chip: #f2f1f0;
+  --link: #0099f7; --price: #000;
+  --radius: 16px; --shadow: none;
+  --font: "Inter", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.45 var(--font); }
+a { color: inherit; text-decoration: none; }
+button, input, select { font: inherit; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+/* Переключатель стилей — для съёмки до/после */
+.switch {
+  position: fixed; z-index: 50; left: 50%; bottom: 20px; transform: translateX(-50%);
+  display: flex; gap: 4px; padding: 5px; border-radius: 999px;
+  background: rgba(17,17,17,.88); backdrop-filter: blur(8px); box-shadow: 0 8px 30px rgba(0,0,0,.3);
+  font-family: "Inter", Arial, sans-serif;
+}
+.switch button {
+  border: 0; cursor: pointer; padding: 10px 18px; border-radius: 999px;
+  background: transparent; color: #bbb; font-weight: 600; font-size: 14px; white-space: nowrap;
+}
+.switch button[aria-pressed="true"] { background: #fff; color: #111; }
+
+/* ===== ОРИГИНАЛ ===== */
+.orig { display: none; padding: 12px 16px 100px; max-width: 1100px; margin: 0 auto; font-family: Times, serif; }
+[data-style="orig"] .orig { display: block; }
+[data-style="orig"] .new { display: none; }
+.orig-grid { display: grid; grid-template-columns: 170px 1fr 170px; gap: 18px; }
+.orig h1 { color: #551a8b; font: 700 26px/1 Times, serif; margin: 6px 0 14px; }
+.orig a { color: #00c; text-decoration: underline; }
+.orig .side p { margin: 4px 0; font-size: 14px; }
+.orig .side input { width: 100%; border: 1px solid #aaa; padding: 2px 4px; }
+.orig .city { text-align: center; font-size: 22px; margin: 6px 0 12px; }
+.orig .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 18px; }
+.orig h4 { background: #eee; margin: 8px 0 4px; padding: 2px 4px; text-align: center; font-size: 14px; border-top: 1px solid #ccc; }
+.orig ul { list-style: none; margin: 0; padding: 0; columns: 2; font-size: 13px; }
+.orig li { margin: 1px 0; }
+@media (max-width: 760px) { .orig-grid { grid-template-columns: 1fr; } .orig .cols { grid-template-columns: 1fr; } }
+
+/* ===== ОБЩАЯ ШАПКА ===== */
+.top { background: var(--head-bg); color: var(--head-ink); }
+.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+.logo { font-weight: 800; font-size: 24px; letter-spacing: -.03em; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.logo .mark { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 8px; font-size: 17px; }
+.loc { font-size: 13px; line-height: 1.2; flex-shrink: 0; }
+.loc small { display: block; opacity: .7; }
+.search { flex: 1; display: flex; min-width: 0; }
+.search input { flex: 1; min-width: 0; border: 0; padding: 0 14px; height: 42px; outline: none; color: #111; }
+.search select { border: 0; padding: 0 10px; background: #e6e6e6; color: #111; }
+.search button { border: 0; cursor: pointer; padding: 0 18px; font-weight: 700; }
+.acts { display: flex; gap: 18px; align-items: center; flex-shrink: 0; font-size: 13px; line-height: 1.2; }
+.acts b { display: block; font-size: 14px; }
+.post-btn { border: 0; cursor: pointer; border-radius: 10px; padding: 11px 16px; font-weight: 700; font-size: 14px; }
+
+[data-style="amazon"] .logo .mark { background: var(--accent); color: #131921; }
+[data-style="amazon"] .logo .smile { color: var(--accent); }
+[data-style="amazon"] .search { border-radius: 6px; overflow: hidden; height: 42px; }
+[data-style="amazon"] .search select { border-radius: 0; }
+[data-style="amazon"] .search button { background: var(--accent); color: #111; }
+[data-style="amazon"] .search button:hover { background: #f3a847; }
+[data-style="amazon"] .post-btn { background: var(--btn); color: #111; border-radius: 999px; }
+[data-style="amazon"] .subnav { display: block; }
+[data-style="amazon"] .search select { display: block; }
+
+[data-style="avito"] .top { border-bottom: 1px solid var(--line); }
+[data-style="avito"] .logo .mark { background: conic-gradient(var(--green) 0 25%, var(--accent) 0 50%, var(--purple) 0 75%, var(--red) 0); color: transparent; border-radius: 50%; width: 26px; height: 26px; }
+[data-style="avito"] .search { border: 2px solid var(--accent); border-radius: 12px; overflow: hidden; }
+[data-style="avito"] .search input { height: 40px; }
+[data-style="avito"] .search select { display: none; }
+[data-style="avito"] .search button { background: var(--accent); color: #fff; }
+[data-style="avito"] .post-btn { background: var(--accent); color: #fff; }
+[data-style="avito"] .loc small { color: var(--ink-2); opacity: 1; }
+
+.subnav { display: none; background: var(--sub-bg); color: #fff; font-size: 14px; }
+.subnav .wrap { display: flex; gap: 18px; padding-block: 8px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.subnav b { font-weight: 700; }
+
+/* ===== HERO ===== */
+.hero { margin: 16px 0; border-radius: var(--radius); overflow: hidden; position: relative; }
+[data-style="amazon"] .hero { margin: 0 -16px; border-radius: 0; background: linear-gradient(180deg, #7ec8e3 0%, #b9e1ef 55%, var(--bg) 100%); padding: 36px 32px 120px; }
+[data-style="amazon"] .hero h2 { font-size: clamp(26px, 4vw, 44px); margin: 0 0 6px; line-height: 1.05; color: #0f1111; }
+[data-style="amazon"] .hero p { margin: 0; font-size: 17px; color: #0f1111; }
+[data-style="avito"] .hero { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+[data-style="avito"] .hero > div { border-radius: var(--radius); padding: 22px; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; }
+[data-style="avito"] .hero h2 { margin: 0; font-size: clamp(20px, 2.4vw, 28px); line-height: 1.1; }
+[data-style="avito"] .hero p { margin: 0; font-size: 14px; }
+.hero .b1 { background: #e3f6ff; } .hero .b2 { background: #e6fbef; } .hero .b3 { background: #f1e9ff; }
+.hero .emoji { font-size: 44px; line-height: 1; align-self: flex-end; }
+[data-style="amazon"] .hero .b2, [data-style="amazon"] .hero .b3, [data-style="amazon"] .hero .emoji { display: none; }
+[data-style="amazon"] .hero .b1 { background: none; }
+
+/* ===== КАТЕГОРИИ ===== */
+.cats { display: grid; gap: 12px; }
+[data-style="avito"] .cats { grid-template-columns: repeat(8, minmax(0, 1fr)); margin: 8px 0 28px; }
+[data-style="avito"] .cat { background: var(--chip); border-radius: 14px; padding: 12px; height: 104px; display: flex; flex-direction: column; justify-content: space-between; font-weight: 600; font-size: 14px; position: relative; overflow: hidden; cursor: pointer; transition: transform .15s; }
+[data-style="avito"] .cat:hover { transform: translateY(-2px); }
+[data-style="avito"] .cat .ic { font-size: 40px; align-self: flex-end; margin: 0 -4px -8px 0; }
+[data-style="avito"] .cat small { display: none; }
+
+[data-style="amazon"] .cats { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: -110px 0 20px; position: relative; gap: 20px; }
+[data-style="amazon"] .cat { background: var(--surface); padding: 18px 18px 14px; box-shadow: var(--shadow); display: flex; flex-direction: column; cursor: pointer; }
+[data-style="amazon"] .cat .name { font-weight: 700; font-size: 19px; order: -1; margin-bottom: 10px; }
+[data-style="amazon"] .cat .ic { font-size: 80px; text-align: center; background: #f7f8f8; padding: 22px 0; line-height: 1; }
+[data-style="amazon"] .cat small { display: block; color: var(--link); font-size: 13px; margin-top: 12px; }
+[data-style="amazon"] .cat:nth-child(n+5) { display: none; }
+
+/* ===== ЛЕНТА ===== */
+.feed-head { display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 14px; gap: 12px; flex-wrap: wrap; }
+.feed-head h3 { margin: 0; font-size: 24px; font-weight: 700; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 0; cursor: pointer; padding: 7px 14px; border-radius: 999px; background: var(--chip, #fff); font-size: 14px; color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--ink); color: #fff; }
+[data-style="amazon"] .feed { background: var(--surface); padding: 20px; box-shadow: var(--shadow); margin-bottom: 120px; }
+[data-style="amazon"] .chip { border: 1px solid var(--line); background: #fff; }
+[data-style="amazon"] .chip[aria-pressed="true"] { background: #0f1111; color: #fff; border-color: #0f1111; }
+[data-style="avito"] .feed { margin-bottom: 120px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px 16px; }
+.card { display: flex; flex-direction: column; cursor: pointer; min-width: 0; }
+.pic { aspect-ratio: 4/3; display: grid; place-items: center; font-size: 72px; position: relative; overflow: hidden; }
+.fav { position: absolute; top: 8px; right: 8px; width: 34px; height: 34px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(255,255,255,.9); font-size: 17px; display: grid; place-items: center; }
+.fav.on { color: #ff4053; }
+.dots { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.6); }
+.dots i:first-child { background: #fff; }
+.body { padding-top: 8px; display: flex; flex-direction: column; gap: 3px; }
+.ttl { font-size: 15px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.price { font-weight: 700; font-size: 18px; color: var(--price); }
+.meta { font-size: 13px; color: var(--ink-2); }
+.badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; width: fit-content; }
+.stars, .ship, .cart, .old, .deal { display: none; }
+
+[data-style="avito"] .pic { border-radius: 12px; }
+[data-style="avito"] .ttl { color: var(--link); }
+[data-style="avito"] .card:hover .ttl { color: var(--red); }
+[data-style="avito"] .badge { background: #e6fbef; color: #009a43; }
+[data-style="avito"] .call { display: flex; }
+.call { display: none; gap: 6px; margin-top: 8px; opacity: 0; transition: opacity .15s; }
+.card:hover .call { opacity: 1; }
+.call button { flex: 1; border: 0; border-radius: 10px; padding: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
+.call .ph { background: var(--green); color: #fff; }
+.call .msg { background: var(--accent); color: #fff; }
+
+[data-style="amazon"] .pic { background: #f7f8f8 !important; border-radius: 4px; }
+[data-style="amazon"] .dots { display: none; }
+[data-style="amazon"] .ttl { color: var(--ink); }
+[data-style="amazon"] .card:hover .ttl { color: #c7511f; }
+[data-style="amazon"] .stars { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--link); }
+[data-style="amazon"] .stars span { color: #de7921; letter-spacing: -1px; font-size: 15px; }
+[data-style="amazon"] .price { font-weight: 500; font-size: 24px; display: flex; align-items: flex-start; gap: 6px; }
+[data-style="amazon"] .price sup { font-size: 13px; margin-top: 4px; }
+[data-style="amazon"] .old { display: inline; font-size: 13px; color: var(--ink-2); text-decoration: line-through; font-weight: 400; align-self: flex-end; margin-bottom: 4px; }
+[data-style="amazon"] .deal { display: inline-block; background: var(--deal); color: #fff; font-size: 12px; font-weight: 700; padding: 3px 7px; border-radius: 3px; width: fit-content; }
+[data-style="amazon"] .ship { display: block; font-size: 13px; }
+[data-style="amazon"] .ship b { color: #00a8e1; font-style: italic; }
+[data-style="amazon"] .cart { display: block; margin-top: 8px; border: 0; border-radius: 999px; padding: 8px; background: var(--btn); cursor: pointer; font-size: 13px; }
+[data-style="amazon"] .cart:hover { background: #f7ca00; }
+[data-style="amazon"] .badge { background: #232f3e; color: #fff; border-radius: 2px; }
+[data-style="amazon"] .badge::before { content: "★ "; color: var(--accent); }
+
+.toast { position: fixed; left: 50%; top: 20px; transform: translate(-50%, -80px); background: #111; color: #fff; padding: 10px 18px; border-radius: 10px; font-family: Inter, Arial, sans-serif; font-size: 14px; transition: transform .25s; z-index: 60; }
+.toast.show { transform: translate(-50%, 0); }
+
+@media (max-width: 1000px) {
+  .acts .hide-m { display: none; }
+  [data-style="avito"] .cats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  [data-style="amazon"] .cats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .top .wrap { flex-wrap: wrap; }
+  .search { order: 5; flex-basis: 100%; }
+  .loc { display: none; }
+  .acts { margin-left: auto; }
+  [data-style="avito"] .hero { grid-template-columns: 1fr 1fr; }
+  [data-style="avito"] .hero .b1 { grid-column: 1 / -1; }
+  [data-style="avito"] .cats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  [data-style="avito"] .cat { height: 84px; font-size: 11px; padding: 8px; border-radius: 12px; }
+  [data-style="avito"] .cat .ic { font-size: 30px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px; }
+  .pic { font-size: 54px; }
+  [data-style="amazon"] .price { font-size: 20px; }
+  [data-style="amazon"] .hero { padding: 24px 16px 110px; }
+  [data-style="amazon"] .cats { gap: 10px; }
+  [data-style="amazon"] .cat .ic { font-size: 54px; padding: 14px 0; }
+  [data-style="amazon"] .cat .name { font-size: 16px; }
+  .switch button { padding: 9px 13px; font-size: 13px; }
+}
+</style>
+</head>
+<body data-style="avito">
+
+<!-- ===== ОРИГИНАЛ (для «до») ===== -->
+<div class="orig">
+  <div class="orig-grid">
+    <div class="side">
+      <h1>craigslist</h1>
+      <p><a href="#">create a posting</a></p>
+      <p><a href="#">my account</a></p>
+      <p style="margin-top:12px"><input placeholder="search craigslist"></p>
+      <p style="margin-top:12px"><b>event calendar</b></p>
+      <p style="font-size:12px">S M T W T F S<br>1 2 3 4 5 6 7<br>8 9 10 11 12 13 14</p>
+      <p style="margin-top:12px"><a href="#">help, faq, abuse, legal</a><br><a href="#">avoid scams &amp; fraud</a></p>
+    </div>
+    <div>
+      <div class="city">new york city</div>
+      <div class="cols" id="origCols"></div>
+    </div>
+    <div class="side">
+      <p><a href="#">english</a></p>
+      <p style="margin-top:12px"><b>nearby cl</b></p>
+      <p><a href="#">albany</a><br><a href="#">allentown</a><br><a href="#">baltimore</a><br><a href="#">boston</a><br><a href="#">hartford</a><br><a href="#">philadelphia</a></p>
+      <p style="margin-top:12px"><b>us cities</b><br><b>us states</b><br><b>canada</b><br><b>cl worldwide</b></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== РЕДИЗАЙН ===== -->
+<div class="new">
+  <header class="top">
+    <div class="wrap">
+      <a class="logo" href="#"><span class="mark">c</span>craigslist</a>
+      <div class="loc"><small>Доставка в</small><b>📍 Нью-Йорк</b></div>
+      <form class="search" onsubmit="event.preventDefault(); toast('Ищем: ' + (this.q.value || 'всё подряд'))">
+        <select aria-label="Категория"><option>Все</option><option>Авто</option><option>Жильё</option><option>Электроника</option></select>
+        <input name="q" placeholder="Поиск по объявлениям" aria-label="Поиск">
+        <button type="submit">Найти</button>
+      </form>
+      <div class="acts">
+        <span class="hide-m"><small>Привет, гость</small><b>Аккаунт</b></span>
+        <span class="hide-m">♡ <b>Избранное</b></span>
+        <button class="post-btn" onclick="toast('Форма объявления — скоро 😉')">+ Разместить</button>
+      </div>
+    </div>
+  </header>
+  <nav class="subnav"><div class="wrap"><b>☰ Все</b><span>Сделки дня</span><span>Авто</span><span>Жильё</span><span>Работа</span><span>Электроника</span><span>Мебель</span><span>Бесплатно</span><span>Услуги</span><span>Сообщество</span></div></nav>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="b1"><div><h2>Craigslist, который<br>не стыдно открыть</h2><p>Тот же Нью-Йорк, те же сделки — новый вид</p></div><div class="emoji">🗽</div></div>
+      <div class="b2"><h2>Отдам даром</h2><div class="emoji">🎁</div></div>
+      <div class="b3"><h2>Работа рядом</h2><div class="emoji">💼</div></div>
+    </section>
+
+    <section class="cats" id="cats"></section>
+
+    <section class="feed">
+      <div class="feed-head">
+        <h3 id="feedTitle">Рекомендации для вас</h3>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+</div>
+
+<div class="switch" role="group" aria-label="Стиль">
+  <button data-s="orig">Было</button>
+  <button data-s="amazon">Amazon-стиль</button>
+  <button data-s="avito">Avito-стиль</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const cats = [
+  { n: "Авто", ic: "🚗", bg: "#ffe8d6" },
+  { n: "Жильё", ic: "🏠", bg: "#dff3ff" },
+  { n: "Работа", ic: "💼", bg: "#efe6ff" },
+  { n: "Электроника", ic: "📱", bg: "#e4f8ec" },
+  { n: "Мебель", ic: "🛋️", bg: "#fff3cc" },
+  { n: "Бесплатно", ic: "🎁", bg: "#ffe2e6" },
+  { n: "Услуги", ic: "🛠️", bg: "#e9eef3" },
+  { n: "Хобби", ic: "🎸", bg: "#fde7f6" },
+];
+
+const items = [
+  { t: "Honda Civic 2014, один владелец, 98k миль", p: 8900, o: 10500, c: "Авто", ic: "🚗", bg: "#ffe8d6", loc: "Бруклин", time: "2 часа назад", r: 4.6, rc: 38, b: "Проверен" },
+  { t: "Студия в Квинсе, 5 минут до метро", p: 1850, c: "Жильё", ic: "🏢", bg: "#dff3ff", loc: "Астория", time: "15 минут назад", r: 4.2, rc: 12, per: "/мес" },
+  { t: "Диван IKEA, почти новый — самовывоз", p: 0, c: "Бесплатно", ic: "🛋️", bg: "#fff3cc", loc: "Манхэттен", time: "только что", r: 4.9, rc: 7 },
+  { t: "iPhone 15 Pro, 256 ГБ, батарея 94%", p: 640, o: 799, c: "Электроника", ic: "📱", bg: "#e4f8ec", loc: "Бронкс", time: "40 минут назад", r: 4.7, rc: 211, b: "Хит" },
+  { t: "Ищем бариста в кофейню, $22/час + чаевые", p: 22, c: "Работа", ic: "☕", bg: "#efe6ff", loc: "Уильямсбург", time: "3 часа назад", r: 4.4, rc: 19, per: "/час" },
+  { t: "Велосипед Trek FX 2, размер M", p: 320, o: 450, c: "Хобби", ic: "🚲", bg: "#e9eef3", loc: "Хобокен", time: "вчера", r: 4.8, rc: 54 },
+  { t: "Gibson Les Paul Studio + кейс", p: 1100, c: "Хобби", ic: "🎸", bg: "#fde7f6", loc: "Джерси-Сити", time: "5 часов назад", r: 5.0, rc: 9, b: "Проверен" },
+  { t: "Переезд под ключ — грузчики и фургон", p: 99, c: "Услуги", ic: "🚚", bg: "#e9eef3", loc: "Весь Нью-Йорк", time: "сегодня", r: 4.5, rc: 320, per: "/час" },
+  { t: "PlayStation 5 + 2 геймпада", p: 380, o: 499, c: "Электроника", ic: "🎮", bg: "#e4f8ec", loc: "Статен-Айленд", time: "1 час назад", r: 4.6, rc: 88 },
+  { t: "Комната в Бушвике, свет и интернет включены", p: 1100, c: "Жильё", ic: "🛏️", bg: "#dff3ff", loc: "Бушвик", time: "20 минут назад", r: 4.1, rc: 6, per: "/мес" },
+  { t: "Монстера в горшке, 1.2 м — отдам даром", p: 0, c: "Бесплатно", ic: "🪴", bg: "#ffe2e6", loc: "Парк-Слоуп", time: "только что", r: 4.9, rc: 3 },
+  { t: "Tesla Model 3 2019, автопилот", p: 21500, o: 24000, c: "Авто", ic: "🚙", bg: "#ffe8d6", loc: "Лонг-Айленд", time: "6 часов назад", r: 4.8, rc: 41, b: "Хит" },
+];
+
+const $ = (s) => document.querySelector(s);
+const fmt = (n) => "$" + n.toLocaleString("en-US");
+let filter = "Все";
+
+$("#cats").innerHTML = cats.map((c) => `
+  <div class="cat" style="--b:${c.bg}" data-c="${c.n}">
+    <span class="name">${c.n}</span><span class="ic">${c.ic}</span><small>Смотреть все →</small>
+  </div>`).join("");
+document.querySelectorAll(".cat").forEach((el) => (el.onclick = () => setFilter(el.dataset.c)));
+
+function paintCats() {
+  document.querySelectorAll(".cat").forEach((el) => {
+    el.style.background = document.body.dataset.style === "avito" ? el.style.getPropertyValue("--b") : "";
+  });
+}
+
+function renderChips() {
+  $("#chips").innerHTML = ["Все", ...cats.map((c) => c.n)].map((n) =>
+    `<button class="chip" aria-pressed="${n === filter}" data-c="${n}">${n}</button>`).join("");
+  document.querySelectorAll(".chip").forEach((b) => (b.onclick = () => setFilter(b.dataset.c)));
+}
+
+function stars(r) { const f = Math.round(r); return "★".repeat(f) + "☆".repeat(5 - f); }
+
+function renderGrid() {
+  const list = items.filter((i) => filter === "Все" || i.c === filter);
+  $("#feedTitle").textContent = filter === "Все" ? "Рекомендации для вас" : filter;
+  $("#grid").innerHTML = list.map((i) => {
+    const free = i.p === 0;
+    const price = free ? "Бесплатно" : fmt(i.p) + (i.per || "");
+    const disc = i.o ? Math.round((1 - i.p / i.o) * 100) : 0;
+    return `
+    <article class="card">
+      <div class="pic" style="background:${i.bg}">${i.ic}
+        <button class="fav" aria-label="В избранное" onclick="event.stopPropagation(); this.classList.toggle('on'); this.textContent = this.classList.contains('on') ? '♥' : '♡'">♡</button>
+        <div class="dots"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="body">
+        ${i.b ? `<span class="badge">${i.b}</span>` : ""}
+        ${disc ? `<span class="deal">−${disc}% сделка</span>` : ""}
+        <div class="price">${price}${i.o ? `<span class="old">${fmt(i.o)}</span>` : ""}</div>
+        <div class="ttl">${i.t}</div>
+        <div class="stars"><span>${stars(i.r)}</span>${i.rc}</div>
+        <div class="ship"><b>✓ рядом</b> · самовывоз сегодня</div>
+        <div class="meta">${i.loc} · ${i.time}</div>
+        <button class="cart" onclick="toast('Продавцу отправлено сообщение')">Написать продавцу</button>
+        <div class="call"><button class="ph" onclick="toast('Показали номер 📞')">Позвонить</button><button class="msg" onclick="toast('Открыли чат 💬')">Написать</button></div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+function setFilter(c) { filter = c; renderChips(); renderGrid(); }
+
+// Оригинальная главная craigslist
+const orig = {
+  "community": ["activities","artists","childcare","classes","events","general","groups","local news","lost+found","musicians","pets","politics","rideshare","volunteers"],
+  "housing": ["apts / housing","housing swap","housing wanted","office / commercial","parking / storage","real estate for sale","rooms / shared","sublets / temporary"],
+  "jobs": ["accounting","admin / office","arch / engineering","art / media","biotech","business","customer service","education","food / bev","government","healthcare","legal","marketing","retail","software"],
+  "services": ["automotive","beauty","computer","creative","cycle","event","financial","legal","lessons","marine","pet","real estate","skilled trade","travel/vac"],
+  "for sale": ["antiques","appliances","arts+crafts","auto parts","bikes","books","cars+trucks","cell phones","clothes+acc","computers","electronics","free","furniture","general","music instr","tools"],
+  "discussion forums": ["apple","arts","atheist","autos","beauty","bikes","celebs","comp","crafts","diet","eco","film","food","games","help","history"],
+};
+$("#origCols").innerHTML = Object.entries(orig).map(([h, l]) =>
+  `<div><h4><a href="#">${h}</a></h4><ul>${l.map((x) => `<li><a href="#">${x}</a></li>`).join("")}</ul></div>`).join("");
+
+function setStyle(s) {
+  document.body.dataset.style = s;
+  document.querySelectorAll(".switch button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.s === s));
+  paintCats();
+  try { localStorage.setItem("cl-style", s); } catch (e) {}
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll(".switch button").forEach((b) => (b.onclick = () => setStyle(b.dataset.s)));
+
+let t;
+function toast(m) { const el = $("#toast"); el.textContent = m; el.classList.add("show"); clearTimeout(t); t = setTimeout(() => el.classList.remove("show"), 1600); }
+
+renderChips(); renderGrid();
+let saved = "avito";
+try { saved = localStorage.getItem("cl-style") || "avito"; } catch (e) {}
+setStyle(saved);
+</script>
+</body>
+</html>
