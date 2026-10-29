@@ -6,7 +6,7 @@
 <title>Craigslist Redesign</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Концепт-редизайн Craigslist: «Было» / Amazon-стиль / Avito-стиль. Главная + страница объявления (#/item/ID) */
+/* Концепт-редизайн Craigslist: «Было» / «Стало» (в стиле Amazon). Главная + страница объявления (#/item/ID) */
 :root {
   --bg: #fff; --surface: #fff; --ink: #111; --ink-2: #5c5f66; --ink-3: #8a8d93; --line: #e3e4e6;
   --head-bg: #fff; --head-ink: #111; --accent: #1f5fd1; --accent-ink: #fff;
@@ -20,11 +20,6 @@
   --head-bg: #131921; --head-ink: #fff; --sub-bg: #232f3e; --accent: #febd69;
   --btn: #ffd814; --btn-ink: #0f1111; --btn-2: #ffa41c; --btn-2-ink: #0f1111;
   --link: #007185; --ok: #067d62; --radius: 8px; --radius-s: 4px; --shadow: 0 1px 3px rgba(15,17,17,.12);
-}
-[data-style="avito"] {
-  --ink: #000; --ink-2: #6b6b6b; --ink-3: #959595; --line: #e8e8e8;
-  --accent: #00a6ff; --btn: #00a6ff; --btn-ink: #fff; --btn-2: #02c35a; --btn-2-ink: #fff;
-  --link: #0090e6; --ok: #02a24a; --radius: 16px; --radius-s: 12px; --chip: #f2f1f0;
 }
 
 * { box-sizing: border-box; }
@@ -81,10 +76,6 @@ svg { display: block; }
 [data-style="amazon"] .search select { display: block; border-right: 1px solid #cdcdcd; }
 [data-style="amazon"] .search button { background: var(--accent); color: #111; }
 [data-style="amazon"] .post-btn { border-radius: 999px; }
-[data-style="avito"] .top { border-bottom: 1px solid var(--line); }
-[data-style="avito"] .search { border: 2px solid var(--accent); border-radius: 12px; }
-[data-style="avito"] .search button { background: var(--accent); color: #fff; }
-[data-style="avito"] .post-btn { border-radius: 12px; }
 
 .subnav { display: none; background: var(--sub-bg); color: #fff; font-size: 14px; }
 [data-style="amazon"] .subnav { display: block; }
@@ -104,11 +95,6 @@ svg { display: block; }
 .cat .ic { width: 36px; height: 36px; border-radius: 50%; background: var(--ph); display: grid; place-items: center; color: var(--ink); }
 .cat .n { font-weight: 600; font-size: 14px; }
 .cat .c { font-size: 12px; color: var(--ink-3); margin-top: -8px; }
-[data-style="avito"] .cat { border: 0; background: var(--chip); }
-[data-style="avito"] .cat[aria-pressed="true"] { background: #000; color: #fff; }
-[data-style="avito"] .cat[aria-pressed="true"] .ic { background: #333; color: #fff; }
-[data-style="avito"] .cat[aria-pressed="true"] .c { color: #aaa; }
-[data-style="avito"] .cat .ic { background: #fff; }
 [data-style="amazon"] .cat { border: 0; box-shadow: var(--shadow); }
 [data-style="amazon"] .cat[aria-pressed="true"] { box-shadow: 0 0 0 2px #e77600, var(--shadow); }
 
@@ -149,8 +135,6 @@ svg { display: block; }
 [data-style="amazon"] .ph { background: #f7f8f8; }
 [data-style="amazon"] .card .price { font-weight: 500; font-size: 22px; }
 [data-style="amazon"] .card:hover .t { color: #c7511f; text-decoration: none; }
-[data-style="avito"] .card .t { color: var(--link); }
-[data-style="avito"] .card:hover .t { color: #ff4053; text-decoration: none; }
 .empty { padding: 60px 0; text-align: center; color: var(--ink-2); }
 
 /* ===== СТРАНИЦА ОБЪЯВЛЕНИЯ ===== */
@@ -161,7 +145,6 @@ svg { display: block; }
 .box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
 [data-style="amazon"] .box, [data-style="amazon"] .item-main { border: 0; box-shadow: var(--shadow); }
 [data-style="amazon"] .item-main { background: var(--surface); padding: 20px; border-radius: var(--radius); }
-[data-style="avito"] .box { border: 0; box-shadow: 0 2px 14px rgba(0,0,0,.08); }
 .side-col { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 14px; }
 .side-col .price { font-size: 30px; letter-spacing: -.02em; }
 .side-col .note { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
@@ -252,11 +235,6 @@ body, .top, .box, .cat, .sheet, .filters, .results, .item-main, .card, .term, .m
 [data-theme="dark"] .orig input { background: #fff; color: #000; }
 [data-theme="dark"][data-style="amazon"] { --bg: #0b0e12; --head-bg: #131921; --sub-bg: #1c2633; --btn-2-ink: #0f1111; --shadow: 0 1px 3px rgba(0,0,0,.5); }
 [data-theme="dark"][data-style="amazon"] .ph { background: #1b1f26; }
-[data-theme="dark"][data-style="avito"] .cat[aria-pressed="true"] { background: #fff; color: #000; }
-[data-theme="dark"][data-style="avito"] .cat[aria-pressed="true"] .ic { background: #e9e9e9; color: #000; }
-[data-theme="dark"][data-style="avito"] .cat .ic { background: #2a2f38; }
-[data-theme="dark"][data-style="avito"] .box { box-shadow: 0 2px 14px rgba(0,0,0,.45); }
-[data-theme="dark"][data-style="avito"] .search input { background: var(--surface); color: var(--ink); }
 [data-theme="dark"] .ava { color: var(--bg); }
 [data-theme="dark"] .fav { background: rgba(23,26,33,.9); color: #eee; }
 [data-theme="dark"] .map { background-color: var(--ph); }
@@ -270,7 +248,6 @@ body, .top, .box, .cat, .sheet, .filters, .results, .item-main, .card, .term, .m
 .new .top .wrap { transition: padding .25s var(--ease); }
 .top.scrolled { box-shadow: 0 6px 24px rgba(0,0,0,.08); }
 .top.scrolled .wrap { padding-block: 7px; }
-[data-style="avito"] .top.scrolled { border-bottom-color: transparent; }
 .filters, .side-col { top: 84px; }
 
 /* Полоса прогресса прокрутки */
@@ -436,7 +413,7 @@ body, .top, .box, .cat, .sheet, .filters, .results, .item-main, .card, .term, .m
 }
 </style>
 </head>
-<body data-style="avito">
+<body data-style="amazon">
 
 <div class="orig">
   <div class="orig-grid">
@@ -483,8 +460,7 @@ body, .top, .box, .cat, .sheet, .filters, .results, .item-main, .card, .term, .m
 
 <div class="switch" role="group" aria-label="Стиль">
   <button data-s="orig">Было</button>
-  <button data-s="amazon">Amazon-стиль</button>
-  <button data-s="avito">Avito-стиль</button>
+  <button data-s="amazon">Стало</button>
 </div>
 <div class="toast" id="toast"></div>
 <div id="prog"></div>
@@ -978,8 +954,8 @@ document.querySelectorAll(".switch button").forEach((b) => (b.onclick = () => se
 let tt;
 function toast(m) { const el = $("#toast"); el.textContent = m; el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 1600); }
 
-let saved = "avito";
-try { saved = localStorage.getItem("cl-style") || "avito"; } catch (e) {}
+let saved = "amazon";
+try { saved = localStorage.getItem("cl-style") === "orig" ? "orig" : "amazon"; } catch (e) {}
 setStyle(saved);
 let savedTheme = null;
 try { savedTheme = localStorage.getItem("cl-theme"); state.view = localStorage.getItem("cl-view") || "grid"; recent = JSON.parse(localStorage.getItem("cl-recent") || "[]");
