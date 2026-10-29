@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-oIgp9aqLIyMS/wC/2+atVQI8vnmUXQn0dVfWNdA5rbQ=' 'sha256-71QmndyA8n+a/eUEsFFqXwHBXSEY4ZnsYqJjZ3KYbWQ='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
 <title>Craigslist Redesign</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
@@ -449,7 +451,7 @@ body, .top, .box, .cat, .sheet, .filters, .results, .item-main, .card, .term, .m
         <span class="a"><small>Войти</small><b>Аккаунт</b></span>
         <a class="a" href="#/" id="favLink"><small>Сохранено</small><b id="favCount">Избранное · 0</b></a>
         <button class="icon-btn" id="themeBtn" aria-label="Тёмная тема"></button>
-        <button class="post-btn" onclick="toast('Размещение объявления доступно после входа')">Разместить<span class="long"> объявление</span></button>
+        <button class="post-btn" data-toast="Размещение объявления доступно после входа">Разместить<span class="long"> объявление</span></button>
       </div>
     </div>
   </header>
@@ -544,6 +546,8 @@ const PAGE = 24;
 */
 
 const $ = (s, r = document) => r.querySelector(s);
+// Экранирование всего, что вводит пользователь, перед вставкой в HTML
+const escHTML = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const fmt = (n) => "$" + n.toLocaleString("en-US");
 const catOf = (id) => CATS.find((c) => c.id === id);
 const favs = new Set();
@@ -621,7 +625,7 @@ function renderHome(y = window.scrollY) {
           <button class="reset" id="reset">Сбросить фильтры</button></section>
       </aside>
       <div class="results">
-        <div class="toolbar"><span>${state.q ? `По запросу «${state.q}»` : "Все объявления"}</span>
+        <div class="toolbar"><span>${state.q ? `По запросу «${escHTML(state.q)}»` : "Все объявления"}</span>
           <div class="tb-r"><button class="f-btn" id="fBtn">Фильтры</button><div class="vt"><button data-view="grid" aria-pressed="${state.view === "grid"}" aria-label="Сеткой">${ic("grid", 16)}</button><button data-view="list" aria-pressed="${state.view === "list"}" aria-label="Списком">${ic("list", 16)}</button></div><select id="sort"><option value="new">Сначала новые</option><option value="cheap">Дешевле</option><option value="exp">Дороже</option></select></div></div>
         ${list.length ? `<div class="grid ${state.view === "list" ? "list" : ""}" id="grid">${list.slice(0, state.shown).map(cardHTML).join("")}</div>` : `<div class="empty">Ничего не найдено. Попробуйте изменить фильтры.</div>`}
         ${list.length > state.shown ? `<button class="more" id="more">Показать ещё · осталось ${list.length - state.shown}</button>` : ""}
@@ -703,7 +707,7 @@ function promoHTML(pool) {
   const n = (cat) => pool.filter((i) => i.cat === cat).length;
   return `<div class="promo" id="promo">${PROMOS.map((x, k) => `<div class="slide ${x.c} ${k === state.promo ? "on" : ""}">
     <div><h3>${x.h}</h3><p>${x.p.replace("{free}", n("free")).replace("{jobs}", n("jobs")).replace("{auto}", n("auto"))}</p>
-    <button class="go" ${x.t === "toast" ? `onclick="toast('Сделка с защитой — скоро во всех городах')"` : `data-goto="${x.t}"`}>${x.b}</button></div>
+    <button class="go" ${x.t === "toast" ? `data-toast="Сделка с защитой — скоро во всех городах"` : `data-goto="${x.t}"`}>${x.b}</button></div>
     <div class="art">${ic(x.i, 48)}</div></div>`).join("")}
     <div class="dots">${PROMOS.map((_, k) => `<button data-dot="${k}" class="${k === state.promo ? "on" : ""}" aria-label="Слайд ${k + 1}"></button>`).join("")}</div></div>`;
 }
@@ -741,14 +745,14 @@ function renderItem(id) {
   recent = [i.id, ...recent.filter((x) => x !== i.id)].slice(0, 12);
   try { localStorage.setItem("cl-recent", JSON.stringify(recent)); } catch (e) {}
   $("#app").innerHTML = `
-    <button class="back" onclick="history.length > 1 ? history.back() : (location.hash='#/')">${ic("back", 16)} Назад к объявлениям</button>
+    <button class="back" data-back>${ic("back", 16)} Назад к объявлениям</button>
     <div class="crumbs" style="margin-top:0"><a href="#/" data-goto="all" data-city="${i.city}">${cityOf(i.city).n}</a> / <a href="#/" data-goto="${c.id}">${c.n}</a> / <span>${i.t}</span></div>
     <div class="item">
       <div class="item-main">
         <h1>${i.t}</h1>
         <div class="sub"><span>№ ${i.id}</span><span>Опубликовано ${i.ago} назад</span><span>${i.cond}</span></div>
         <div class="gal">${pic(i, "main")}
-          <div class="credit">Фото: <a href="${i.cr.u}" target="_blank" rel="noopener">${i.cr.a}</a>, CC BY 2.0. Иллюстрация, не фото конкретного товара.</div>
+          <div class="credit">Фото: <a href="${i.cr.u}" target="_blank" rel="noopener noreferrer">${i.cr.a}</a>, CC BY 2.0. Иллюстрация, не фото конкретного товара.</div>
         </div>
 
         <h2 class="sec">Условия</h2>
@@ -769,8 +773,8 @@ function renderItem(id) {
           <div class="price">${priceText(i)}</div>
           <div class="note">${i.p === 0 ? "Отдаётся бесплатно" : i.terms.deal}</div>
           <div class="btns">
-            <button class="btn s" onclick="toast('Номер скрыт: свяжитесь через чат')">Показать телефон</button>
-            <button class="btn" onclick="toast('${i.cat === "jobs" ? "Отклик отправлен" : "Сообщение отправлено продавцу"}')">${cta}</button>
+            <button class="btn s" data-toast="Номер скрыт: свяжитесь через чат">Показать телефон</button>
+            <button class="btn" data-toast="${i.cat === "jobs" ? "Отклик отправлен" : "Сообщение отправлено продавцу"}">${cta}</button>
             <button class="btn g" data-fav="${i.id}">${favs.has(i.id) ? "В избранном" : "Добавить в избранное"}</button>
           </div>
         </div>
@@ -790,7 +794,7 @@ function renderItem(id) {
       </aside>
     </div>
     ${similar.length ? `<h2 class="sec" style="margin-top:0">Похожие объявления</h2><div class="grid" style="padding-bottom:110px">${similar.map(cardHTML).join("")}</div>` : ""}
-    <div class="mbar"><button class="btn s" onclick="toast('Номер скрыт: свяжитесь через чат')">${i.cat === "jobs" ? "Позвонить" : "Показать телефон"}</button><button class="btn" onclick="toast('${i.cat === "jobs" ? "Отклик отправлен" : "Сообщение отправлено продавцу"}')">${cta}</button></div>`;
+    <div class="mbar"><button class="btn s" data-toast="Номер скрыт: свяжитесь через чат">${i.cat === "jobs" ? "Позвонить" : "Показать телефон"}</button><button class="btn" data-toast="${i.cat === "jobs" ? "Отклик отправлен" : "Сообщение отправлено продавцу"}">${cta}</button></div>`;
   document.body.classList.add("has-mbar");
   $(".gal .main").onclick = () => openLB(IMG[i.img]);
   reveal($("#app"));
@@ -809,6 +813,9 @@ function route() {
 window.addEventListener("hashchange", route);
 
 document.addEventListener("click", (e) => {
+  const tb = e.target.closest("[data-toast]");
+  if (tb) toast(tb.dataset.toast);
+  if (e.target.closest("[data-back]")) { history.length > 1 ? history.back() : (location.hash = "#/"); return; }
   const g = e.target.closest("[data-goto]");
   if (g) {
     e.preventDefault();
@@ -958,8 +965,10 @@ let saved = "amazon";
 try { saved = localStorage.getItem("cl-style") === "orig" ? "orig" : "amazon"; } catch (e) {}
 setStyle(saved);
 let savedTheme = null;
-try { savedTheme = localStorage.getItem("cl-theme"); state.view = localStorage.getItem("cl-view") || "grid"; recent = JSON.parse(localStorage.getItem("cl-recent") || "[]");
-  JSON.parse(localStorage.getItem("cl-favs") || "[]").forEach((id) => favs.add(id)); } catch (e) {}
+const ids = (k) => { const v = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(v) ? v.filter((x) => Number.isInteger(x) && ITEMS.some((i) => i.id === x)).slice(0, 200) : []; };
+try { savedTheme = localStorage.getItem("cl-theme"); if (savedTheme !== "dark" && savedTheme !== "light") savedTheme = null;
+  state.view = localStorage.getItem("cl-view") === "list" ? "list" : "grid"; recent = ids("cl-recent").slice(0, 12);
+  ids("cl-favs").forEach((id) => favs.add(id)); } catch (e) {}
 setTheme(savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
 $("#favCount").textContent = "Избранное · " + favs.size;
 let savedCity = "nyc";
