@@ -299,87 +299,88 @@ const CATS = [
 
 /*
   Демо-данные: правдоподобные объявления с ценами по рынку Нью-Йорка.
-  Фото: добавьте URL в массив img — карточки и галерея подхватят их автоматически.
+  Фото: бесплатные снимки Unsplash (Unsplash License), иллюстративные — не фото самих товаров. Добавьте URL в массив img — карточки и галерея подхватят их автоматически.
 */
+const u = (...ids) => ids.map((id) => `https://unsplash.com/photos/${id}/download?w=900`);
 const ITEMS = [
-  { id: 101, cat: "auto", t: "Honda Accord EX 2017, 1 владелец", p: 14900, loc: "Бруклин, Bay Ridge", ago: "2 ч", cond: "С пробегом", seller: "Michael R.", since: 2019, rate: 4.9, rc: 23, type: "Частное лицо",
-    specs: { "Год": "2017", "Пробег": "86 400 миль", "Двигатель": "2.4 л, бензин", "КПП": "Вариатор", "Привод": "Передний", "Цвет": "Серый металлик", "VIN": "проверен, без ДТП", "Title": "Clean" },
+  { id: 101, img: u("oKTAsXDuaeg", "UcFVVAan25w", "G48s1FJb_WE"), cat: "auto", t: "Honda Accord EX 2017, 1 владелец", p: 14900, loc: "Бруклин, Bay Ridge", ago: "2 ч", cond: "С пробегом", seller: "Michael R.", since: 2019, rate: 4.9, rc: 23, type: "Частное лицо",
+    specs: { "Год": "2017", "Пробег": "86 400 миль", "Двигатель": "2.4 л, бензин", "КПП": "Вариатор", "Привод": "Передний", "Цвет": "Белый", "VIN": "проверен, без ДТП", "Title": "Clean" },
     terms: { deal: "Торг уместен при осмотре", pay: "Наличные, Zelle, банковский чек", ship: "Только самовывоз", extra: "Можно проверить у своего механика" },
     d: "Продаю свой Accord: обслуживался у дилера, вся история в CarFax. Новые шины Michelin (12 тыс. миль назад), тормоза поменяны весной.\n\nДва комплекта ключей. Не курили. Причина продажи — переезд." },
-  { id: 102, cat: "auto", t: "Toyota RAV4 XLE AWD 2019", p: 22500, loc: "Квинс, Flushing", ago: "5 ч", cond: "С пробегом", seller: "Queens Auto Group", since: 2014, rate: 4.6, rc: 312, type: "Дилер", badge: "Проверенный дилер",
-    specs: { "Год": "2019", "Пробег": "58 900 миль", "Двигатель": "2.5 л, бензин", "КПП": "Автомат", "Привод": "Полный", "Цвет": "Белый", "Title": "Clean" },
+  { id: 102, img: u("PNyyffLvWIs", "_61OLuGdgwQ"), cat: "auto", t: "Toyota RAV4 XLE AWD 2019", p: 22500, loc: "Квинс, Flushing", ago: "5 ч", cond: "С пробегом", seller: "Queens Auto Group", since: 2014, rate: 4.6, rc: 312, type: "Дилер", badge: "Проверенный дилер",
+    specs: { "Год": "2019", "Пробег": "58 900 миль", "Двигатель": "2.5 л, бензин", "КПП": "Автомат", "Привод": "Полный", "Цвет": "Синий", "Title": "Clean" },
     terms: { deal: "Цена фиксированная", pay: "Кредит, лизинг, наличные, карта", ship: "Доставка по NY/NJ — $250", extra: "Гарантия 3 месяца / 3 000 миль" },
     d: "Автомобиль прошёл 150-точечную проверку. CarFax прилагается. Возможен trade-in вашего авто.\n\nТест-драйв по записи, ежедневно 10:00–19:00." },
-  { id: 103, cat: "auto", t: "Tesla Model 3 Long Range 2020", p: 23900, loc: "Лонг-Айленд, Hempstead", ago: "вчера", cond: "С пробегом", seller: "Daniel K.", since: 2021, rate: 5.0, rc: 6, type: "Частное лицо",
+  { id: 103, img: u("N3FCay6SBzc", "L1_XWJ_bRSM", "pDOM_D1GEwk", "YJlW6heZzUc"), cat: "auto", t: "Tesla Model 3 Long Range 2020", p: 23900, loc: "Лонг-Айленд, Hempstead", ago: "вчера", cond: "С пробегом", seller: "Daniel K.", since: 2021, rate: 5.0, rc: 6, type: "Частное лицо",
     specs: { "Год": "2020", "Пробег": "47 200 миль", "Запас хода": "~310 миль", "Привод": "Полный", "Цвет": "Чёрный", "Autopilot": "Базовый" },
     terms: { deal: "Небольшой торг", pay: "Банковский перевод, банковский чек", ship: "Самовывоз", extra: "Остаток заводской гарантии на батарею" },
     d: "Батарея в отличном состоянии, деградация около 6%. Зарядка только дома (Level 2). Зимняя резина на дисках в подарок." },
-  { id: 201, cat: "housing", t: "Студия 450 ft², 5 минут до метро N/W", p: 2350, per: "мес", loc: "Квинс, Astoria", ago: "30 мин", cond: "Аренда", seller: "Astoria Realty", since: 2016, rate: 4.4, rc: 87, type: "Агентство",
+  { id: 201, img: u("mD2atAC5GxE", "DEfgoEX4ya8"), cat: "housing", t: "Студия 450 ft², 5 минут до метро N/W", p: 2350, per: "мес", loc: "Квинс, Astoria", ago: "30 мин", cond: "Аренда", seller: "Astoria Realty", since: 2016, rate: 4.4, rc: 87, type: "Агентство",
     specs: { "Тип": "Студия", "Площадь": "450 ft²", "Этаж": "3 из 4, без лифта", "Санузел": "1", "Стирка": "В здании", "Животные": "Кошки — да", "Свободна с": "1 декабря" },
     terms: { deal: "Договор на 12 месяцев", pay: "1-й месяц + депозит", ship: "Комиссия: нет (no fee)", extra: "Доход от 40× аренды или поручитель" },
     d: "Светлая студия после ремонта: новая кухня, посудомойка, деревянный пол. Отопление и горячая вода включены в стоимость.\n\nПросмотры по будням вечером и в выходные." },
-  { id: 202, cat: "housing", t: "Комната в квартире 3BR, коммунальные включены", p: 1450, per: "мес", loc: "Бруклин, Bushwick", ago: "1 ч", cond: "Аренда", seller: "Sarah L.", since: 2022, rate: 4.8, rc: 11, type: "Частное лицо",
+  { id: 202, img: u("rS0d3l1YRgI", "ePpt1W2cTjs"), cat: "housing", t: "Комната в квартире 3BR, коммунальные включены", p: 1450, per: "мес", loc: "Бруклин, Bushwick", ago: "1 ч", cond: "Аренда", seller: "Sarah L.", since: 2022, rate: 4.8, rc: 11, type: "Частное лицо",
     specs: { "Тип": "Комната", "Площадь комнаты": "120 ft²", "Соседи": "2 человека", "Мебель": "Кровать, шкаф, стол", "Интернет": "1 Гбит/с", "Метро": "L — Jefferson St" },
     terms: { deal: "Минимум 6 месяцев", pay: "Депозит = 1 месяц", ship: "Без комиссии", extra: "Предпочтительно некурящий" },
     d: "Ищем спокойного соседа. Квартира с общей гостиной и кухней, крыша с видом на Манхэттен.\n\nСвет, газ и интернет уже входят в цену." },
-  { id: 203, cat: "housing", t: "1BR с балконом, швейцар, спортзал", p: 3650, per: "мес", loc: "Джерси-Сити, Newport", ago: "3 ч", cond: "Аренда", seller: "Newport Rentals", since: 2012, rate: 4.5, rc: 204, type: "Агентство", badge: "Без комиссии",
+  { id: 203, img: u("k-rwQAZS0Fg", "YktL-k8ErB8", "ZMeYdUGeQO0"), cat: "housing", t: "1BR с балконом, швейцар, спортзал", p: 3650, per: "мес", loc: "Джерси-Сити, Newport", ago: "3 ч", cond: "Аренда", seller: "Newport Rentals", since: 2012, rate: 4.5, rc: 204, type: "Агентство", badge: "Без комиссии",
     specs: { "Тип": "1 спальня", "Площадь": "720 ft²", "Этаж": "18", "Здание": "Doorman, gym, roof deck", "Стирка": "В квартире", "Парковка": "$250/мес", "PATH": "5 минут" },
     terms: { deal: "Договор 12–24 месяца", pay: "Депозит 1.5 месяца", ship: "Месяц бесплатно при договоре на 13 мес.", extra: "Кредитный рейтинг от 680" },
     d: "Вид на Гудзон и Манхэттен. Кухня с техникой из нержавеющей стали, гардеробная. Консьерж 24/7." },
-  { id: 301, cat: "jobs", t: "Бариста в кофейню specialty, полный день", p: 22, per: "час", pTo: 25, loc: "Манхэттен, West Village", ago: "4 ч", cond: "Полная занятость", seller: "Grind & Co. Coffee", since: 2018, rate: 4.7, rc: 41, type: "Работодатель",
+  { id: 301, img: u("vCtvn_xqoyA", "WS_-BSp4ss8", "BBZ1O-D3gYc"), cat: "jobs", t: "Бариста в кофейню specialty, полный день", p: 22, per: "час", pTo: 25, loc: "Манхэттен, West Village", ago: "4 ч", cond: "Полная занятость", seller: "Grind & Co. Coffee", since: 2018, rate: 4.7, rc: 41, type: "Работодатель",
     specs: { "График": "5/2, смены 7:00–15:00", "Опыт": "От 6 месяцев", "Ставка": "$22–25/час + чаевые", "Чаевые": "~$6–8/час", "Бонусы": "Медстраховка, бесплатный кофе" },
     terms: { deal: "Пробная смена оплачивается", pay: "Выплаты еженедельно", ship: "Старт: на следующей неделе", extra: "Разрешение на работу в США обязательно" },
     d: "Ищем бариста в команду. Работаем на зерне местной обжарки, обучаем латте-арту.\n\nОтправьте короткое резюме через кнопку «Написать»." },
-  { id: 302, cat: "jobs", t: "Курьер на электровелосипеде, гибкий график", p: 21, per: "час", pTo: 28, loc: "Весь Манхэттен", ago: "6 ч", cond: "Частичная занятость", seller: "CityDrop Logistics", since: 2020, rate: 4.1, rc: 96, type: "Работодатель",
+  { id: 302, img: u("pZcCZf9SqkE"), cat: "jobs", t: "Курьер на электровелосипеде, гибкий график", p: 21, per: "час", pTo: 28, loc: "Весь Манхэттен", ago: "6 ч", cond: "Частичная занятость", seller: "CityDrop Logistics", since: 2020, rate: 4.1, rc: 96, type: "Работодатель",
     specs: { "График": "Свободный, от 15 часов/нед", "Транспорт": "Электровелосипед предоставляется", "Ставка": "$21 минимум + бонусы", "Выплаты": "Ежедневно" },
     terms: { deal: "Без опыта", pay: "Выплаты ежедневно", ship: "Обучение 1 день", extra: "Возраст 18+, смартфон" },
     d: "Доставка заказов из ресторанов и аптек. Страховка на время смены включена." },
-  { id: 303, cat: "jobs", t: "Junior Frontend-разработчик (React), гибрид", p: 85000, per: "год", pTo: 105000, loc: "Бруклин, DUMBO", ago: "вчера", cond: "Полная занятость", seller: "Harbor Labs", since: 2017, rate: 4.6, rc: 18, type: "Работодатель",
+  { id: 303, img: u("N3Bf0ArT5J0", "CXxH2EiX760", "iOykDIkZLQw"), cat: "jobs", t: "Junior Frontend-разработчик (React), гибрид", p: 85000, per: "год", pTo: 105000, loc: "Бруклин, DUMBO", ago: "вчера", cond: "Полная занятость", seller: "Harbor Labs", since: 2017, rate: 4.6, rc: 18, type: "Работодатель",
     specs: { "Формат": "Гибрид, 3 дня в офисе", "Опыт": "1+ год", "Стек": "React, TypeScript, Next.js", "Зарплата": "$85–105k + опционы", "Отпуск": "20 дней" },
     terms: { deal: "3 этапа собеседований", pay: "Зарплата 2 раза в месяц", ship: "Ноутбук и $1 500 на обучение", extra: "Медицина, стоматология, 401(k)" },
     d: "Продуктовая команда из 14 человек, делаем B2B-сервис для логистики. Ментор на первые 3 месяца." },
-  { id: 401, cat: "tech", t: "iPhone 16 Pro 256 ГБ, Desert Titanium", p: 780, loc: "Бронкс, Riverdale", ago: "50 мин", cond: "Б/у, отличное", seller: "Kevin T.", since: 2020, rate: 4.9, rc: 34, type: "Частное лицо",
+  { id: 401, img: u("N5qbfch8PrU", "cJ__vN6h7v4", "LqMK_dwsaxs"), cat: "tech", t: "iPhone 16 Pro 256 ГБ, Natural Titanium", p: 780, loc: "Бронкс, Riverdale", ago: "50 мин", cond: "Б/у, отличное", seller: "Kevin T.", since: 2020, rate: 4.9, rc: 34, type: "Частное лицо",
     specs: { "Память": "256 ГБ", "Батарея": "96%", "Состояние": "Без царапин, всегда в чехле", "Комплект": "Коробка, кабель", "Блокировка": "Отвязан, unlocked" },
     terms: { deal: "Торг минимальный", pay: "Наличные, Zelle", ship: "Встреча в безопасном месте", extra: "Проверка IMEI при встрече" },
     d: "Перешёл на рабочий телефон, этот почти не использую. Защитное стекло с первого дня, чек из Apple Store есть." },
-  { id: 402, cat: "tech", t: "MacBook Air 13\" M3, 16 ГБ / 512 ГБ", p: 920, loc: "Манхэттен, Upper East Side", ago: "2 ч", cond: "Б/у, как новый", seller: "Emily W.", since: 2018, rate: 5.0, rc: 15, type: "Частное лицо",
-    specs: { "Процессор": "Apple M3", "ОЗУ": "16 ГБ", "SSD": "512 ГБ", "Циклы батареи": "41", "Цвет": "Midnight", "Комплект": "Полный, коробка" },
+  { id: 402, img: u("RSCirJ70NDM", "PjH_BkzjxTA", "T7wi6TLyucI"), cat: "tech", t: "MacBook Air 13\" M3, 16 ГБ / 512 ГБ", p: 920, loc: "Манхэттен, Upper East Side", ago: "2 ч", cond: "Б/у, как новый", seller: "Emily W.", since: 2018, rate: 5.0, rc: 15, type: "Частное лицо",
+    specs: { "Процессор": "Apple M3", "ОЗУ": "16 ГБ", "SSD": "512 ГБ", "Циклы батареи": "41", "Цвет": "Silver", "Комплект": "Полный, коробка" },
     terms: { deal: "Цена окончательная", pay: "Наличные, Zelle, Venmo", ship: "Встреча или доставка USPS +$25", extra: "Чек из Apple Store" },
     d: "Покупала для учёбы, использовала пару месяцев. Сброшен, выход из iCloud выполнен." },
-  { id: 403, cat: "tech", t: "Sony PlayStation 5 Slim + 2 DualSense", p: 360, loc: "Статен-Айленд", ago: "3 ч", cond: "Б/у, хорошее", seller: "Chris P.", since: 2021, rate: 4.7, rc: 9, type: "Частное лицо",
+  { id: 403, img: u("-8xeF0LeUtI", "mth7yBmBQ84", "Fw5Bdj-qUXI"), cat: "tech", t: "Sony PlayStation 5 Slim + 2 DualSense", p: 360, loc: "Статен-Айленд", ago: "3 ч", cond: "Б/у, хорошее", seller: "Chris P.", since: 2021, rate: 4.7, rc: 9, type: "Частное лицо",
     specs: { "Версия": "С дисководом", "Память": "1 ТБ", "Геймпады": "2 шт.", "Игры в комплекте": "Spider-Man 2, GT7" },
     terms: { deal: "Торг", pay: "Наличные", ship: "Самовывоз", extra: "Покажу работу при встрече" },
     d: "Всё работает, без перегревов. Один геймпад с лёгким дрифтом левого стика — учёл в цене." },
-  { id: 501, cat: "furniture", t: "Кресло Herman Miller Aeron, размер B", p: 650, loc: "Манхэттен, Midtown", ago: "1 ч", cond: "Б/у, отличное", seller: "Office Liquidation NYC", since: 2015, rate: 4.8, rc: 158, type: "Компания", badge: "Гарантия 1 год",
-    specs: { "Модель": "Aeron Remastered", "Размер": "B (средний)", "Регулировки": "Полные, PostureFit SL", "Подлокотники": "4D", "Год": "2021" },
+  { id: 501, img: u("UgYT5nkXdK4", "z16K3-ZNlQA"), cat: "furniture", t: "Офисное эргономичное кресло, 12 шт.", p: 650, loc: "Манхэттен, Midtown", ago: "1 ч", cond: "Б/у, отличное", seller: "Office Liquidation NYC", since: 2015, rate: 4.8, rc: 158, type: "Компания", badge: "Гарантия 1 год",
+    specs: { "Модель": "Эргономичное, сетка", "Размер": "Стандартный", "Регулировки": "Полные, PostureFit SL", "Подлокотники": "4D", "Год": "2021" },
     terms: { deal: "От 3 шт. — скидка 10%", pay: "Карта, наличные, счёт для компаний", ship: "Доставка по NYC — $60", extra: "Гарантия 1 год" },
     d: "Офисные кресла после закрытия офиса. Каждое проверено и почищено. В наличии 12 штук." },
-  { id: 502, cat: "furniture", t: "Диван West Elm Harmony, 3-местный", p: 900, loc: "Бруклин, Park Slope", ago: "6 ч", cond: "Б/у, хорошее", seller: "Anna M.", since: 2019, rate: 4.9, rc: 8, type: "Частное лицо",
+  { id: 502, img: u("YqFz7UMm8qE", "N4wUsqIbMAM", "g_5UyVBIX_k"), cat: "furniture", t: "Серый диван, 3-местный", p: 900, loc: "Бруклин, Park Slope", ago: "6 ч", cond: "Б/у, хорошее", seller: "Anna M.", since: 2019, rate: 4.9, rc: 8, type: "Частное лицо",
     specs: { "Ширина": "82\" (208 см)", "Обивка": "Performance velvet", "Цвет": "Тёмно-серый", "Возраст": "2 года", "Животные": "Нет" },
     terms: { deal: "Торг", pay: "Zelle, наличные", ship: "Самовывоз, 2-й этаж без лифта", extra: "Помогу вынести" },
     d: "Новый стоил $2 600. Без пятен, чехлы снимаются. Переезжаем — не помещается в новую квартиру." },
-  { id: 601, cat: "free", t: "Отдам комод IKEA Malm, 6 ящиков", p: 0, loc: "Квинс, Long Island City", ago: "20 мин", cond: "Даром", seller: "Jason H.", since: 2023, rate: 4.6, rc: 4, type: "Частное лицо",
-    specs: { "Размер": "160 × 78 см", "Цвет": "Белый", "Состояние": "Небольшие потёртости" },
+  { id: 601, img: u("7pCFUybP_P8"), cat: "free", t: "Отдам белый комод с зеркалом", p: 0, loc: "Квинс, Long Island City", ago: "20 мин", cond: "Даром", seller: "Jason H.", since: 2023, rate: 4.6, rc: 4, type: "Частное лицо",
+    specs: { "Размер": "120 × 80 см", "Цвет": "Белый", "Состояние": "Небольшие потёртости" },
     terms: { deal: "Бесплатно", pay: "—", ship: "Забрать до воскресенья", extra: "Лифт в доме" },
     d: "Забирайте сами, стоит у консьержа. Пишите — отвечу быстро." },
-  { id: 602, cat: "free", t: "Отдам книги по программированию, 20 шт.", p: 0, loc: "Манхэттен, Harlem", ago: "2 ч", cond: "Даром", seller: "Priya S.", since: 2020, rate: 5.0, rc: 3, type: "Частное лицо",
+  { id: 602, img: u("R52YghRa_Ik", "HipdIdv3F2M"), cat: "free", t: "Отдам книги по программированию, 20 шт.", p: 0, loc: "Манхэттен, Harlem", ago: "2 ч", cond: "Даром", seller: "Priya S.", since: 2020, rate: 5.0, rc: 3, type: "Частное лицо",
     specs: { "Количество": "~20 книг", "Темы": "Python, JS, алгоритмы, системный дизайн", "Язык": "Английский" },
     terms: { deal: "Бесплатно", pay: "—", ship: "Самовывоз", extra: "Отдам только всё вместе" },
     d: "Освобождаю полки. Есть «Clean Code», «Designing Data-Intensive Applications», CLRS." },
-  { id: 701, cat: "services", t: "Переезды: 2 грузчика + фургон 16 ft", p: 140, per: "час", loc: "Весь Нью-Йорк", ago: "сегодня", cond: "Услуга", seller: "Brooklyn Movers LLC", since: 2013, rate: 4.7, rc: 421, type: "Компания", badge: "Лицензия и страховка",
+  { id: 701, img: u("ctXcNX1b4Oo"), cat: "services", t: "Переезды: 2 грузчика + фургон 16 ft", p: 140, per: "час", loc: "Весь Нью-Йорк", ago: "сегодня", cond: "Услуга", seller: "Brooklyn Movers LLC", since: 2013, rate: 4.7, rc: 421, type: "Компания", badge: "Лицензия и страховка",
     specs: { "Минимум": "3 часа", "Команда": "2–4 грузчика", "Упаковка": "Плёнка и одеяла бесплатно", "Лицензия": "NY DOT", "Страховка": "Есть" },
     terms: { deal: "Фиксированная цена после оценки", pay: "Карта, Zelle, наличные", ship: "Выезд в день обращения", extra: "Сборка/разборка мебели включена" },
     d: "Квартирные и офисные переезды. Работаем без выходных. Смета по фото квартиры за 15 минут." },
-  { id: 702, cat: "services", t: "Мастер на час: сборка мебели, полки, ТВ", p: 75, per: "час", loc: "Манхэттен и Бруклин", ago: "вчера", cond: "Услуга", seller: "Alex — Handyman", since: 2017, rate: 4.9, rc: 188, type: "Частный мастер",
+  { id: 702, img: u("WXoHE4GibYo", "f0T-eGanP_4"), cat: "services", t: "Мастер на час: сборка мебели, полки, ТВ", p: 75, per: "час", loc: "Манхэттен и Бруклин", ago: "вчера", cond: "Услуга", seller: "Alex — Handyman", since: 2017, rate: 4.9, rc: 188, type: "Частный мастер",
     specs: { "Минимум": "1 час", "Работы": "Сборка IKEA, монтаж ТВ, полки, мелкий ремонт", "Инструмент": "Свой", "Гарантия": "30 дней на работу" },
     terms: { deal: "Предварительная оценка бесплатно", pay: "Zelle, Venmo, наличные", ship: "Выезд в течение 1–2 дней", extra: "Работаю с COI для зданий" },
     d: "10 лет опыта. Аккуратно, вовремя, убираю за собой. Фото работ пришлю в чат." },
-  { id: 801, cat: "hobby", t: "Велосипед Trek FX 3 Disc, размер M", p: 520, loc: "Хобокен", ago: "4 ч", cond: "Б/у, отличное", seller: "Mark D.", since: 2018, rate: 4.8, rc: 12, type: "Частное лицо",
+  { id: 801, img: u("ClzrGdUNfXc", "Yx4182pV5pI"), cat: "hobby", t: "Городской велосипед, рама M, 2023", p: 520, loc: "Хобокен", ago: "4 ч", cond: "Б/у, отличное", seller: "Mark D.", since: 2018, rate: 4.8, rc: 12, type: "Частное лицо",
     specs: { "Рама": "Алюминий, M", "Тормоза": "Гидравлические дисковые", "Передачи": "1×10", "Пробег": "~600 миль", "Год": "2023" },
     terms: { deal: "Торг", pay: "Наличные, Zelle", ship: "Самовывоз", extra: "Можно прокатиться" },
     d: "Прошёл ТО в веломагазине месяц назад. В подарок замок Kryptonite и фонари." },
-  { id: 802, cat: "hobby", t: "Гитара Fender Player Stratocaster + кейс", p: 640, loc: "Джерси-Сити", ago: "8 ч", cond: "Б/у, хорошее", seller: "Luis G.", since: 2016, rate: 4.9, rc: 27, type: "Частное лицо",
-    specs: { "Модель": "Player Series", "Страна": "Мексика", "Звукосниматели": "Alnico V", "Цвет": "3-Color Sunburst", "Кейс": "Fender gig bag" },
+  { id: 802, img: u("4ZQQ1i0pR9g", "SqEqY2DyFp0"), cat: "hobby", t: "Гитара Fender Player Stratocaster + кейс", p: 640, loc: "Джерси-Сити", ago: "8 ч", cond: "Б/у, хорошее", seller: "Luis G.", since: 2016, rate: 4.9, rc: 27, type: "Частное лицо",
+    specs: { "Модель": "Player Series", "Страна": "Мексика", "Звукосниматели": "Alnico V", "Цвет": "Olympic White", "Кейс": "Fender gig bag" },
     terms: { deal: "Торг уместен", pay: "Наличные", ship: "Встреча", extra: "Обмен на педали — рассмотрю" },
     d: "Настроена в мастерской, новые струны. Мелкие следы использования на деке." },
 ];
@@ -397,7 +398,7 @@ function priceText(i) {
 }
 function photo(i, k = 0, cls = "") {
   const src = i.img && i.img[k];
-  return `<div class="ph ${cls}">${src ? `<img src="${src}" alt="" loading="lazy">` : ic(catOf(i.cat).i, 40)}</div>`;
+  return `<div class="ph ${cls}">${ic(catOf(i.cat).i, 40)}${src ? `<img src="${src}" alt="" loading="lazy" onerror="this.remove()">` : ""}</div>`;
 }
 const stars = (r) => "★".repeat(Math.round(r)) + "☆".repeat(5 - Math.round(r));
 
@@ -415,7 +416,7 @@ function filtered() {
 
 function cardHTML(i) {
   return `<a class="card" href="#/item/${i.id}">
-    <div class="ph">${i.img && i.img[0] ? `<img src="${i.img[0]}" alt="" loading="lazy">` : ic(catOf(i.cat).i, 40)}
+    <div class="ph">${ic(catOf(i.cat).i, 40)}${i.img && i.img[0] ? `<img src="${i.img[0]}" alt="" loading="lazy" onerror="this.remove()">` : ""}
       <button class="fav ${favs.has(i.id) ? "on" : ""}" data-fav="${i.id}" aria-label="В избранное">${ic("heart", 18)}</button>
       ${i.img && i.img.length ? `<span class="cnt">${ic("photo", 12)} ${i.img.length}</span>` : ""}
     </div>
@@ -466,7 +467,7 @@ function renderItem(id) {
   const i = ITEMS.find((x) => x.id === +id);
   if (!i) { location.hash = "#/"; return; }
   const c = catOf(i.cat);
-  const n = Math.max(i.img ? i.img.length : 0, 5);
+  const n = i.img && i.img.length ? i.img.length : 5;
   const terms = [
     ["tag", "Условия сделки", i.terms.deal],
     ["card", "Оплата", i.terms.pay],
@@ -483,7 +484,7 @@ function renderItem(id) {
         <div class="sub"><span>№ ${i.id}04${i.id}</span><span>Опубликовано ${i.ago} назад</span><span>${i.cond}</span></div>
         <div class="gal">
           ${photo(i, 0, "main")}
-          <div class="thumbs">${Array.from({ length: n }, (_, k) => photo(i, k, k === 0 ? "on" : "")).join("")}</div>
+          ${n > 1 ? `<div class="thumbs">${Array.from({ length: n }, (_, k) => photo(i, k, k === 0 ? "on" : "").replace('class="ph', `data-k="${k}" class="ph`)).join("")}</div>` : ""}
         </div>
 
         <h2 class="sec">Условия</h2>
@@ -526,6 +527,10 @@ function renderItem(id) {
     </div>
     ${similar.length ? `<h2 class="sec" style="margin-top:0">Похожие объявления</h2><div class="grid" style="padding-bottom:110px">${similar.map(cardHTML).join("")}</div>` : ""}`;
   document.querySelectorAll("[data-goto]").forEach((a) => (a.onclick = () => { state.cat = a.dataset.goto; }));
+  document.querySelectorAll(".thumbs [data-k]").forEach((t) => (t.onclick = () => {
+    $(".gal .main").outerHTML = photo(i, +t.dataset.k, "main");
+    document.querySelectorAll(".thumbs .ph").forEach((x) => x.classList.toggle("on", x === t));
+  }));
   window.scrollTo({ top: 0 });
 }
 
