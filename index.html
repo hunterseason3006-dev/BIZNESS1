@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<script>document.documentElement.classList.add("js")</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Эвкалипт — цветочная лавка, Балаково</title>
 <meta name="description" content="Цветочная лавка «Эвкалипт» в Балаково: авторские букеты из отборных свежих цветов, монобукеты, цветы в коробках и корзинах. Доставка за 1 час. ул. Ленина, 56/1.">
@@ -10,9 +11,7 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f6f4f0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 58C32 36 22 22 8 14c18 0 30 12 24 44zm0 0c0-22 10-36 24-44-18 0-30 12-24 44z' fill='%236f8f7a'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Marck+Script&family=Manrope:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* ====== Тема ====== */
 :root {
@@ -94,12 +93,13 @@ footer .logo-img { height: 46px; background: #f6f4f0; border-radius: 10px; paddi
 .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(40,46,46,.62) 0%, rgba(40,46,46,.25) 55%, rgba(40,46,46,.05) 100%), linear-gradient(180deg, rgba(40,46,46,0) 50%, rgba(40,46,46,.45) 100%); }
 .hero > .wrap { width: 100%; }
 .hero-inner { display: grid; gap: 22px; max-width: 760px; }
-.hero-kicker { font: 400 clamp(34px, 4.6vw, 54px)/1 var(--f-hand); color: var(--lemon); margin: -14px 0 0 clamp(40px, 9vw, 150px); clip-path: inset(0 100% 0 0); animation: write 1.6s .9s cubic-bezier(.6,.1,.3,1) forwards; }
+.hero-kicker { font: 400 clamp(34px, 4.6vw, 54px)/1 var(--f-hand); color: var(--lemon); margin: -14px 0 0 clamp(40px, 9vw, 150px); }
+.js .hero-kicker { clip-path: inset(0 100% 0 0); animation: write 1.6s .9s cubic-bezier(.6,.1,.3,1) forwards; }
 @keyframes write { to { clip-path: inset(0 -5% 0 0); } }
 .split span { display: inline-block; opacity: 0; transform: translateY(.35em) rotate(4deg); filter: blur(8px); animation: letter .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i) * 90ms + .15s); }
 @keyframes letter { to { opacity: 1; transform: none; filter: none; } }
-.hero-glass, .hero-inner > p, .hero-cta { opacity: 0; animation: up .9s 1.4s ease forwards; }
-.hero-inner > p { animation-delay: 1.55s; } .hero-cta { animation-delay: 1.7s; }
+.js .hero-glass, .js .hero-inner > p, .js .hero-cta { opacity: 0; animation: up .9s 1.4s ease forwards; }
+.js .hero-inner > p { animation-delay: 1.55s; } .js .hero-cta { animation-delay: 1.7s; }
 @keyframes up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 .hero h1 { margin: 0; font: 400 clamp(76px, 15vw, 190px)/.85 var(--f-display); letter-spacing: .02em; text-transform: uppercase; }
 .hero-glass { display: inline-block; padding: 16px 26px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 14px; font-size: clamp(15px, 1.6vw, 19px); letter-spacing: .06em; text-transform: uppercase; width: fit-content; max-width: 100%; }
@@ -230,6 +230,10 @@ section { padding: 96px 0; }
 .map-btn .vk { background: #0077ff; }
 .map-frame { border-radius: var(--radius); overflow: hidden; min-height: 420px; background: #3f4747; position: relative; }
 .map-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.map-fallback { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; text-decoration: none; color: #fff; text-align: center; padding: 20px; }
+.map-fallback span { font-size: 40px; }
+.map-fallback b { font: 400 28px/1.1 var(--f-display); }
+.map-fallback small { opacity: .7; font-size: 14px; }
 
 /* ====== Подвал ====== */
 footer { background: #3d4545; color: rgba(255,255,255,.7); padding: 40px 0 calc(40px + env(safe-area-inset-bottom)); font-size: 14px; }
@@ -263,11 +267,11 @@ footer a:hover { color: #fff; }
 .fav-list button { border: 0; background: none; color: var(--ink-3); font-size: 20px; }
 
 /* ====== Появление при скролле ====== */
-.rv { opacity: 0; transform: translateY(26px); transition: opacity .8s ease, transform .8s ease; }
-.rv.in { opacity: 1; transform: none; }
+.js .rv { opacity: 0; transform: translateY(26px); transition: opacity .8s ease, transform .8s ease; }
+.js .rv.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .rv { opacity: 1; transform: none; }
+  .js .rv { opacity: 1; transform: none; }
 }
 
 
@@ -320,7 +324,7 @@ main, footer { position: relative; z-index: 1; }
 .btn-dark:hover::after, .btn-light:hover::after { left: 130%; }
 .sec-title { overflow: hidden; }
 .rv .sec-title em, .sec-head.rv .sec-title em { transition: opacity 1s .1s, transform 1s .1s; }
-.sec-head.rv:not(.in) .sec-title em { opacity: 0; transform: translateX(-24px); }
+.js .sec-head.rv:not(.in) .sec-title em { opacity: 0; transform: translateX(-24px); }
 .ph.reveal { clip-path: inset(0 0 100% 0 round var(--radius)); transition: clip-path 1.2s cubic-bezier(.7,0,.2,1); }
 .in .ph.reveal, .ph.reveal.in { clip-path: inset(0 0 0 0 round var(--radius)); }
 .gallery .ph { transition: transform .5s, box-shadow .5s; }
@@ -824,8 +828,8 @@ main, footer { position: relative; z-index: 1; }
             <small>Адрес</small>
             <p data-address>Саратовская обл., г. Балаково, ул. Ленина, 56/1</p>
             <div class="map-btns">
-              <a class="map-btn" data-yandex-link href="#" target="_blank" rel="noopener"><i class="ya">Я</i>Яндекс Карты</a>
-              <a class="map-btn" data-2gis-link href="#" target="_blank" rel="noopener"><i class="gis">2</i>2ГИС</a>
+              <a class="map-btn" data-yandex-link href="https://yandex.ru/maps/?text=%D0%AD%D0%B2%D0%BA%D0%B0%D0%BB%D0%B8%D0%BF%D1%82%2C%20%D1%86%D0%B2%D0%B5%D1%82%D1%8B%2C%20%D0%91%D0%B0%D0%BB%D0%B0%D0%BA%D0%BE%D0%B2%D0%BE%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B0%2C%2056/1" target="_blank" rel="noopener"><i class="ya">Я</i>Яндекс Карты</a>
+              <a class="map-btn" data-2gis-link href="https://2gis.ru/balakovo/search/%D0%AD%D0%B2%D0%BA%D0%B0%D0%BB%D0%B8%D0%BF%D1%82%2C%20%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B0%2056/1" target="_blank" rel="noopener"><i class="gis">2</i>2ГИС</a>
             </div>
           </div>
           <div class="c-item">
@@ -841,7 +845,8 @@ main, footer { position: relative; z-index: 1; }
           </div>
         </div>
         <div class="map-frame rv">
-          <iframe id="map" title="Карта: Эвкалипт, Балаково" loading="lazy" allowfullscreen></iframe>
+          <a class="map-fallback" href="https://yandex.ru/maps/?text=%D0%AD%D0%B2%D0%BA%D0%B0%D0%BB%D0%B8%D0%BF%D1%82%2C%20%D1%86%D0%B2%D0%B5%D1%82%D1%8B%2C%20%D0%91%D0%B0%D0%BB%D0%B0%D0%BA%D0%BE%D0%B2%D0%BE%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B0%2C%2056/1" target="_blank" rel="noopener"><span>📍</span><b>ул. Ленина, 56/1</b><small>Открыть на Яндекс Картах</small></a>
+          <iframe id="map" src="https://yandex.ru/map-widget/v1/?text=%D0%AD%D0%B2%D0%BA%D0%B0%D0%BB%D0%B8%D0%BF%D1%82%2C%20%D0%91%D0%B0%D0%BB%D0%B0%D0%BA%D0%BE%D0%B2%D0%BE%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B0%2C%2056/1&z=16" title="Карта: Эвкалипт, Балаково" loading="lazy" allowfullscreen></iframe>
         </div>
       </div>
     </div>
