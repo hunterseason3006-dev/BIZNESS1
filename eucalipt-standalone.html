@@ -276,6 +276,22 @@ main > section > .wrap { position: relative; z-index: 2; }
 main, footer { position: relative; z-index: 1; }
 .petal { position: absolute; top: -12vh; left: 0; width: var(--s); height: var(--s); opacity: var(--o); animation: fall var(--t) linear var(--dl) infinite; will-change: transform; }
 .petal svg { width: 100%; height: 100%; animation: spin var(--t2) ease-in-out infinite alternate; }
+.blob { position: absolute; width: var(--s); height: var(--s); border-radius: 50%; background: radial-gradient(circle at 40% 40%, var(--c) 0%, transparent 68%); opacity: var(--o); filter: blur(30px); animation: blob var(--t) ease-in-out var(--dl) infinite alternate; }
+@keyframes blob { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(var(--dx), calc(var(--dy) * -1)) scale(1.18); } 100% { transform: translate(calc(var(--dx) * -1), var(--dy)) scale(.9); } }
+.drift { position: absolute; width: var(--s); height: var(--s); opacity: var(--o); animation: drift var(--t) ease-in-out var(--dl) infinite alternate; }
+.drift svg { width: 100%; height: 100%; overflow: visible; }
+@keyframes drift { from { transform: translate(0, 0) rotate(var(--r0)); } to { transform: translate(var(--dx), var(--dy)) rotate(var(--r1)); } }
+.spark { position: absolute; width: var(--s); height: var(--s); border-radius: 50%; background: radial-gradient(circle, #fff7d6 0%, #f1d58e 45%, transparent 70%); animation: twinkle var(--t) ease-in-out var(--dl) infinite; }
+.spark.star { border-radius: 0; background: none; }
+.spark.star::before { content: "✦"; position: absolute; inset: 0; display: grid; place-items: center; color: #e8c97a; font-size: var(--s); line-height: 1; }
+@keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(.4); } 50% { opacity: .9; transform: scale(1); } }
+.fly { position: absolute; top: 0; left: 0; width: var(--s); height: var(--s); offset-path: var(--path); offset-rotate: auto 90deg; animation: fly var(--t) linear var(--dl) infinite; opacity: .9; }
+.fly svg { width: 100%; height: 100%; overflow: visible; }
+.fly .wing-l, .fly .wing-r { transform-box: view-box; transform-origin: 0 0; animation: flap .28s ease-in-out infinite alternate; }
+.fly .wing-r { animation-name: flapR; }
+@keyframes flap { to { transform: scaleX(.25); } }
+@keyframes flapR { to { transform: scaleX(.25); } }
+@keyframes fly { from { offset-distance: 0%; } to { offset-distance: 100%; } }
 @keyframes fall { from { transform: translate3d(var(--x0), 0, 0); } to { transform: translate3d(var(--x1), 125vh, 0); } }
 @keyframes spin { from { transform: rotate(-40deg) scale(.9); } to { transform: rotate(220deg) scale(1.05); } }
 
@@ -367,6 +383,18 @@ main, footer { position: relative; z-index: 1; }
     <g id="leafE"><path d="M0 0c-6-6-6-16 0-22 6 6 6 16 0 22z" fill="url(#gLeaf)" opacity=".9"/></g>
     <g id="leafR"><ellipse rx="10" ry="8" fill="url(#gLeaf2)" opacity=".9"/></g>
     <g id="leafL"><path d="M0 0C10-14 30-24 58-26 38-14 18-6 0 0z" fill="url(#gLeaf)" opacity=".85"/></g>
+    <g id="leafL2"><path d="M0 0C6-10 18-16 34-16 24-8 12-3 0 0z" fill="url(#gLeaf2)" opacity=".9"/></g>
+    <g id="sprig"><path d="M0 40C0 10 2-10 6-38" stroke="#7d9a88" stroke-width="1.6" fill="none"/>
+      <use href="#leafR" x="-8" y="22"/><use href="#leafR" x="9" y="12"/><use href="#leafR" x="-6" y="0"/><use href="#leafR" x="11" y="-12"/><use href="#leafR" x="-3" y="-24"/><use href="#leafR" x="8" y="-34" transform="scale(.8)"/></g>
+    <g id="spray"><path d="M0 38C-2 10 4-14 14-36M2 6C-10-6-18-16-22-30M4-6C14-14 22-18 30-20" stroke="#8aa595" stroke-width="1.3" fill="none"/>
+      <use href="#flP" transform="translate(14 -36) scale(.45)"/><use href="#flW" transform="translate(-22 -30) scale(.4)"/><use href="#flO" transform="translate(30 -20) scale(.35)"/>
+      <use href="#leafL2" transform="translate(0 18) rotate(-150)"/><use href="#leafL2" transform="translate(1 10) rotate(-30)"/></g>
+    <g id="lineArt" fill="none" stroke="#6f8f7a" stroke-width="1.1" stroke-linecap="round">
+      <path d="M0 40C2 10 0-12-4-38"/><path d="M1 28c-10-2-16-8-18-16 9 0 15 6 18 16zM1 28c9-4 14-10 15-18-8 2-13 8-15 18zM0 10c-9-3-14-9-15-17 8 1 13 7 15 17zM0 10c8-4 13-10 13-18-7 2-12 8-13 18zM-2-8c-8-3-12-9-12-16 7 1 11 7 12 16zM-2-8c7-4 11-10 11-17-6 2-10 8-11 17z"/>
+      <circle cx="-4" cy="-38" r="2.5"/></g>
+    <g id="bfly"><g class="wing-l"><path d="M0 0C-6-14-22-20-26-10-28-2-16 4 0 0z" fill="#f2b8ae"/><path d="M0 0C-8 4-18 10-16 18-12 22-4 14 0 0z" fill="#f7d3c6"/></g>
+      <g class="wing-r"><path d="M0 0C6-14 22-20 26-10 28-2 16 4 0 0z" fill="#f2b8ae"/><path d="M0 0C8 4 18 10 16 18 12 22 4 14 0 0z" fill="#f7d3c6"/></g>
+      <path d="M0-8V14" stroke="#6b5a4e" stroke-width="2.2" stroke-linecap="round"/><path d="M0-8c-2-5-5-8-8-9M0-8c2-5 5-8 8-9" stroke="#6b5a4e" stroke-width=".9" fill="none"/></g>
     <g id="cluster">
       <g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s">
         <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/>
@@ -889,17 +917,41 @@ const CONFIG = {
   $$(".split").forEach(el => { const t = el.textContent; el.setAttribute("aria-label", t); el.innerHTML = [...t].map((c, i) => `<span aria-hidden="true" style="--i:${i}">${c}</span>`).join(""); });
 
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  /* Плывущие цветы и лепестки на фоне */
+  /* Живой фон: акварельные пятна, веточки, искры, цветы, бабочки */
   if (!calm) {
-    const box = $("#petals"), kinds = ["#flP", "#flW", "#flO", "#petalP", "#petalW", "#leafE", "#flP", "#petalO"];
-    const n = innerWidth < 700 ? 10 : 22;
-    for (let i = 0; i < n; i++) {
-      const k = kinds[i % kinds.length], small = k.startsWith("#petal") || k === "#leafE";
-      const d = document.createElement("div"); d.className = "petal";
-      const x0 = Math.random() * 100, drift = (Math.random() * 30 - 10);
-      d.style.cssText = `--s:${(small ? 22 : 38) + Math.random() * (small ? 16 : 30)}px;--o:${.55 + Math.random() * .35};--x0:${x0}vw;--x1:${x0 + drift}vw;--t:${22 + Math.random() * 20}s;--t2:${5 + Math.random() * 6}s;--dl:${-Math.random() * 40}s`;
-      d.innerHTML = `<svg viewBox="-40 -40 80 80"><use href="${k}"/></svg>`;
-      box.appendChild(d);
+    const box = $("#petals"), R = (a, b) => a + Math.random() * (b - a), mob = innerWidth < 700;
+    const add = (cls, css, html = "") => { const d = document.createElement("div"); d.className = cls; d.style.cssText = css; d.innerHTML = html; box.appendChild(d); return d; };
+    const svg = (id, vb = "-40 -40 80 80") => `<svg viewBox="${vb}"><use href="${id}"/></svg>`;
+
+    // 1. Мягкие акварельные пятна
+    ["#f6cfc6", "#cfdcd2", "#f9dcc6", "#e7d9ee", "#d9e6dc", "#fbe3dc"].slice(0, mob ? 3 : 6).forEach((c, i) =>
+      add("blob", `--c:${c};--s:${R(260, 520)}px;--o:${R(.45, .7)};left:${R(-10, 85)}vw;top:${R(-10, 85)}vh;--dx:${R(4, 10)}vw;--dy:${R(4, 10)}vh;--t:${R(18, 30)}s;--dl:${-R(0, 30)}s`));
+
+    // 2. Ботанические веточки и контурные рисунки, медленно покачиваются
+    const drifts = ["#lineArt", "#sprig", "#spray", "#lineArt", "#sprig", "#spray", "#lineArt", "#spray"];
+    drifts.slice(0, mob ? 4 : 8).forEach((id, i) => {
+      const r0 = R(-40, 40);
+      add("drift", `--s:${R(mob ? 70 : 90, mob ? 110 : 160)}px;--o:${id === "#lineArt" ? R(.25, .4) : R(.4, .6)};left:${(i * 13 + R(0, 8)) % 95}vw;top:${R(5, 85)}vh;--dx:${R(-4, 4)}vw;--dy:${R(-6, 6)}vh;--r0:${r0}deg;--r1:${r0 + R(-25, 25)}deg;--t:${R(14, 24)}s;--dl:${-R(0, 20)}s`, svg(id));
+    });
+
+    // 3. Золотые искорки
+    for (let i = 0; i < (mob ? 14 : 30); i++)
+      add("spark" + (i % 3 === 0 ? " star" : ""), `--s:${R(6, 14)}px;left:${R(0, 100)}vw;top:${R(0, 100)}vh;--t:${R(2.5, 6)}s;--dl:${-R(0, 6)}s`);
+
+    // 4. Падающие цветы, лепестки и листья (крупнее)
+    const kinds = ["#flP", "#flW", "#flO", "#petalP", "#leafL2", "#petalW", "#flP", "#leafE", "#flW", "#petalO", "#leafR", "#flO"];
+    for (let i = 0; i < (mob ? 12 : 26); i++) {
+      const k = kinds[i % kinds.length], fl = k.startsWith("#fl"), x0 = R(0, 100);
+      const sz = fl ? R(56, 100) : R(30, 52);
+      add("petal", `--s:${mob ? sz * .75 : sz}px;--o:${R(.6, .92)};--x0:${x0}vw;--x1:${x0 + R(-10, 22)}vw;--t:${R(20, 38)}s;--t2:${R(5, 11)}s;--dl:${-R(0, 40)}s`, svg(k));
+    }
+
+    // 5. Бабочки
+    const W = innerWidth, H = innerHeight;
+    for (let i = 0; i < (mob ? 1 : 3); i++) {
+      const y = R(.15, .8) * H, a = R(.1, .4) * H;
+      const path = `path('M ${-60} ${y} C ${W * .25} ${y - a}, ${W * .45} ${y + a}, ${W * .6} ${y - a * .5} S ${W * .9} ${y + a}, ${W + 80} ${y - a * .3}')`;
+      add("fly", `--s:${R(30, 44)}px;--path:${path};--t:${R(26, 40)}s;--dl:${-R(0, 30)}s`, svg("#bfly", "-30 -30 60 60"));
     }
   }
   /* Цветочные углы секций: прорастают при прокрутке */
