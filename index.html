@@ -619,7 +619,6 @@ footer a:hover { color: #fff; }
             <p data-address>Саратовская обл., г. Балаково, ул. Ленина, 58г</p>
             <div class="map-btns">
               <a class="map-btn" data-yandex-link href="#" target="_blank" rel="noopener"><i class="ya">Я</i>Яндекс Карты</a>
-              <a class="map-btn" data-yandex-route href="#" target="_blank" rel="noopener"><i class="ya">→</i>Маршрут</a>
               <a class="map-btn" data-2gis-link href="#" target="_blank" rel="noopener"><i class="gis">2</i>2ГИС</a>
             </div>
           </div>
@@ -709,7 +708,6 @@ const CONFIG = {
 
   /* Контакты и ссылки на карты */
   const ySearch = CONFIG.yandexUrl || "https://yandex.ru/maps/?text=" + q("Эвкалипт, цветы, " + CONFIG.addressShort);
-  const yRoute = "https://yandex.ru/maps/?rtext=~" + q(CONFIG.addressShort) + "&rtt=auto";
   const gis = CONFIG.gisUrl || "https://2gis.ru/balakovo/search/" + q("Эвкалипт, Ленина 58г");
   $$("[data-phone-link]").forEach(a => a.href = "tel:" + CONFIG.phone);
   $$("[data-phone-text]").forEach(a => a.textContent = CONFIG.phoneText);
@@ -718,7 +716,6 @@ const CONFIG = {
   $$("[data-vk-link]").forEach(a => a.href = CONFIG.vk);
   $$("[data-vk-msg]").forEach(a => a.href = CONFIG.vkMessage);
   $$("[data-yandex-link]").forEach(a => a.href = ySearch);
-  $$("[data-yandex-route]").forEach(a => a.href = yRoute);
   $$("[data-2gis-link]").forEach(a => a.href = gis);
   $("#map").src = "https://yandex.ru/map-widget/v1/?text=" + q("Эвкалипт, " + CONFIG.addressShort) + "&z=16";
   $("#year").textContent = new Date().getFullYear();
