@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Капитал до 30</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: annual-report register — masthead, ranked ledger table, then one dossier per founder (photos left, text right) */
+:root {
+  --paper: #f4f4f2;
+  --sheet: #ffffff;
+  --ink: #16181b;
+  --ink-2: #4a4f57;
+  --ink-3: #7b8088;
+  --rule: #d9dadc;
+  --slate: #2f3a48;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  --font-data: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121417; --sheet: #191c20; --ink: #e8e9ea; --ink-2: #b3b7bd; --ink-3: #868b93; --rule: #2c3036; --slate: #9fb0c4; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121417; --sheet: #191c20; --ink: #e8e9ea; --ink-2: #b3b7bd; --ink-3: #868b93; --rule: #2c3036; --slate: #9fb0c4; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 16px/1.6 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+img { max-width: 100%; display: block; }
+a { color: var(--slate); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--slate); outline-offset: 2px; }
+.wrap { max-width: 1120px; margin: 0 auto; }
+
+/* Masthead */
+.mast { border-bottom: 1px solid var(--ink); padding-block: 28px 18px; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.mast .brand { font: 600 15px/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; }
+.mast .meta { font: 400 13px/1.4 var(--font-data); color: var(--ink-3); }
+.lede { padding-block: 56px 40px; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 48px; align-items: end; }
+.lede h1 { font: 400 clamp(38px, 6vw, 68px)/1.04 var(--font-display); margin: 0; letter-spacing: -.015em; text-wrap: balance; }
+.lede p { margin: 0; color: var(--ink-2); max-width: 46ch; }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.kpi { padding: 18px 20px 18px 0; }
+.kpi + .kpi { padding-left: 20px; border-left: 1px solid var(--rule); }
+.kpi b { display: block; font: 400 30px/1.1 var(--font-display); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--ink-3); }
+
+/* Section heads */
+.sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-block: 64px 16px; border-bottom: 1px solid var(--ink); }
+.sec-head h2 { font: 400 30px/1.2 var(--font-display); margin: 0; }
+.sec-head small { font: 400 13px/1.4 var(--font-data); color: var(--ink-3); }
+
+/* Ledger table */
+.table-box { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 820px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 14px 12px 14px 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+th { font: 500 11px/1.3 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+td.num, th.num { text-align: right; padding-right: 28px; }
+td.worth, th:last-child { padding-right: 0; }
+td.rank { font-family: var(--font-data); color: var(--ink-3); width: 44px; }
+td.name a { font: 600 16px/1.3 var(--font-body); color: var(--ink); text-decoration: none; }
+td.name a:hover { text-decoration: underline; }
+td.name span { display: block; font-size: 13px; color: var(--ink-3); }
+td.worth { font: 500 15px/1.3 var(--font-data); white-space: nowrap; }
+.tag { font: 500 11px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--rule); padding: 5px 7px; white-space: nowrap; color: var(--ink-2); }
+
+/* Dossier */
+.dossier { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 48px; padding-block: 56px; border-bottom: 1px solid var(--rule); scroll-margin-top: 16px; }
+.photos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-self: start; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+figure { margin: 0; }
+.frame { display: block; aspect-ratio: 3 / 4; max-width: 100%; background: var(--rule); overflow: hidden; }
+.frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(.25) contrast(1.02); }
+.frame.empty { display: flex; align-items: center; justify-content: center; padding: 16px; background: var(--sheet); border: 1px dashed var(--rule); text-align: center; font: 400 12px/1.5 var(--font-data); color: var(--ink-3); }
+figcaption { padding-top: 8px; font: 400 12px/1.4 var(--font-data); color: var(--ink-3); }
+figcaption b { display: block; font: 500 11px/1.4 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.d-head { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+.d-rank { font: 400 14px/1 var(--font-data); color: var(--ink-3); }
+.dossier h3 { font: 400 clamp(30px, 4vw, 42px)/1.1 var(--font-display); margin: 0; letter-spacing: -.01em; }
+.role { color: var(--ink-2); margin: 6px 0 24px; }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); margin: 0 0 28px; }
+.facts div { padding: 12px 12px 12px 0; min-width: 0; }
+.facts dt { font: 500 11px/1.3 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.facts dd { margin: 4px 0 0; font: 500 15px/1.35 var(--font-data); overflow-wrap: anywhere; }
+.body h4 { font: 600 12px/1.3 var(--font-body); letter-spacing: .12em; text-transform: uppercase; margin: 28px 0 10px; color: var(--ink); }
+.body p { margin: 0 0 12px; max-width: 68ch; color: var(--ink-2); }
+.timeline { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+.timeline li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 0 0 12px 16px; position: relative; color: var(--ink-2); max-width: 72ch; }
+.timeline li::before { content: ""; position: absolute; left: -4px; top: 9px; width: 7px; height: 7px; background: var(--paper); border: 1px solid var(--ink); }
+.timeline time { font: 500 14px/1.6 var(--font-data); color: var(--ink); }
+.lesson { margin-top: 24px; padding: 16px 20px; background: var(--sheet); border: 1px solid var(--rule); max-width: 72ch; }
+.lesson b { font: 600 11px/1.3 var(--font-body); letter-spacing: .12em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+.lesson p { margin: 0; color: var(--ink); font: 400 18px/1.5 var(--font-display); }
+
+/* Others & notes */
+.others { columns: 2 320px; column-gap: 48px; padding-block: 24px 0; }
+.others div { break-inside: avoid; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.others b { display: block; }
+.others span { color: var(--ink-2); font-size: 14px; }
+.notes { padding-block: 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; font-size: 13px; color: var(--ink-2); }
+.notes h4 { font: 600 11px/1.3 var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); margin: 0 0 10px; }
+.notes ol { margin: 0; padding-left: 18px; }
+.notes li { margin-bottom: 6px; overflow-wrap: anywhere; }
+footer { border-top: 1px solid var(--ink); padding-block: 18px 40px; font: 400 12px/1.5 var(--font-data); color: var(--ink-3); }
+
+@media (max-width: 860px) {
+  .lede { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 40px 28px; }
+  .dossier { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 40px; }
+  .photos { position: static; max-width: 440px; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .notes { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+}
+@media (max-width: 480px) {
+  .kpis { grid-template-columns: minmax(0, 1fr); }
+  .kpi + .kpi { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* ---------- Motion & charts ---------- */
+:root { --chart: 22, 24, 27; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --chart: 232, 233, 234; } }
+:root[data-theme="dark"] { --chart: 232, 233, 234; }
+
+#bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.wrap { position: relative; z-index: 1; }
+
+/* Ticker tape */
+.ticker { overflow: hidden; white-space: nowrap; border-bottom: 1px solid var(--rule); padding-block: 11px; font: 500 12px/1 var(--font-data); color: var(--ink-3);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.ticker-track { display: inline-flex; gap: 44px; padding-right: 44px; }
+.ticker-track span b { color: var(--ink); font-weight: 500; letter-spacing: .06em; }
+.ticker-track span i { font-style: normal; color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) {
+  .ticker-track { animation: tick 70s linear infinite; }
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+}
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* Hero chart */
+.lede-side { display: grid; gap: 20px; min-width: 0; }
+.lede { align-items: center; }
+.hero-chart { background: color-mix(in srgb, var(--sheet) 82%, transparent); border: 1px solid var(--rule); padding: 16px 16px 12px; backdrop-filter: blur(2px); }
+.hero-chart .hc-title { display: flex; justify-content: space-between; gap: 12px; font: 500 11px/1.3 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.hero-chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font: 400 12px/1.3 var(--font-data); color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend svg { width: 22px; height: 6px; }
+svg .ax { stroke: var(--rule); stroke-width: 1; }
+svg .lbl { fill: var(--ink-3); font: 400 10px var(--font-data); }
+svg .lbl-strong { fill: var(--ink); font: 500 11px var(--font-data); }
+svg .ln { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+svg .area { fill: var(--ink); opacity: .06; }
+svg .dot { fill: var(--paper); stroke: var(--ink); stroke-width: 1.4; }
+svg .dot-end { fill: var(--ink); }
+.draw-ready .ln { transition: stroke-dashoffset 1.8s cubic-bezier(.6,.05,.25,1); }
+.draw-ready .area, .draw-ready .dot, .draw-ready .lbl-strong { transition: opacity .8s ease .9s; }
+.draw-hidden .area, .draw-hidden .dot, .draw-hidden .lbl-strong { opacity: 0; }
+
+/* KPIs: 4 columns */
+.kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); background: color-mix(in srgb, var(--paper) 70%, transparent); }
+
+/* Ledger bars */
+.bar { height: 3px; background: var(--rule); margin-top: 7px; width: 100%; min-width: 90px; }
+.bar i { display: block; height: 100%; background: var(--ink); width: var(--w); }
+@media (prefers-reduced-motion: no-preference) {
+  .bar i { animation: grow 1.4s cubic-bezier(.6,.05,.25,1) both; animation-delay: var(--d); }
+  tbody tr { transition: background .25s; }
+}
+@keyframes grow { from { width: 0; } }
+tbody tr:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+td.worth { min-width: 120px; }
+
+/* Dossier chart */
+.vchart { margin: 0 0 8px; padding: 14px 16px 10px; border: 1px solid var(--rule); background: color-mix(in srgb, var(--sheet) 85%, transparent); max-width: 72ch; }
+.vchart .hc-title { display: flex; justify-content: space-between; gap: 12px; font: 500 11px/1.3 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+.vchart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.deal { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.deal b { font: 400 34px/1.1 var(--font-display); color: var(--ink); }
+.deal span { color: var(--ink-2); font-size: 14px; }
+.dossier, .others div, .notes { background: transparent; }
+.body, .others { background: color-mix(in srgb, var(--paper) 55%, transparent); }
+
+/* Photo motion */
+.frame img { transition: filter .6s ease, transform 1.2s cubic-bezier(.2,.7,.2,1); }
+.frame:hover img, .frame:focus-visible img { filter: none; transform: scale(1.045); }
+.frame { position: relative; }
+.frame::after { content: ""; position: absolute; inset: 0; border: 1px solid transparent; transition: border-color .4s; pointer-events: none; }
+.frame:hover::after { border-color: var(--ink); }
+
+/* Timeline motion */
+.timeline li { transition: color .3s, transform .3s; }
+.timeline li:hover { color: var(--ink); transform: translateX(4px); }
+.timeline li:hover::before { background: var(--ink); }
+.d-rank { font-variant-numeric: tabular-nums; }
+
+/* Reveal: always readable, only a gentle slide */
+@media (prefers-reduced-motion: no-preference) {
+  .js .rv { transition: transform .9s cubic-bezier(.2,.7,.2,1), opacity .9s ease; }
+  .js .rv.pending { transform: translateY(22px); opacity: .55; }
+  .lede h1 { animation: rise 1s cubic-bezier(.2,.7,.2,1) both; }
+  .lede-side { animation: rise 1s cubic-bezier(.2,.7,.2,1) .15s both; }
+}
+@keyframes rise { from { transform: translateY(18px); opacity: .4; } }
+
+/* ---------- Live layer ---------- */
+[hidden] { display: none !important; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 40; pointer-events: none; }
+.progress i { display: block; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(0); }
+
+.live { display: inline-flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; }
+.live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
+@media (prefers-reduced-motion: no-preference) { .live::before { animation: pulse 2s ease-out infinite; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(var(--chart), .45); } 70%, 100% { box-shadow: 0 0 0 9px rgba(var(--chart), 0); } }
+
+.tip { position: fixed; z-index: 50; pointer-events: none; background: var(--ink); color: var(--paper); font: 500 12px/1.35 var(--font-data); padding: 7px 9px; white-space: nowrap; transform: translate(-50%, calc(-100% - 14px)); }
+.tip::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 9px; height: 9px; background: var(--ink); transform: translateX(-50%) rotate(45deg); }
+svg .hit { fill: transparent; cursor: crosshair; }
+svg .guide { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0; transition: opacity .2s; pointer-events: none; }
+svg .dot { transition: r .2s; }
+svg .dot.hot { r: 5; fill: var(--ink); }
+
+.peek { position: fixed; z-index: 45; width: 128px; aspect-ratio: 3 / 4; pointer-events: none; overflow: hidden; border: 1px solid var(--ink); background: var(--rule); box-shadow: 0 18px 40px -18px rgba(var(--chart), .5); transition: opacity .2s, transform .25s; }
+.peek img { width: 100%; height: 100%; object-fit: cover; }
+.peek span { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 8px; font: 500 10px/1.3 var(--font-data); letter-spacing: .06em; text-transform: uppercase; background: var(--ink); color: var(--paper); }
+
+.rail { position: fixed; left: max(16px, calc((100vw - 1120px) / 2 - 170px)); top: 50%; transform: translateY(-50%); z-index: 15; display: none; gap: 2px; opacity: 0; transition: opacity .5s; }
+@media (min-width: 1460px) { .rail { display: grid; } }
+.rail.show { opacity: 1; }
+.rail a { font: 400 11px/1.3 var(--font-data); color: var(--ink-3); text-decoration: none; padding: 4px 0 4px 14px; border-left: 1px solid var(--rule); transition: color .3s, border-color .3s, padding .3s; white-space: nowrap; }
+.rail a:hover { color: var(--ink); }
+.rail a.on { color: var(--ink); border-color: var(--ink); padding-left: 22px; }
+
+.dossier { position: relative; }
+.dossier::before { content: attr(data-n); position: absolute; right: -6px; top: 18px; z-index: -1; pointer-events: none;
+  font: 400 clamp(110px, 17vw, 230px)/1 var(--font-display); font-variant-numeric: tabular-nums; color: transparent; -webkit-text-stroke: 1px var(--rule);
+  transform: translateY(var(--py, 0px)); }
+.photos { perspective: 900px; }
+.photos figure { transition: transform .6s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; }
+
+.sec-head { position: relative; border-bottom-color: transparent; }
+.sec-head::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--ink); transform-origin: left; transition: transform 1.3s cubic-bezier(.6,.05,.25,1); }
+.js .sec-head.pending::after { transform: scaleX(0); }
+
+.w { display: inline-block; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .lede h1 { animation: none; }
+  .js .lede h1 .w { animation: rise 1s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--i); }
+  .kpi { transition: background .3s; }
+  .kpi:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+  .lesson { transition: transform .4s, border-color .4s; }
+  .lesson:hover { transform: translateY(-3px); border-color: var(--ink); }
+  td.name a { background: linear-gradient(var(--ink), var(--ink)) 0 100% / 0 1px no-repeat; transition: background-size .4s; }
+  tbody tr:hover td.name a { background-size: 100% 1px; text-decoration: none; }
+}
+
+.d-nav { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--rule); font: 500 13px/1.4 var(--font-data); max-width: 72ch; }
+.d-nav a { color: var(--ink-2); text-decoration: none; padding-block: 8px; transition: color .2s; }
+.d-nav a:hover { color: var(--ink); }
+.d-nav a + a { margin-left: auto; text-align: right; }
+
+/* ---------- Dock & phone layout ---------- */
+html { -webkit-tap-highlight-color: transparent; }
+.cards { display: none; list-style: none; margin: 0; padding: 0; }
+.dock { position: fixed; z-index: 35; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, calc(100% + 40px));
+  width: min(520px, calc(100% - 24px)); display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 2px;
+  padding: 4px 4px 4px 14px; background: color-mix(in srgb, var(--sheet) 86%, transparent); border: 1px solid var(--rule);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 18px 40px -22px rgba(var(--chart), .6);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.dock.show { transform: translate(-50%, 0); }
+.dock > i { position: absolute; left: -1px; right: -1px; top: -1px; height: 2px; background: var(--ink); transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform .5s; }
+.dock .dn { font: 500 12px/1 var(--font-data); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.dock .dname { font: 600 14px/1.2 var(--font-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px; min-width: 0; }
+.dock button { -webkit-appearance: none; appearance: none; border: 0; background: transparent; color: var(--ink); width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; font: 400 20px/1 var(--font-data); }
+.dock button:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.dock button:active { background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.dock button:disabled { color: var(--ink-3); opacity: .45; cursor: default; background: transparent; }
+.dock button:focus-visible { outline: 2px solid var(--ink); outline-offset: -4px; }
+@media (min-width: 1460px) { .dock { display: none; } }
+
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  .mast { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; flex-wrap: nowrap; align-items: center;
+    margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 14px 12px;
+    background: color-mix(in srgb, var(--paper) 84%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+  .mast .brand { font-size: 13px; }
+  .mast .meta { font-size: 12px; white-space: nowrap; }
+  .mast .rest, .cd { display: none; }
+  .ticker { padding-block: 9px; font-size: 11px; }
+  .ticker-track { gap: 32px; padding-right: 32px; }
+
+  .lede { padding-block: 30px 22px; gap: 20px; }
+  .lede h1 { font-size: clamp(36px, 10.6vw, 46px); line-height: 1.03; }
+  .lede p { font-size: 15px; }
+  .hero-chart { padding: 12px 12px 10px; }
+  .legend { gap: 6px 14px; font-size: 11px; }
+
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi, .kpi + .kpi, .kpi:nth-child(3) { padding: 14px 12px 14px 0; border-left: 0; border-top: 0; }
+  .kpi:nth-child(even) { padding-left: 14px; border-left: 1px solid var(--rule); }
+  .kpi:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .kpi b { font-size: 24px; }
+  .kpi span { font-size: 12px; line-height: 1.35; display: block; margin-top: 2px; }
+
+  .sec-head { padding-block: 44px 12px; }
+  .sec-head h2 { font-size: 26px; }
+  .sec-head small { font-size: 11px; }
+
+  .table-box { display: none; }
+  .cards { display: block; }
+  .card a { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 3px 10px; align-items: baseline; padding: 14px 0 15px; border-bottom: 1px solid var(--rule); color: inherit; text-decoration: none; }
+  .card a:active { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  .card .r { font: 400 12px/1.3 var(--font-data); color: var(--ink-3); }
+  .card .n { font: 600 16px/1.25 var(--font-body); min-width: 0; }
+  .card .v { font: 500 14px/1.25 var(--font-data); white-space: nowrap; text-align: right; }
+  .card .m { grid-column: 2 / 4; font-size: 13px; color: var(--ink-3); }
+  .card .bar { grid-column: 2 / 4; display: block; min-width: 0; margin-top: 6px; }
+
+  .dossier { padding-block: 36px 40px; gap: 22px; scroll-margin-top: 44px; }
+  #rating { scroll-margin-top: 40px; }
+  .dossier::before { font-size: 92px; top: 22px; right: -2px; }
+  .photos { max-width: none; gap: 8px; }
+  figcaption { font-size: 11px; }
+  .dossier h3 { font-size: 30px; }
+  .d-head { gap: 10px; }
+  .role { margin: 4px 0 18px; font-size: 15px; }
+  .facts { margin-bottom: 20px; }
+  .facts dd { font-size: 14px; }
+  .vchart { padding: 12px 12px 8px; }
+  .vchart .hc-title span:last-child { display: none; }
+  .deal b { font-size: 28px; }
+  .body h4 { margin-top: 24px; }
+  .body p { font-size: 15px; }
+  .timeline li { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; font-size: 15px; }
+  .timeline time { font-size: 13px; }
+  .lesson { padding: 14px 16px; }
+  .lesson p { font-size: 17px; }
+  .others { columns: 1; }
+  .notes { padding-block: 16px 40px; }
+  footer { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+
+  .dock { width: calc(100% - 16px); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); padding-left: 12px; }
+  .tip { font-size: 11px; white-space: normal; max-width: 220px; text-align: center; }
+}
+
+@media (max-width: 860px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi:nth-child(3) { padding-left: 0; border-left: 0; }
+  .kpi:nth-child(n+3) { border-top: 1px solid var(--rule); }
+}
+@media (max-width: 480px) {
+  .kpis { grid-template-columns: minmax(0, 1fr); }
+  .kpi, .kpi:nth-child(3) { padding-left: 0; border-left: 0; }
+  .kpi + .kpi { border-top: 1px solid var(--rule); }
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add("js");</script>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"><i id="prog"></i></div>
+<nav class="rail" id="rail" aria-label="Навигация по досье"></nav>
+<div class="tip" id="tip" hidden></div>
+<nav class="dock" id="dock" aria-label="Переход между досье">
+  <i></i>
+  <span class="dn" id="dockN">01/10</span>
+  <span class="dname" id="dockName"></span>
+  <button type="button" id="dockPrev" aria-label="Предыдущее досье">‹</button>
+  <button type="button" id="dockNext" aria-label="Следующее досье">›</button>
+  <button type="button" id="dockTop" aria-label="К рейтингу">↑</button>
+</nav>
+<div class="peek" id="peek" hidden><img alt="" referrerpolicy="no-referrer"><span></span></div>
+<div class="wrap">
+  <header class="mast">
+    <div class="brand">Капитал до 30</div>
+    <div class="meta"><span class="live" id="clock">Октябрь 2026</span><span class="rest"> · Оценки в долларах США</span></div>
+  </header>
+  <div class="ticker" aria-label="Оценки компаний героев рейтинга"><div class="ticker-track" id="ticker"></div></div>
+
+  <section class="lede">
+    <h1>Десять бизнесменов, заработавших состояние раньше тридцати</h1>
+    <div class="lede-side">
+      <p>Основатели компаний моложе 30 лет: искусственный интеллект, финтех, электронная коммерция, косметика и напитки. Для каждого: ранний и современный снимок, биография, хронология роста бизнеса и главный фактор успеха. Только те, кто построил компанию сам.</p>
+      <div class="hero-chart">
+        <div class="hc-title"><span>Оценка компаний, $ млрд</span><span>2019–2025</span></div>
+        <svg id="heroChart" viewBox="0 0 440 210" role="img" aria-label="Рост оценки Scale AI, Cursor, Mercor и Polymarket"></svg>
+        <div class="legend" id="heroLegend"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="kpis">
+    <div class="kpi"><b data-count="10">10</b><span>основателей компаний</span></div>
+    <div class="kpi"><b data-count="26" data-suffix=" лет">26 лет</b><span>средний возраст</span></div>
+    <div class="kpi"><b data-count="12.4" data-prefix="≈ $" data-suffix=" млрд" data-dec="1">≈ $12,4 млрд</b><span>совокупное состояние</span></div>
+    <div class="kpi"><b data-count="5">5</b><span>миллиардеров по оценкам Forbes и Bloomberg</span></div>
+  </div>
+
+  <div class="sec-head" id="rating">
+    <h2>Рейтинг</h2>
+    <small>Отсортировано по оценке состояния</small>
+  </div>
+  <div class="table-box">
+    <table>
+      <thead><tr><th>№</th><th>Имя</th><th class="num">Возраст</th><th>Страна</th><th>Компания</th><th>Отрасль</th><th class="num">Оценка</th></tr></thead>
+      <tbody id="ledger"></tbody>
+    </table>
+  </div>
+  <ul class="cards" id="cards"></ul>
+
+  <div class="sec-head">
+    <h2>Досье</h2>
+    <small>Фото: Wikimedia Commons и пресса, источник у каждого снимка</small>
+  </div>
+  <main id="dossiers"></main>
+
+  <div class="sec-head">
+    <h2>Также в категории до 30</h2>
+    <small>Партнёры героев рейтинга</small>
+  </div>
+  <div class="others">
+    <div><b>Адарш Хиремат</b><span>Технический директор и сооснователь Mercor, третий из школьной команды по дебатам. Доля около 22%, состояние по оценке Forbes превышает $2 млрд.</span></div>
+    <div><b>Кайвалья Вохра</b><span>Сооснователь и технический директор Zepto, друг детства Аадита Паличи. Вместе бросили Стэнфорд. По версии Hurun, самый молодой участник списка богатейших людей Индии 2025 года.</span></div>
+    <div><b>Суалех Асиф, Аман Сангер, Арвид Луннемарк</b><span>Сооснователи Cursor, однокурсники Майкла Труэлла по MIT. По оценке Forbes, доля каждого стоила не менее $1,3 млрд уже в 2025 году.</span></div>
+    <div><b>Люси Го</b><span>Сооснователь Scale AI вместе с Александром Вангом. В 2025 году стала самой молодой женщиной-миллиардером, но ей уже больше 30 лет.</span></div>
+  </div>
+
+  <section class="notes">
+    <div>
+      <h4>Методика</h4>
+      <p>Оценки ориентировочные. Опираемся на Forbes, Bloomberg и Hurun, а также на стоимость долей по последним раундам и сделкам. Возраст указан на 18 октября 2026 года. Для тех, чья точная дата рождения не публиковалась, возраст рассчитан по возрасту, указанному в прессе.</p>
+      <p>«Тогда» — самый ранний снимок, который удалось найти. Фото с Wikimedia Commons распространяются по свободным лицензиям. Фото из прессы принадлежат правообладателям и показаны со ссылкой на источник. Для публикации сайта в открытом доступе на них нужно разрешение.</p>
+    </div>
+    <div>
+      <h4>Источники фотографий</h4>
+      <ol id="credits"></ol>
+    </div>
+  </section>
+
+  <footer>Капитал до 30 · Информационный обзор, не является финансовой рекомендацией.</footer>
+</div>
+
+<script>
+// Content is pre-rendered in the standalone build; render it here only when the page is empty
+const pre = document.getElementById("dossiers").children.length > 0;
+const C = (file) => ({ src: "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(file.replace(/ /g, "_")) + "?width=640", link: "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(file.replace(/ /g, "_")) });
+
+const people = [
+  {
+    id: "wang", name: "Александр Ванг", latin: "Alexandr Wang", age: 29, country: "США",
+    source: "Scale AI", sector: "ИИ", worth: "≈ $3,6 млрд",
+    role: "Основатель Scale AI, главный директор по ИИ в Meta",
+    then: { ...C("Guillaume Pousaz & Alexandr Wang - The Grove 2022 (Wang crop).jpg"), when: "2022 · 25 лет", credit: "Village Global, CC BY 2.0", pos: "40% 30%" },
+    now:  { ...C("Alexandr Wang, Chief A.I. Officer, Meta.jpg"), when: "2025 · 28 лет", credit: "Meta Platforms, CC BY-SA 4.0", pos: "50% 20%" },
+    bio: [
+      "Вырос в Лос-Аламосе, Нью-Мексико, в семье физиков-иммигрантов из Китая. В школе выступал на олимпиадах по математике и программированию, в 17 лет работал инженером в Quora.",
+      "Поступил в MIT, но после первого курса ушёл, чтобы вместе с Люси Го основать Scale AI. Компания размечает данные для обучения ИИ: сначала для беспилотных автомобилей, затем для военных заказчиков и разработчиков больших языковых моделей."
+    ],
+    timeline: [
+      ["2016", "Основывает Scale AI, проходит акселератор Y Combinator."],
+      ["2019", "Scale становится «единорогом» с оценкой больше $1 млрд."],
+      ["2021", "В 24 года Forbes называет его самым молодым миллиардером, заработавшим состояние самостоятельно."],
+      ["2024", "Оценка Scale AI достигает $13,8 млрд."],
+      ["2025", "Meta вкладывает около $14,3 млрд за 49% Scale. Ванг переходит в Meta и возглавляет её лабораторию сверхинтеллекта."]
+    ],
+    lesson: "Он продавал не ИИ, а то, без чего ИИ не работает: качественные данные. Пока все строили модели, он строил инфраструктуру для них."
+  },
+  {
+    id: "foody", name: "Брендан Фуди", latin: "Brendan Foody", age: 23, country: "США",
+    source: "Mercor", sector: "ИИ, найм", worth: "≈ $2,2 млрд",
+    role: "Сооснователь и CEO Mercor",
+    then: { src: "https://www.forbes.com.au/wp-content/uploads/2025/10/image_4fab55.png", link: "https://www.forbes.com.au/?p=163477", when: "2025 · 22 года, в центре", credit: "Forbes Australia", pos: "54% 40%" },
+    now:  { src: "https://forbes.es/wp-content/uploads/2026/04/Progetto-senza-titolo-2026-04-16T114212.953.png", link: "https://forbes.es/empresas/906984/los-fundadores-multimillonarios-de-mercor-de-23-anos-se-enfrentan-al-fraude-de-empleados-y-a-la-infiltracion-norcoreana/", when: "2026 · 23 года", credit: "Forbes España, фото Cody Pickens", pos: "55% 30%" },
+    bio: [
+      "Вырос в районе Сан-Франциско. В школе Bellarmine College Prep выступал в команде по дебатам вместе с Адаршем Хирематом и Сурьей Мидхой. Эта троица позже и основала Mercor.",
+      "Учился в Джорджтауне, но ушёл ради компании и получил стипендию Thiel Fellowship для тех, кто бросает учёбу ради бизнеса. Mercor начинался как ИИ-рекрутер для поиска программистов, а затем нашёл более прибыльную нишу: подбор врачей, юристов и финансистов, которые обучают модели для крупнейших ИИ-лабораторий."
+    ],
+    timeline: [
+      ["2023", "Основывает Mercor с друзьями по школьной команде."],
+      ["2024", "Раунд серии A от фонда Benchmark."],
+      ["2025", "Февраль: оценка $2 млрд. Октябрь: раунд $350 млн при оценке $10 млрд."],
+      ["2025", "Forbes называет трёх основателей самыми молодыми миллиардерами, создавшими состояние самостоятельно."],
+      ["2026", "Все трое входят в мировой список миллиардеров Forbes."]
+    ],
+    lesson: "Они вовремя сменили рынок. Когда ИИ-лабораториям понадобились эксперты для обучения моделей, Mercor уже умел быстро находить и проверять специалистов."
+  },
+  {
+    id: "midha", name: "Сурья Мидха", latin: "Surya Midha", age: 23, country: "США",
+    source: "Mercor", sector: "ИИ, найм", worth: "≈ $2,2 млрд",
+    role: "Сооснователь и председатель совета директоров Mercor",
+    then: { src: "https://www.forbes.com.au/wp-content/uploads/2025/10/image_4fab55.png", link: "https://www.forbes.com.au/?p=163477", when: "2025 · 22 года, справа", credit: "Forbes Australia", pos: "100% 40%" },
+    now:  { src: "https://akm-img-a-in.tosshub.com/businesstoday/images/story/202603/69b29dc9d95a9-mercors-surya-midha-120436662-16x9.png", link: "https://www.businesstoday.in/amp/technology/news/story/this-22-year-old-co-founder-surpassed-mark-zuckerbergs-forbes-record-meet-surya-midha-520329-2026-03-12", when: "2026 · 22 года", credit: "Business Today", pos: "50% 30%" },
+    bio: [
+      "Сын индийских иммигрантов, вырос в Сан-Хосе. В школе вместе с Фуди и Хирематом выигрывал национальные турниры по дебатам. Поступил в Школу дипломатической службы Джорджтауна, но в 2023 году взял академический отпуск ради Mercor.",
+      "В 2024 году получил стипендию Thiel Fellowship. В компании отвечает за стратегию и работу совета директоров. В 2026 году Forbes отметил, что Мидха и его партнёры побили рекорд Марка Цукерберга, ставшего миллиардером в 23 года."
+    ],
+    timeline: [
+      ["2023", "Уходит из Джорджтауна и становится сооснователем Mercor."],
+      ["2024", "Получает стипендию Thiel Fellowship."],
+      ["2025", "Оценка Mercor вырастает с $2 млрд до $10 млрд за восемь месяцев."],
+      ["2025", "Становится миллиардером в 22 года."],
+      ["2026", "Состояние около $2,2 млрд по версии Forbes."]
+    ],
+    lesson: "Доверие и общий опыт. Трое друзей много лет работали вместе ещё в школе, поэтому смогли быстро распределить роли и расти без конфликтов."
+  },
+  {
+    id: "truell", name: "Майкл Труэлл", latin: "Michael Truell", age: 26, country: "США",
+    source: "Cursor (Anysphere)", sector: "ИИ, софт", worth: "≥ $1,3 млрд",
+    role: "Сооснователь и CEO Cursor",
+    then: { src: "https://www.forbes.com.au/wp-content/uploads/2025/11/960x0-2025-11-28T115413.216.jpg", link: "https://www.forbes.com.au/?p=165979", when: "Основатели Cursor · Труэлл справа", credit: "Forbes Australia", pos: "100% 30%" },
+    now:  { src: "https://fortune.com/img-assets/wp-content/uploads/2026/04/GettyImages-2270265262-e1776885634438.jpg?resize=1200,600", link: "https://fortune.com/article/who-is-michael-truell-cursor-ceo-spacex-acquisition/", when: "2026 · 25 лет", credit: "Fortune, Getty Images", pos: "55% 30%" },
+    bio: [
+      "Вырос в Нью-Йорке, учился в школе Horace Mann. Изучал математику и информатику в MIT, стажировался в Google. Там познакомился с инвестором Али Партови и попал в программу Neo Scholars.",
+      "В MIT вместе с тремя однокурсниками основал Anysphere. Их продукт Cursor — редактор кода со встроенным ИИ. Он стал одним из самых быстрорастущих программных продуктов в истории: годовая выручка превысила $1 млрд меньше чем за три года после запуска."
+    ],
+    timeline: [
+      ["2022", "Основывает Anysphere с однокурсниками по MIT."],
+      ["2023", "Посевной раунд $8 млн во главе с OpenAI Startup Fund."],
+      ["2024", "Раунд серии A от Andreessen Horowitz."],
+      ["2025", "Раунд $2,3 млрд при оценке $29,3 млрд. Годовая выручка превышает $1 млрд."],
+      ["2026", "SpaceX получает право купить Cursor за $60 млрд."]
+    ],
+    lesson: "Они сделали продукт для себя. Программисты быстро оценили инструмент, который реально ускоряет работу, и рекомендовали его коллегам почти без рекламы."
+  },
+  {
+    id: "coplan", name: "Шейн Коплан", latin: "Shayne Coplan", age: 28, country: "США",
+    source: "Polymarket", sector: "Финтех", worth: "≈ $1 млрд",
+    role: "Основатель и CEO Polymarket",
+    then: { src: "https://cdn.decrypt.co/resize/1024/height/512/wp-content/uploads/2025/09/polymarket-shayne-coplan-decrypt-style-01-gID_7.jpg", link: "https://decrypt.co/343426/polymarket-shayne-coplan-youngest-self-made-billionaire-bloomberg", when: "2025 · 27 лет", credit: "Decrypt", pos: "50% 30%" },
+    now:  { src: "https://cdn.prod.website-files.com/68d6be744d7efccc2207f571/699763c11e0c9f5390f48d9c_Shayne%20Headshot.png", link: "https://www.sloansportsconference.com/people/shayne-coplan", when: "2026 · 27 лет", credit: "MIT Sloan Sports Analytics Conference", pos: "50% 40%" },
+    bio: [
+      "Родился в Нью-Йорке в 1998 году. В 14 лет написал письмо в Комиссию по ценным бумагам с идеей собственной биржи. Изучал информатику в Нью-Йоркском университете, но ушёл на первом курсе и занялся блокчейн-проектами.",
+      "В 2020 году в своей квартире основал Polymarket — рынок прогнозов, где люди ставят на исход реальных событий. Были годы без денег, штраф регулятора и запрет работать в США. Но выборы 2024 года сделали Polymarket одним из главных источников прогнозов в мире."
+    ],
+    timeline: [
+      ["2020", "Запуск Polymarket."],
+      ["2022", "Штраф CFTC $1,4 млн, платформа закрыта для пользователей из США."],
+      ["2024", "На исход президентских выборов в США поставлено больше $3 млрд."],
+      ["2025", "Покупка биржи QCX за $112 млн и возвращение на рынок США."],
+      ["2025", "Владелец Нью-Йоркской фондовой биржи ICE вкладывает до $2 млрд. Bloomberg называет Коплана самым молодым миллиардером."]
+    ],
+    lesson: "Упорство в одной идее. Он пять лет развивал рынок прогнозов, когда его считали нишей, и был готов к моменту, когда к нему пришёл массовый спрос."
+  },
+  {
+    id: "kylie", name: "Кайли Дженнер", latin: "Kylie Jenner", age: 29, country: "США",
+    source: "Kylie Cosmetics", sector: "Косметика", worth: "≈ $0,7 млрд",
+    role: "Основательница Kylie Cosmetics",
+    then: { ...C("Kylie Jenner1 (cropped).png"), when: "2017 · 20 лет", credit: "Hayu, CC BY 3.0", pos: "50% 20%" },
+    now:  { ...C("Guests at the 2026 Met Gala 134 (Kylie Jenner).jpg"), when: "2026 · 28 лет", credit: "SWinxy, CC BY 4.0", pos: "50% 20%" },
+    bio: [
+      "С подросткового возраста была известна по семейному реалити-шоу, поэтому к 18 годам у неё была многомиллионная аудитория в соцсетях. Её она и сделала главным маркетинговым каналом бизнеса.",
+      "В 2015 году запустила наборы для губ Kylie Lip Kit. Производство отдала на подряд, продажи шли только онлайн, а реклама шла через её собственные соцсети. Такая модель дала высокую маржу и минимум расходов."
+    ],
+    timeline: [
+      ["2015", "Первая партия Lip Kit распродана за минуты."],
+      ["2016", "Бренд переименован в Kylie Cosmetics, ассортимент расширен."],
+      ["2019", "Coty покупает 51% компании за $600 млн."],
+      ["2023", "Запускает бренд одежды Khy."],
+      ["2024", "Выходит на рынок напитков с брендом Sprinter."]
+    ],
+    lesson: "Собственная аудитория заменила рекламный бюджет. Компания с небольшим штатом, контрактным производством и онлайн-продажами окупилась почти сразу."
+  },
+  {
+    id: "palicha", name: "Аадит Палича", latin: "Aadit Palicha", age: 24, country: "Индия",
+    source: "Zepto", sector: "E-commerce", worth: "≈ $0,6 млрд",
+    role: "Сооснователь и CEO Zepto",
+    then: { src: "https://media.assettype.com/gulfnews%2Fimport%2F2023%2F09%2F05%2FPalicha-dropped-out-of-Stanford-University-two-years-ago-to-pursue-his-entrepreneurial-ambitions-with-an-e-commerce-start-up._18a6506a494_medium.jpg?w=800", link: "https://gulfnews.com/technology/21-year-old-dubai-school-alumnus-is-now-heading-a-14-billion-indian-startup-zepto-1.97927360", when: "Школьные годы, Дубай", credit: "Gulf News", pos: "45% 30%" },
+    now:  { src: "https://asset.inc42.com/2025/05/zepto-smear-featured.png", link: "https://inc42.com/?p=518401", when: "2025 · 23 года", credit: "Inc42", pos: "62% 30%" },
+    bio: [
+      "Родился в Мумбаи, вырос в Дубае, учился в школе GEMS. В 17 лет запустил приложение для совместных поездок GoPool. В 2020 году поступил в Стэнфорд на информатику вместе с другом детства Кайвальей Вохрой.",
+      "Во время пандемии оба ушли из университета. Первый стартап, KiranaKart, не нашёл своего рынка. Второй, Zepto, обещал доставку продуктов за 10 минут через сеть небольших городских складов. Компания прошла Y Combinator и стала одним из крупнейших игроков быстрой доставки в Индии."
+    ],
+    timeline: [
+      ["2018", "Запускает приложение GoPool."],
+      ["2020", "Уходит из Стэнфорда, пробует первый стартап KiranaKart."],
+      ["2021", "Запускает Zepto с доставкой за 10 минут."],
+      ["2023", "Zepto становится «единорогом» с оценкой $1,4 млрд."],
+      ["2025", "Hurun включает его в список богатейших людей Индии, состояние около ₹5 380 крор."]
+    ],
+    lesson: "Быстрый отказ от неудачной идеи. KiranaKart не сработал, и через несколько месяцев основатели запустили Zepto, учтя прошлые ошибки."
+  },
+  {
+    id: "gomez", name: "Эйдан Гомес", latin: "Aidan Gomez", age: 29, country: "Канада",
+    source: "Cohere", sector: "ИИ", worth: "≈ $0,5 млрд",
+    role: "Сооснователь и CEO Cohere",
+    then: { ...C("Aidan Gomez at Collision 2023.jpg"), when: "2023 · 26 лет", credit: "Piaras Ó Mídheach / Web Summit, CC BY 2.0", pos: "55% 30%" },
+    now:  { ...C("Aidan Gomez at \"ALL IN\" 2025 01.jpg"), when: "2025 · 28 лет", credit: "Gabriel Hutchinson, CC BY-SA 4.0", pos: "50% 25%" },
+    bio: [
+      "Родился в Торонто, вырос в небольшом городе Брайтон в Онтарио. Учился в Университете Торонто и в 20 лет попал стажёром в Google Brain.",
+      "Там он стал одним из восьми авторов статьи «Attention Is All You Need», которая описала архитектуру трансформера. На ней построены почти все современные языковые модели. Позже Гомес защитил диссертацию в Оксфорде и основал Cohere, которая делает языковые модели для корпоративных клиентов."
+    ],
+    timeline: [
+      ["2017", "Соавтор статьи о трансформерах, самый молодой в команде."],
+      ["2019", "Основывает Cohere вместе с Иваном Чжаном и Ником Фросстом."],
+      ["2023", "Cohere привлекает $270 млн при оценке около $2 млрд."],
+      ["2024", "Оценка компании достигает $5,5 млрд."],
+      ["2025", "Новый раунд на $500 млн при оценке $6,8 млрд."]
+    ],
+    lesson: "Он выбрал узкий и платёжеспособный рынок. Cohere не конкурирует за обычных пользователей, а продаёт банкам, госструктурам и корпорациям модели, которые можно развернуть на своих серверах."
+  },
+  {
+    id: "hailey", name: "Хейли Бибер", latin: "Hailey Bieber", age: 29, country: "США",
+    source: "Rhode", sector: "Косметика", worth: "≈ $0,3 млрд",
+    role: "Основательница Rhode",
+    then: { ...C("Hailey Baldwin 2014 (cropped).png"), when: "2014 · 18 лет", credit: "LOVE Magazine, CC BY 3.0", pos: "50% 25%" },
+    now:  { ...C("Hailey Bieber at WWD Style Awards 2026.jpg"), when: "2026 · 29 лет", credit: "Kevin Paul, CC BY 4.0", pos: "50% 20%" },
+    bio: [
+      "Родилась в Тусоне, Аризона. С 17 лет работала моделью и снималась для крупных модных брендов, параллельно набирая аудиторию в соцсетях.",
+      "В 2022 году запустила бренд уходовой косметики Rhode. Линейка была минимальной: несколько средств по доступной цене и продажи только через собственный сайт. Продукты регулярно становились вирусными, а за три года бренд вырос до выручки больше $200 млн в год."
+    ],
+    timeline: [
+      ["2019", "Начинает работу над собственным брендом."],
+      ["2022", "Запуск Rhode с тремя продуктами."],
+      ["2024", "Выручка бренда превышает $200 млн за год."],
+      ["2025", "e.l.f. Beauty покупает Rhode за сумму до $1 млрд."],
+      ["2025", "Остаётся креативным директором, Rhode выходит в Sephora."]
+    ],
+    lesson: "Мало продуктов, много внимания к каждому. Узкая линейка и прямые продажи сделали бренд прибыльным и привлекательным для покупателя всего за три года."
+  },
+  {
+    id: "mikaila", name: "Микаэла Ульмер", latin: "Mikaila Ulmer", age: 22, country: "США",
+    source: "Me & the Bees Lemonade", sector: "Напитки", worth: "не раскрыто",
+    role: "Основательница Me & the Bees Lemonade",
+    then: { ...C("Mikaila Ulmer.jpg"), when: "2016 · 11 лет", credit: "Springwater88, CC BY-SA 4.0", pos: "30% 30%" },
+    now:  { src: "https://news.emory.edu/sites/emorynews/files/shorthand/stories/KMMu15ZAHW/2026-06-01T21%3A35%3A21.058Z/assets/I8uJCIp70a/mikailaulmer1200x800-1600x1067.jpg", link: "https://news.emory.edu/features/2025/07/bee-change", when: "2025 · 20 лет", credit: "Emory University", pos: "50% 25%" },
+    bio: [
+      "Выросла в Остине, Техас. В четыре года её дважды ужалили пчёлы. Родители предложили ей узнать о пчёлах больше, и она решила сделать продукт, который поможет их защищать.",
+      "Взяла рецепт лимонада прабабушки с семенами льна и подсластила его мёдом. Небольшой киоск превратился в компанию Me & the Bees Lemonade, которая продаётся во всех 50 штатах. Часть прибыли идёт на защиту пчёл. Сейчас она совмещает бизнес с учёбой в Университете Эмори."
+    ],
+    timeline: [
+      ["2009", "Первый лимонадный киоск, ей 5 лет."],
+      ["2015", "Участие в шоу Shark Tank, инвестиция $60 тыс. от Деймонда Джона."],
+      ["2016", "Контракт с сетью Whole Foods, выход в розницу по всей стране."],
+      ["2017", "Привлекает $810 тыс. от группы инвесторов из НФЛ."],
+      ["2020", "Выходит её книга для молодых предпринимателей «Bee Fearless»."]
+    ],
+    lesson: "Понятная история и социальная миссия. Покупатели и сети поддерживали не просто лимонад, а бизнес с честной идеей и реальной пользой."
+  }
+];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// Company valuations, $ bn, from funding rounds and deals (year as decimal)
+const series = {
+  scale:      { name: "Scale AI",   pts: [[2019.6, 1], [2021.3, 7.3], [2024.4, 13.8], [2025.45, 29]] },
+  cursor:     { name: "Cursor",     pts: [[2024.6, 0.4], [2025.05, 2.5], [2025.45, 9.9], [2025.9, 29.3]] },
+  mercor:     { name: "Mercor",     pts: [[2024.7, 0.25], [2025.15, 2], [2025.8, 10]] },
+  polymarket: { name: "Polymarket", pts: [[2025.45, 1], [2025.8, 9]] },
+  zepto:      { name: "Zepto",      pts: [[2021.95, 0.57], [2022.4, 0.9], [2023.65, 1.4], [2024.6, 5]] },
+  cohere:     { name: "Cohere",     pts: [[2023.45, 2.2], [2024.55, 5.5], [2025.65, 6.8]] }
+};
+const metrics = {
+  wang: { w: 3.6, s: "scale" }, foody: { w: 2.2, s: "mercor" }, midha: { w: 2.2, s: "mercor" },
+  truell: { w: 1.3, s: "cursor" }, coplan: { w: 1.0, s: "polymarket" }, palicha: { w: 0.6, s: "zepto" }, gomez: { w: 0.5, s: "cohere" },
+  kylie: { w: 0.7, deal: ["$1,2 млрд", "оценка Kylie Cosmetics при продаже 51% компании Coty, 2019"] },
+  hailey: { w: 0.3, deal: ["до $1 млрд", "цена продажи Rhode компании e.l.f. Beauty, 2025"] },
+  mikaila: { w: 0, deal: ["$810 тыс.", "привлечено от инвесторов из НФЛ, 2017"] }
+};
+const fmt = v => v < 1 ? Math.round(v * 1000) + " млн" : String(Math.round(v * 10) / 10).replace(".", ",") + " млрд";
+
+function lineChart(svg, list, opts) {
+  const W = opts.w, H = opts.h, L = opts.l ?? 34, R = opts.r ?? 58, T = 14, B = 24;
+  const xs = list.flatMap(s => s.pts.map(p => p[0])), x0 = opts.x0 ?? Math.floor(Math.min(...xs)), x1 = opts.x1 ?? Math.ceil(Math.max(...xs) + 0.01);
+  const vmax = Math.max(...list.flatMap(s => s.pts.map(p => p[1])));
+  const step = vmax > 20 ? 10 : vmax > 8 ? 5 : vmax > 4 ? 2 : 1, ymax = Math.ceil(vmax / step) * step;
+  const X = x => L + (x - x0) / (x1 - x0) * (W - L - R), Y = v => T + (1 - v / ymax) * (H - T - B);
+  let g = "";
+  for (let v = 0; v <= ymax; v += step) g += `<line class="ax" x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" opacity="${v ? .6 : 1}"/><text class="lbl" x="${L - 6}" y="${Y(v) + 3}" text-anchor="end">${v}</text>`;
+  for (let yr = Math.ceil(x0); yr <= x1; yr++) g += `<text class="lbl" x="${X(yr)}" y="${H - 6}" text-anchor="middle">${yr}</text>`;
+  list.forEach((s, k) => {
+    const d = s.pts.map((p, i) => (i ? "L" : "M") + X(p[0]).toFixed(1) + " " + Y(p[1]).toFixed(1)).join(" ");
+    const last = s.pts[s.pts.length - 1];
+    if (opts.area) g += `<path class="area" d="${d} L ${X(last[0]).toFixed(1)} ${Y(0)} L ${X(s.pts[0][0]).toFixed(1)} ${Y(0)} Z"/>`;
+    g += `<path class="ln" d="${d}" style="opacity:${s.op ?? 1};stroke-dasharray:${s.dash ?? "none"}"/>`;
+    s.pts.forEach((p, i) => g += `<circle class="${i === s.pts.length - 1 ? "dot dot-end" : "dot"}" cx="${X(p[0])}" cy="${Y(p[1])}" r="${i === s.pts.length - 1 ? 3.5 : 2.5}" style="opacity:${s.op ?? 1}"/>`);
+    if (opts.endLabel) g += `<text class="lbl-strong" x="${X(last[0]) + 8}" y="${Y(last[1]) + 4}">$${fmt(last[1])}</text>`;
+  });
+  g += `<line class="guide" x1="0" x2="0" y1="${T}" y2="${H - B}"/>`;
+  // Hover targets, drawn last so they sit on top
+  list.forEach(s => s.pts.forEach(p => {
+    const q = Math.min(4, Math.floor((p[0] % 1) * 4) + 1);
+    g += `<circle class="hit" cx="${X(p[0])}" cy="${Y(p[1])}" r="11" data-tip="${s.name} · ${Math.floor(p[0])}, ${q} кв. · $${fmt(p[1])}"/>`;
+  }));
+  svg.innerHTML = g;
+}
+
+// Hero chart: four fastest-growing companies of the list
+const heroList = [
+  { ...series.scale, op: 1 }, { ...series.cursor, op: .85, dash: "6 4" },
+  { ...series.mercor, op: .6 }, { ...series.polymarket, op: .45, dash: "2 3" }
+];
+// Phones get narrower viewBoxes so chart text stays legible
+const phoneMQ = matchMedia("(max-width: 640px)");
+function renderHero() {
+  const s = phoneMQ.matches, svg = document.getElementById("heroChart"), w = s ? 330 : 440, h = s ? 220 : 210;
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  lineChart(svg, heroList, { w, h, x0: 2019, x1: 2026, r: 10, l: s ? 26 : 34 });
+}
+function renderSparks() {
+  const s = phoneMQ.matches, w = s ? 330 : 420, h = s ? 150 : 140;
+  document.querySelectorAll("svg.spark").forEach(svg => { svg.setAttribute("viewBox", `0 0 ${w} ${h}`); lineChart(svg, [series[svg.dataset.s]], { w, h, area: true, endLabel: true, r: s ? 62 : 66, l: s ? 26 : 34 }); });
+}
+renderHero();
+if (!pre) document.getElementById("heroLegend").innerHTML = heroList.map(s =>
+  `<span><svg viewBox="0 0 22 6"><line x1="0" x2="22" y1="3" y2="3" stroke="currentColor" stroke-width="1.6" style="opacity:${s.op};stroke-dasharray:${s.dash ?? "none"}"/></svg>${s.name} · $${fmt(s.pts[s.pts.length - 1][1])}</span>`).join("");
+
+// Ticker tape
+const tick = [
+  ["SCALE AI", "$29 млрд", "сделка с Meta, 2025"], ["CURSOR", "$29,3 млрд", "раунд, 2025"], ["MERCOR", "$10 млрд", "раунд, 2025"],
+  ["POLYMARKET", "$9 млрд", "инвестиция ICE, 2025"], ["COHERE", "$6,8 млрд", "раунд, 2025"], ["ZEPTO", "$5 млрд", "раунд, 2024"],
+  ["KYLIE COSMETICS", "$1,2 млрд", "сделка с Coty, 2019"], ["RHODE", "до $1 млрд", "продажа e.l.f., 2025"]
+].map(([n, v, t]) => `<span><b>${n}</b> <i>▲ ${v}</i> · ${t}</span>`).join("");
+if (!pre) document.getElementById("ticker").innerHTML = tick + tick;
+
+if (!pre) document.getElementById("ledger").innerHTML = people.map((p, i) => `
+  <tr>
+    <td class="rank">${String(i + 1).padStart(2, "0")}</td>
+    <td class="name"><a href="#${p.id}">${esc(p.name)}</a><span>${esc(p.latin)}</span></td>
+    <td class="num">${p.age}</td>
+    <td>${esc(p.country)}</td>
+    <td>${esc(p.source)}</td>
+    <td><span class="tag">${esc(p.sector)}</span></td>
+    <td class="num worth">${esc(p.worth)}<div class="bar"><i style="--w:${(metrics[p.id].w / 3.6 * 100).toFixed(1)}%;--d:${(0.15 + i * 0.08).toFixed(2)}s"></i></div></td>
+  </tr>`).join("");
+
+const fig = (ph, label, name) => `
+  <figure>
+    <a class="frame" href="${ph.link}" target="_blank" rel="noopener">
+      <img src="${ph.src}" alt="${esc(name)}, ${esc(ph.when)}" loading="lazy" referrerpolicy="no-referrer" style="object-position:${ph.pos}">
+    </a>
+    <figcaption><b>${label}</b>${esc(ph.when)}</figcaption>
+  </figure>`;
+
+if (!pre) document.getElementById("dossiers").innerHTML = people.map((p, i) => `
+  <article class="dossier" id="${p.id}" data-n="${String(i + 1).padStart(2, "0")}">
+    <div class="photos">${fig(p.then, "Тогда", p.name)}${fig(p.now, "Сейчас", p.name)}</div>
+    <div class="body">
+      <div class="d-head"><span class="d-rank">№ ${String(i + 1).padStart(2, "0")}</span><h3>${esc(p.name)}</h3></div>
+      <p class="role">${esc(p.role)}</p>
+      <dl class="facts">
+        <div><dt>Возраст</dt><dd>${p.age}</dd></div>
+        <div><dt>Страна</dt><dd>${esc(p.country)}</dd></div>
+        <div><dt>Капитал</dt><dd>${esc(p.worth)}</dd></div>
+        <div><dt>Отрасль</dt><dd>${esc(p.sector)}</dd></div>
+      </dl>
+      ${metrics[p.id].s
+        ? `<div class="vchart"><div class="hc-title"><span>Оценка ${esc(series[metrics[p.id].s].name)}, $ млрд</span><span>раунды и сделки</span></div><svg class="spark" data-s="${metrics[p.id].s}" viewBox="0 0 420 140" role="img" aria-label="Рост оценки ${esc(series[metrics[p.id].s].name)}"></svg></div>`
+        : `<div class="vchart deal"><b>${metrics[p.id].deal[0]}</b><span>${esc(metrics[p.id].deal[1])}</span></div>`}
+      <h4>Биография</h4>
+      ${p.bio.map(t => `<p>${esc(t)}</p>`).join("")}
+      <h4>Путь к успеху</h4>
+      <ol class="timeline">${p.timeline.map(([y, t]) => `<li><time>${y}</time><span>${esc(t)}</span></li>`).join("")}</ol>
+      <div class="lesson"><b>Главный фактор</b><p>${esc(p.lesson)}</p></div>
+      <nav class="d-nav" aria-label="Соседние досье">${i ? `<a href="#${people[i - 1].id}">← ${esc(people[i - 1].name)}</a>` : `<a href="#rating">← К рейтингу</a>`}${i < people.length - 1 ? `<a href="#${people[i + 1].id}">${esc(people[i + 1].name)} →</a>` : `<a href="#rating">К рейтингу ↑</a>`}</nav>
+    </div>
+  </article>`).join("");
+
+if (!pre) document.getElementById("credits").innerHTML = people.flatMap(p => [p.then, p.now].map(ph =>
+  `<li><a href="${ph.link}" target="_blank" rel="noopener">${esc(p.latin)}</a>: ${esc(ph.credit)}</li>`)).join("");
+
+renderSparks();
+phoneMQ.addEventListener("change", () => { renderHero(); renderSparks(); document.querySelectorAll(".draw-ready").forEach(s => s.classList.remove("draw-ready", "draw-hidden")); });
+
+// Phone version of the ranking: tappable cards
+if (!pre) document.getElementById("cards").innerHTML = people.map((p, i) => `
+  <li class="card"><a href="#${p.id}">
+    <span class="r">${String(i + 1).padStart(2, "0")}</span>
+    <span class="n">${esc(p.name)}</span>
+    <span class="v">${esc(p.worth)}</span>
+    <span class="m">${esc(p.source)} · ${esc(p.sector)} · ${p.age} ${p.age % 10 >= 2 && p.age % 10 <= 4 && (p.age < 12 || p.age > 14) ? "года" : p.age % 10 === 1 && p.age !== 11 ? "год" : "лет"}</span>
+    <span class="bar"><i style="--w:${(metrics[p.id].w / 3.6 * 100).toFixed(1)}%;--d:${(0.15 + i * 0.08).toFixed(2)}s"></i></span>
+  </a></li>`).join("");
+
+/* ---------- Motion ---------- */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Line-drawing for charts that enter the viewport later
+function prepDraw(svg) {
+  svg.classList.add("draw-ready", "draw-hidden");
+  svg.querySelectorAll(".ln").forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+}
+function runDraw(svg) {
+  svg.classList.remove("draw-hidden");
+  svg.querySelectorAll(".ln").forEach(p => { p.style.strokeDashoffset = 0; p.addEventListener("transitionend", () => { p.style.strokeDasharray = p.dataset.dash || ""; }, { once: true }); });
+}
+// Count-up for KPI figures
+function countUp(el) {
+  const to = parseFloat(el.dataset.count), dec = +(el.dataset.dec || 0), pre = el.dataset.prefix || "", suf = el.dataset.suffix || "", t0 = performance.now();
+  const f = now => { const k = Math.min(1, (now - t0) / 1400), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = pre + (to * e).toFixed(dec).replace(".", ",") + suf; if (k < 1) requestAnimationFrame(f); };
+  requestAnimationFrame(f);
+}
+
+if (!reduce && "IntersectionObserver" in window) {
+  document.querySelectorAll(".ln").forEach(p => { p.dataset.dash = p.style.strokeDasharray === "none" ? "" : p.style.strokeDasharray; });
+  document.querySelectorAll("#heroChart, svg.spark").forEach(prepDraw);
+  requestAnimationFrame(() => setTimeout(() => runDraw(document.getElementById("heroChart")), 250));
+
+  const vh = innerHeight;
+  const rv = [...document.querySelectorAll(".dossier .photos, .dossier .body > *, .sec-head, .others > div, .notes > div")];
+  rv.forEach(el => { el.classList.add("rv"); if (el.getBoundingClientRect().top > vh * 0.92) el.classList.add("pending"); });
+
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    const el = en.target;
+    el.classList.remove("pending");
+    if (el.matches("svg.spark")) runDraw(el);
+    if (el.dataset.count) countUp(el);
+    io.unobserve(el);
+  }), { rootMargin: "0px 0px -8% 0px" });
+  rv.forEach(el => io.observe(el));
+  document.querySelectorAll("svg.spark, [data-count]").forEach(el => io.observe(el));
+}
+
+// Background: slow-moving market charts
+(function bg() {
+  const cv = document.getElementById("bg"), ctx = cv.getContext("2d");
+  let W, H, dpr, rgb = "22,24,27", lines = [], candles = [], off = 0, last = 0;
+  const STEP = 16, coarse = matchMedia("(pointer: coarse)").matches;
+  let lastW = 0, lastH = 0;
+  const readColor = () => { rgb = getComputedStyle(document.documentElement).getPropertyValue("--chart").trim() || rgb; };
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+  function walk(arr, cfg) {
+    let y = arr.length ? arr[arr.length - 1] : cfg.base;
+    y += -cfg.drift + gauss() * cfg.vol;
+    if (y < cfg.top) y += cfg.vol * 2; if (y > cfg.bottom) y -= cfg.vol * 2;
+    arr.push(y);
+  }
+  function newCandle(prev) {
+    const o = prev ? prev.c : H * 0.86, c = o + gauss() * 14 - 1.2;
+    return { o, c, hi: Math.min(o, c) - rnd(2, 12), lo: Math.max(o, c) + rnd(2, 12) };
+  }
+  function setup() {
+    dpr = Math.min(coarse ? 1.5 : 2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight;
+    if (W === lastW && Math.abs(H - lastH) < 160 && lines.length) { cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return; } // ignore mobile URL-bar resizes
+    lastW = W; lastH = H;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.ceil(W / STEP) + 3;
+    lines = [
+      { cfg: { base: H * .62, drift: .9, vol: 9, top: H * .18, bottom: H * .78 }, a: .13, w: 1.4, pts: [] },
+      { cfg: { base: H * .48, drift: .4, vol: 7, top: H * .22, bottom: H * .7 }, a: .08, w: 1, pts: [] },
+      { cfg: { base: H * .34, drift: .2, vol: 5, top: H * .12, bottom: H * .55 }, a: .055, w: 1, pts: [], dash: [4, 6] }
+    ];
+    lines.forEach(l => { for (let i = 0; i < n; i++) walk(l.pts, l.cfg); });
+    candles = []; for (let i = 0; i < Math.ceil(W / (STEP * 1.5)) + 3; i++) candles.push(newCandle(candles[i - 1]));
+    readColor();
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = `rgba(${rgb},.045)`;
+    for (let y = 80 - (scrollY * .25) % 80; y < H; y += 80) { ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); ctx.stroke(); }
+    for (let x = (-off * .5) % 120; x < W; x += 120) { ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); ctx.stroke(); }
+    lines.forEach(l => {
+      ctx.beginPath(); ctx.setLineDash(l.dash || []);
+      l.pts.forEach((y, i) => { const x = i * STEP - off; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      ctx.strokeStyle = `rgba(${rgb},${l.a})`; ctx.lineWidth = l.w; ctx.stroke();
+      if (!l.dash) { // soft area under the main line
+        ctx.lineTo((l.pts.length - 1) * STEP - off, H); ctx.lineTo(-off, H); ctx.closePath();
+        ctx.fillStyle = `rgba(${rgb},${l.a * .18})`; ctx.fill();
+      }
+    });
+    ctx.setLineDash([]);
+    const cs = STEP * 1.5, coff = (off * .6) % cs;
+    candles.forEach((c, i) => {
+      const x = i * cs - coff, up = c.c < c.o;
+      ctx.strokeStyle = `rgba(${rgb},.07)`; ctx.beginPath(); ctx.moveTo(x + .5, c.hi); ctx.lineTo(x + .5, c.lo); ctx.stroke();
+      ctx.fillStyle = `rgba(${rgb},${up ? .07 : .035})`; ctx.fillRect(x - 3, Math.min(c.o, c.c), 6, Math.max(2, Math.abs(c.c - c.o)));
+    });
+    const main = lines[0].pts, ly = main[main.length - 3], lx = (main.length - 3) * STEP - off;
+    ctx.fillStyle = `rgba(${rgb},.18)`; ctx.beginPath(); ctx.arc(lx, ly, 3, 0, 7); ctx.fill();
+    // Live tick: a ring that pulses from the head of the main line
+    const ph = (pulseT % 2600) / 2600;
+    ctx.strokeStyle = `rgba(${rgb},${.2 * (1 - ph)})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(lx, ly, 3 + ph * 22, 0, 7); ctx.stroke();
+
+    if (mouse.on) {
+      // Spotlight: redraw the lines brighter near the cursor
+      ctx.save(); ctx.beginPath(); ctx.arc(mouse.x, mouse.y, 170, 0, 7); ctx.clip();
+      lines.forEach(l => {
+        ctx.beginPath(); ctx.setLineDash(l.dash || []);
+        l.pts.forEach((y, i) => { const x = i * STEP - off; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+        ctx.strokeStyle = `rgba(${rgb},${Math.min(.5, l.a * 2.6)})`; ctx.lineWidth = l.w + .3; ctx.stroke();
+      });
+      ctx.restore(); ctx.setLineDash([]);
+      // Crosshair snapped to the main line
+      const i = Math.max(0, Math.min(main.length - 1, Math.round((mouse.x + off) / STEP))), sx = i * STEP - off, sy = main[i];
+      ctx.strokeStyle = `rgba(${rgb},.14)`; ctx.setLineDash([3, 4]);
+      ctx.beginPath(); ctx.moveTo(sx + .5, 0); ctx.lineTo(sx + .5, H); ctx.moveTo(0, sy + .5); ctx.lineTo(W, sy + .5); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = `rgba(${rgb},.35)`; ctx.beginPath(); ctx.arc(sx, sy, 3.5, 0, 7); ctx.fill();
+    }
+  }
+  let pulseT = 0;
+  const mouse = { x: 0, y: 0, on: false };
+  addEventListener("pointermove", e => { if (e.pointerType === "mouse") { mouse.x = e.clientX; mouse.y = e.clientY; mouse.on = true; if (reduce) draw(); } }, { passive: true });
+  document.addEventListener("pointerleave", () => { mouse.on = false; });
+  let coffAcc = 0;
+  function frame(t) {
+    if (coarse && last && t - last < 31) { requestAnimationFrame(frame); return; } // ~30 fps on phones
+    const dt = Math.min(50, t - (last || t)); last = t;
+    off += dt * .012; coffAcc += dt * .012 * .6; pulseT += dt;
+    while (off >= STEP) { off -= STEP; lines.forEach(l => { l.pts.shift(); walk(l.pts, l.cfg); }); }
+    while (coffAcc >= STEP * 1.5) { coffAcc -= STEP * 1.5; candles.shift(); candles.push(newCandle(candles[candles.length - 1])); }
+    draw();
+    if (!document.hidden) requestAnimationFrame(frame); else last = 0;
+  }
+  setup(); draw();
+  addEventListener("resize", () => { setup(); draw(); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { readColor(); draw(); });
+  if (!reduce) { requestAnimationFrame(frame); document.addEventListener("visibilitychange", () => { if (!document.hidden) requestAnimationFrame(frame); }); }
+})();
+
+/* ---------- Live layer ---------- */
+// Clock in the masthead
+(function clock() {
+  const el = document.getElementById("clock");
+  const f = new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const tick = () => {
+    const s = f.format(new Date()).replace(/ г\.?,? в | в |, /, " · "), k = s.lastIndexOf(" · ");
+    el.innerHTML = `<span class="cd">${s.slice(0, k + 3)}</span>${s.slice(k + 3)}`;
+  };
+  tick(); setInterval(tick, 1000);
+})();
+
+// Headline: words rise one after another
+(function words() {
+  const h = document.querySelector(".lede h1");
+  h.innerHTML = h.textContent.trim().split(/\s+/).map((w, i) => `<span class="w" style="--i:${(i * .08).toFixed(2)}s">${esc(w)}</span>`).join(" ");
+})();
+
+// Side rail navigation
+const rail = document.getElementById("rail");
+rail.innerHTML = people.map((p, i) => `<a href="#${p.id}" data-id="${p.id}">${String(i + 1).padStart(2, "0")} ${esc(p.latin)}</a>`).join("");
+
+// Bottom dock controls
+const dock = document.getElementById("dock"), dockN = document.getElementById("dockN"), dockName = document.getElementById("dockName"),
+  dockPrev = document.getElementById("dockPrev"), dockNext = document.getElementById("dockNext");
+const goTo = el => el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+dockPrev.addEventListener("click", () => { const i = Math.min(currentIndex(), people.length); if (i > 0) goTo(document.getElementById(people[i - 1].id)); });
+dockNext.addEventListener("click", () => { const i = Math.max(currentIndex(), -1); if (i < people.length - 1) goTo(document.getElementById(people[i + 1].id)); });
+document.getElementById("dockTop").addEventListener("click", () => goTo(document.getElementById("rating")));
+// Keyboard: ← / → switch between dossiers
+function currentIndex() {
+  const mid = innerHeight * .4, d = [...document.querySelectorAll(".dossier")];
+  const i = d.findIndex(x => { const r = x.getBoundingClientRect(); return r.top < mid && r.bottom > mid; });
+  return i >= 0 ? i : (d[0].getBoundingClientRect().top > mid ? -1 : d.length);
+}
+addEventListener("keydown", e => {
+  if (e.altKey || e.ctrlKey || e.metaKey || /input|textarea|select/i.test(e.target.tagName)) return;
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  const i = currentIndex(), j = e.key === "ArrowRight" ? Math.min(people.length - 1, i + 1) : Math.max(0, i - 1);
+  if (j !== i) { e.preventDefault(); goTo(document.getElementById(people[j].id)); }
+});
+
+// Progress bar, rail state, numeral parallax: one scroll handler
+(function scrollFx() {
+  const prog = document.getElementById("prog"), doss = [...document.querySelectorAll(".dossier")], first = doss[0];
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+    const mid = innerHeight * .4;
+    let active = null;
+    doss.forEach(d => {
+      const r = d.getBoundingClientRect();
+      if (r.top < mid && r.bottom > mid) active = d.id;
+      if (!reduce && r.bottom > 0 && r.top < innerHeight) d.style.setProperty("--py", ((r.top - innerHeight / 2) * -0.12).toFixed(1) + "px");
+    });
+    const inDoss = first.getBoundingClientRect().top < innerHeight * .6 && doss[doss.length - 1].getBoundingClientRect().bottom > innerHeight * .3;
+    rail.classList.toggle("show", inDoss);
+    rail.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.dataset.id === active));
+    // Bottom dock
+    const idx = active ? doss.findIndex(d => d.id === active) : (first.getBoundingClientRect().top > 0 ? 0 : doss.length - 1);
+    dock.classList.toggle("show", inDoss);
+    dock.dataset.i = idx;
+    dockN.textContent = String(idx + 1).padStart(2, "0") + "/" + doss.length;
+    dockName.textContent = people[idx].name;
+    dock.style.setProperty("--p", ((idx + 1) / doss.length).toFixed(3));
+    dockPrev.disabled = idx === 0; dockNext.disabled = idx === doss.length - 1;
+  }
+  addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true; requestAnimationFrame(update);
+    setTimeout(() => { if (ticking) update(); }, 120); // fallback when frames are throttled
+  }, { passive: true });
+  addEventListener("resize", update);
+  update();
+})();
+
+// Chart tooltips with a vertical guide
+(function tooltips() {
+  const tip = document.getElementById("tip");
+  document.addEventListener("pointerover", e => {
+    const h = e.target.closest(".hit");
+    if (!h) return;
+    const svg = h.ownerSVGElement, r = h.getBoundingClientRect(), guide = svg.querySelector(".guide");
+    tip.textContent = h.dataset.tip; tip.hidden = false;
+    tip.style.left = (r.left + r.width / 2) + "px"; tip.style.top = (r.top + r.height / 2) + "px";
+    guide.setAttribute("x1", h.getAttribute("cx")); guide.setAttribute("x2", h.getAttribute("cx")); guide.style.opacity = .5;
+    const dot = [...svg.querySelectorAll(".dot")].find(d => d.getAttribute("cx") === h.getAttribute("cx") && d.getAttribute("cy") === h.getAttribute("cy"));
+    if (dot) dot.classList.add("hot");
+    const hide = () => { tip.hidden = true; guide.style.opacity = 0; if (dot) dot.classList.remove("hot"); };
+    if (e.pointerType === "mouse") h.addEventListener("pointerout", hide, { once: true });
+    else { // touch: keep the tip until the next tap or scroll
+      setTimeout(() => {
+        document.addEventListener("pointerdown", hide, { once: true });
+        addEventListener("scroll", hide, { once: true, passive: true });
+      }, 0);
+    }
+  });
+})();
+
+// Ledger: photo preview that follows the cursor
+(function peek() {
+  const pk = document.getElementById("peek"), img = pk.querySelector("img"), cap = pk.querySelector("span");
+  const byId = Object.fromEntries(people.map(p => [p.id, p]));
+  const rows = document.querySelectorAll("#ledger tr");
+  rows.forEach(tr => {
+    const p = byId[tr.querySelector("a").getAttribute("href").slice(1)];
+    tr.addEventListener("pointerenter", e => {
+      if (e.pointerType !== "mouse") return;
+      img.src = document.querySelector(`#${p.id} figure:last-child img`).src; img.style.objectPosition = p.now.pos; cap.textContent = p.source; pk.hidden = false;
+    });
+    tr.addEventListener("pointermove", e => { pk.style.left = (e.clientX + 22) + "px"; pk.style.top = (e.clientY - 70) + "px"; });
+    tr.addEventListener("pointerleave", () => { pk.hidden = true; });
+    tr.style.cursor = "pointer";
+    tr.addEventListener("click", e => { if (!e.target.closest("a")) location.hash = p.id; });
+  });
+})();
+
+// Photo tilt
+if (!reduce) document.querySelectorAll(".photos").forEach(box => {
+  box.addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
+    const r = box.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    box.querySelectorAll("figure").forEach((f, i) => { f.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 6}deg) translateZ(${i ? 10 : 0}px)`; });
+  });
+  box.addEventListener("pointerleave", () => box.querySelectorAll("figure").forEach(f => { f.style.transform = ""; }));
+});
+</script>
+</body>
+</html>
