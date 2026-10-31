@@ -139,14 +139,15 @@ section { padding: 96px 0; }
 
 /* ====== Ленты-баннеры (Креатив / Эстетика / Качество) ====== */
 .bands { padding: 0; }
-.band { position: relative; height: clamp(200px, 26vw, 300px); display: grid; place-items: center; overflow: hidden; color: #fff; isolation: isolate; }
+.band { position: relative; height: clamp(260px, 32vw, 480px); display: grid; place-items: center; overflow: hidden; color: #fff; isolation: isolate; }
 .band .ph { position: absolute; inset: 0; z-index: -2; }
-.band .strip { position: absolute; inset: 0; z-index: -2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.band .strip { position: absolute; inset: 0; z-index: -2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: 100%; }
+.band .strip img { min-height: 0; }
 .band .strip img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s ease; }
 .band:hover .strip img { transform: scale(1.06); }
 .band-light::after { background: rgba(60,66,66,.45); }
 .band .ph img { transition: transform 1.2s ease; }
-.band::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(60,66,66,.28); transition: .5s; }
+.band::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 45% 55% at 50% 50%, rgba(40,46,46,.45), rgba(40,46,46,.08) 75%); transition: .5s; }
 .band:hover::after { background: rgba(60,66,66,.5); }
 .band:hover .ph img { transform: scale(1.06); }
 .band-txt { text-align: center; padding: 0 16px; }
@@ -573,7 +574,7 @@ main, footer { position: relative; z-index: 1; }
   <!-- ====== ЛЕНТЫ ====== -->
   <section class="bands" aria-label="Наши принципы">
     <div class="band" tabindex="0">
-      <div class="strip"><img src="img/work-08.jpg" alt="" loading="lazy"><img src="img/work-09.jpg" alt="" loading="lazy"><img src="img/work-16.jpg" alt="" loading="lazy"><img src="img/work-07.jpg" alt="" loading="lazy"></div>
+      <div class="strip"><img src="img/work-08.jpg" alt="" loading="lazy" style="object-position:50% 38%"><img src="img/work-09.jpg" alt="" loading="lazy" style="object-position:50% 48%"><img src="img/work-16.jpg" alt="" loading="lazy" style="object-position:50% 45%"><img src="img/work-07.jpg" alt="" loading="lazy" style="object-position:50% 30%"></div>
       <div class="band-txt"><h3>Креатив</h3><p>Авторские букеты и оригинальные композиции — от классических роз до дизайнерских решений.</p></div>
     </div>
     <div class="band band-light" tabindex="0">
@@ -581,7 +582,7 @@ main, footer { position: relative; z-index: 1; }
       <div class="band-txt"><h3>Эстетика</h3><p>Нежные оттенки, живая зелень эвкалипта и внимание к каждой детали.</p></div>
     </div>
     <div class="band" tabindex="0">
-      <div class="strip"><img src="img/work-06.jpg" alt="" loading="lazy"><img src="img/work-11.jpg" alt="" loading="lazy"><img src="img/work-17.jpg" alt="" loading="lazy"><img src="img/work-19.jpg" alt="" loading="lazy"></div>
+      <div class="strip"><img src="img/work-06.jpg" alt="" loading="lazy" style="object-position:50% 38%"><img src="img/work-11.jpg" alt="" loading="lazy" style="object-position:50% 42%"><img src="img/work-03.jpg" alt="" loading="lazy" style="object-position:50% 62%"><img src="img/work-19.jpg" alt="" loading="lazy" style="object-position:50% 36%"></div>
       <div class="band-txt"><h3>Качество</h3><p>Эксклюзивные букеты из элитных цветов наивысшего качества — с уверенностью в 100% свежести.</p></div>
     </div>
   </section>
