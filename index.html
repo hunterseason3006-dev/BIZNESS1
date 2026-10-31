@@ -94,13 +94,13 @@ footer .logo-img { height: 46px; background: #f6f4f0; border-radius: 10px; paddi
 .hero > .wrap { width: 100%; }
 .hero-inner { display: grid; gap: 22px; max-width: 760px; }
 .hero-kicker { font: 400 clamp(34px, 4.6vw, 54px)/1 var(--f-hand); color: var(--lemon); margin: -14px 0 0 clamp(40px, 9vw, 150px); }
-.js .hero-kicker { clip-path: inset(0 100% 0 0); animation: write 1.6s .9s cubic-bezier(.6,.1,.3,1) forwards; }
-@keyframes write { to { clip-path: inset(0 -5% 0 0); } }
-.split span { display: inline-block; opacity: 0; transform: translateY(.35em) rotate(4deg); filter: blur(8px); animation: letter .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i) * 90ms + .15s); }
-@keyframes letter { to { opacity: 1; transform: none; filter: none; } }
-.js .hero-glass, .js .hero-inner > p, .js .hero-cta { opacity: 0; animation: up .9s 1.4s ease forwards; }
-.js .hero-inner > p { animation-delay: 1.55s; } .js .hero-cta { animation-delay: 1.7s; }
-@keyframes up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.hero-kicker { animation: write 1.6s .9s cubic-bezier(.6,.1,.3,1) both; }
+@keyframes write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 -5% 0 0); } }
+.split span { display: inline-block; animation: letter .9s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i) * 90ms + .15s); }
+@keyframes letter { from { opacity: 0; transform: translateY(.35em) rotate(4deg); filter: blur(8px); } }
+.hero-glass, .hero-inner > p, .hero-cta { animation: up .9s 1.4s ease both; }
+.hero-inner > p { animation-delay: 1.55s; } .hero-cta { animation-delay: 1.7s; }
+@keyframes up { from { opacity: 0; transform: translateY(16px); } }
 .hero h1 { margin: 0; font: 400 clamp(76px, 15vw, 190px)/.85 var(--f-display); letter-spacing: .02em; text-transform: uppercase; }
 .hero-glass { display: inline-block; padding: 16px 26px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 14px; font-size: clamp(15px, 1.6vw, 19px); letter-spacing: .06em; text-transform: uppercase; width: fit-content; max-width: 100%; }
 .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
@@ -282,7 +282,7 @@ main > section > .wrap { position: relative; z-index: 2; }
 main, footer { position: relative; z-index: 1; }
 .petal { position: absolute; top: -12vh; left: 0; width: var(--s); height: var(--s); opacity: var(--o); animation: fall var(--t) linear var(--dl) infinite; will-change: transform; }
 .petal svg { width: 100%; height: 100%; animation: spin var(--t2) ease-in-out infinite alternate; }
-.blob { position: absolute; width: var(--s); height: var(--s); border-radius: 50%; background: radial-gradient(circle at 40% 40%, var(--c) 0%, transparent 68%); opacity: var(--o); filter: blur(30px); animation: blob var(--t) ease-in-out var(--dl) infinite alternate; }
+.blob { position: absolute; width: var(--s); height: var(--s); border-radius: 50%; background: radial-gradient(circle at 45% 45%, var(--c) 0%, transparent 70%); background: radial-gradient(circle at 45% 45%, var(--c) 0%, color-mix(in srgb, var(--c) 40%, transparent) 38%, transparent 70%); opacity: var(--o); animation: blob var(--t) ease-in-out var(--dl) infinite alternate; }
 @keyframes blob { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(var(--dx), calc(var(--dy) * -1)) scale(1.18); } 100% { transform: translate(calc(var(--dx) * -1), var(--dy)) scale(.9); } }
 .drift { position: absolute; width: var(--s); height: var(--s); opacity: var(--o); animation: drift var(--t) ease-in-out var(--dl) infinite alternate; }
 .drift svg { width: 100%; height: 100%; overflow: visible; }
@@ -291,13 +291,15 @@ main, footer { position: relative; z-index: 1; }
 .spark.star { border-radius: 0; background: none; }
 .spark.star::before { content: "✦"; position: absolute; inset: 0; display: grid; place-items: center; color: #e8c97a; font-size: var(--s); line-height: 1; }
 @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(.4); } 50% { opacity: .9; transform: scale(1); } }
-.fly { position: absolute; top: 0; left: 0; width: var(--s); height: var(--s); offset-path: var(--path); offset-rotate: auto 90deg; animation: fly var(--t) linear var(--dl) infinite; opacity: .9; }
+.fly { position: absolute; top: var(--y); left: 0; width: var(--s); height: var(--s); animation: flyX var(--t) linear var(--dl) infinite; opacity: .92; }
+.fly i { display: block; width: 100%; height: 100%; animation: flyY var(--w) ease-in-out infinite alternate; }
 .fly svg { width: 100%; height: 100%; overflow: visible; }
+@keyframes flyX { from { transform: translateX(-14vw); } to { transform: translateX(114vw); } }
+@keyframes flyY { 0% { transform: translateY(calc(var(--a) * -1)) rotate(70deg); } 100% { transform: translateY(var(--a)) rotate(110deg); } }
 .fly .wing-l, .fly .wing-r { transform-box: view-box; transform-origin: 0 0; animation: flap .28s ease-in-out infinite alternate; }
 .fly .wing-r { animation-name: flapR; }
 @keyframes flap { to { transform: scaleX(.25); } }
 @keyframes flapR { to { transform: scaleX(.25); } }
-@keyframes fly { from { offset-distance: 0%; } to { offset-distance: 100%; } }
 @keyframes fall { from { transform: translate3d(var(--x0), 0, 0); } to { transform: translate3d(var(--x1), 125vh, 0); } }
 @keyframes spin { from { transform: rotate(-40deg) scale(.9); } to { transform: rotate(220deg) scale(1.05); } }
 
@@ -307,8 +309,10 @@ main, footer { position: relative; z-index: 1; }
 .bloom.br { bottom: 0; right: 0; transform: scaleY(-1); }
 .bloom.bl { bottom: 0; left: 0; transform: scale(-1); }
 .bloom svg { width: 100%; height: 100%; overflow: visible; }
-.bloom .part { transform: scale(0) rotate(-25deg); opacity: 0; transform-origin: 300px 0; transition: transform 1.6s cubic-bezier(.2,.8,.2,1), opacity 1s ease; transition-delay: var(--d); }
-.bloom.on .part { transform: none; opacity: 1; }
+.bloom .part { transform-origin: 300px 0; animation: grow 1.8s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--d) + .3s); }
+@keyframes grow { from { transform: scale(0) rotate(-25deg); opacity: 0; } }
+.js .bloom .part { animation: none; transform: scale(0) rotate(-25deg); opacity: 0; transition: transform 1.6s cubic-bezier(.2,.8,.2,1), opacity 1s ease; transition-delay: var(--d); }
+.js .bloom.on .part { transform: none; opacity: 1; }
 .bloom .sway { transform-origin: 300px 0; animation: sway 7s ease-in-out infinite alternate; animation-delay: var(--sd, 0s); }
 @keyframes sway { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
 .bloom .bob { transform-box: fill-box; transform-origin: center; animation: bob 5s ease-in-out infinite alternate; animation-delay: var(--sd, 0s); }
@@ -333,7 +337,7 @@ main, footer { position: relative; z-index: 1; }
 .assort-item svg { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
 .assort-item:hover svg { transform: rotate(-12deg) scale(1.12); }
 .hero .bg { will-change: transform; }
-@media (max-width: 560px) { .bloom { width: 150px; opacity: .85; } }
+@media (max-width: 560px) { .bloom { width: 170px; } }
 @media (prefers-reduced-motion: reduce) { .petals { display: none; } .bloom .part { transform: none; opacity: 1; } .split span, .hero-kicker, .hero-glass, .hero-inner > p, .hero-cta { opacity: 1; clip-path: none; filter: none; transform: none; } }
 
 /* ====== Адаптив ====== */
@@ -484,33 +488,83 @@ main, footer { position: relative; z-index: 1; }
     <g id="bfly"><g class="wing-l"><path d="M0 0C-6-14-22-20-26-10-28-2-16 4 0 0z" fill="#f2b8ae"/><path d="M0 0C-8 4-18 10-16 18-12 22-4 14 0 0z" fill="#f7d3c6"/></g>
       <g class="wing-r"><path d="M0 0C6-14 22-20 26-10 28-2 16 4 0 0z" fill="#f2b8ae"/><path d="M0 0C8 4 18 10 16 18 12 22 4 14 0 0z" fill="#f7d3c6"/></g>
       <path d="M0-8V14" stroke="#6b5a4e" stroke-width="2.2" stroke-linecap="round"/><path d="M0-8c-2-5-5-8-8-9M0-8c2-5 5-8 8-9" stroke="#6b5a4e" stroke-width=".9" fill="none"/></g>
-    <g id="cluster">
-      <g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s">
-        <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/>
-        <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/>
-        <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/>
-      </g></g>
-      <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s">
-        <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/>
-        <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/>
-        <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/>
-      </g></g>
-      <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s">
-        <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/>
-        <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/>
-      </g></g>
-      <g class="part" style="--d:.6s"><g fill="#f1d58e">
-        <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/>
-      </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g>
-      <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g>
-      <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g>
-      <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g>
-      <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g>
-      <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g>
-    </g>
   </defs>
 </svg>
-<div class="petals" id="petals" aria-hidden="true"></div>
+<div class="petals" id="petals" aria-hidden="true">
+  <div class="blob" style="--c:#f6cfc6;--s:51.1vmax;--o:0.5;left:46.8vw;top:-8.1vh;--dx:7.2vw;--dy:6.2vh;--t:18.7s;--dl:-15.2s"></div>
+  <div class="blob" style="--c:#cfdcd2;--s:43vmax;--o:0.6;left:-8.4vw;top:-6.4vh;--dx:6.5vw;--dy:9vh;--t:19.5s;--dl:-6.7s"></div>
+  <div class="blob" style="--c:#f9dcc6;--s:59.6vmax;--o:0.7;left:39.8vw;top:22.7vh;--dx:9.9vw;--dy:4.3vh;--t:28.3s;--dl:-8.7s"></div>
+  <div class="blob" style="--c:#e7d9ee;--s:46vmax;--o:0.5;left:14.3vw;top:62.5vh;--dx:5.1vw;--dy:7.5vh;--t:25.7s;--dl:-11.2s"></div>
+  <div class="blob" style="--c:#d9e6dc;--s:57.3vmax;--o:0.5;left:-9.3vw;top:4.6vh;--dx:8.1vw;--dy:6.6vh;--t:21.8s;--dl:-17.6s"></div>
+  <div class="blob" style="--c:#fbe3dc;--s:54.7vmax;--o:0.6;left:60.5vw;top:51.4vh;--dx:5.5vw;--dy:7.4vh;--t:24.3s;--dl:-26.3s"></div>
+  <div class="drift" style="--s:clamp(80px,10.2vw,164px);--o:0.3;left:2.9vw;top:66.1vh;--dx:-2.8vw;--dy:-0.1vh;--r0:18.4deg;--r1:-4.7deg;--t:20.7s;--dl:-15.3s"><svg viewBox="-40 -40 80 80"><use href="#lineArt"/></svg></div>
+  <div class="drift" style="--s:clamp(80px,12.5vw,134px);--o:0.6;left:16.7vw;top:51.6vh;--dx:-0.4vw;--dy:4.1vh;--r0:5.8deg;--r1:28.1deg;--t:18.7s;--dl:-13.3s"><svg viewBox="-40 -40 80 80"><use href="#sprig"/></svg></div>
+  <div class="drift" style="--s:clamp(80px,11.8vw,149px);--o:0.6;left:30.8vw;top:27.3vh;--dx:-0.9vw;--dy:2vh;--r0:-35.1deg;--r1:-59deg;--t:18.6s;--dl:-3.4s"><svg viewBox="-40 -40 80 80"><use href="#spray"/></svg></div>
+  <div class="drift" style="--s:clamp(80px,9.2vw,154px);--o:0.3;left:39.2vw;top:36.1vh;--dx:3vw;--dy:-5vh;--r0:-30.6deg;--r1:-33.2deg;--t:19.5s;--dl:-17.7s"><svg viewBox="-40 -40 80 80"><use href="#lineArt"/></svg></div>
+  <div class="drift" style="--s:clamp(80px,12.5vw,132px);--o:0.5;left:52.5vw;top:76.5vh;--dx:3.7vw;--dy:-4.2vh;--r0:25.5deg;--r1:9.4deg;--t:16.3s;--dl:-4.7s"><svg viewBox="-40 -40 80 80"><use href="#sprig"/></svg></div>
+  <div class="drift" style="--s:clamp(80px,11.4vw,131px);--o:0.4;left:65.4vw;top:34.3vh;--dx:0.5vw;--dy:5.4vh;--r0:-1.2deg;--r1:8.3deg;--t:19.2s;--dl:-12.4s"><svg viewBox="-40 -40 80 80"><use href="#spray"/></svg></div>
+  <div class="drift" style="--s:clamp(80px,9.2vw,160px);--o:0.4;left:81.1vw;top:69.4vh;--dx:-0.9vw;--dy:-1.2vh;--r0:14.1deg;--r1:-5.7deg;--t:20.3s;--dl:-1.2s"><svg viewBox="-40 -40 80 80"><use href="#lineArt"/></svg></div>
+  <div class="drift" style="--s:clamp(80px,9.8vw,127px);--o:0.5;left:87.9vw;top:4vh;--dx:-2.8vw;--dy:-4.8vh;--r0:-34.6deg;--r1:-41.4deg;--t:14.3s;--dl:-17.5s"><svg viewBox="-40 -40 80 80"><use href="#spray"/></svg></div>
+  <div class="spark star" style="--s:10.9px;left:14.9vw;top:25.2vh;--t:3.7s;--dl:-2.2s"></div>
+  <div class="spark" style="--s:7px;left:84.9vw;top:99.3vh;--t:4.1s;--dl:-2.9s"></div>
+  <div class="spark" style="--s:6.7px;left:10.2vw;top:34.3vh;--t:3.4s;--dl:-5s"></div>
+  <div class="spark star" style="--s:7.3px;left:2.3vw;top:95.1vh;--t:4.3s;--dl:-0.9s"></div>
+  <div class="spark" style="--s:10.3px;left:2.7vw;top:52.8vh;--t:5.9s;--dl:-5.2s"></div>
+  <div class="spark" style="--s:11.6px;left:26.1vw;top:36.7vh;--t:3.1s;--dl:-4.6s"></div>
+  <div class="spark star" style="--s:10.3px;left:77.9vw;top:33vh;--t:3.3s;--dl:-4.9s"></div>
+  <div class="spark" style="--s:13.9px;left:85.3vw;top:80.6vh;--t:5.4s;--dl:-4.4s"></div>
+  <div class="spark" style="--s:7.8px;left:51.8vw;top:35.6vh;--t:2.6s;--dl:-0.2s"></div>
+  <div class="spark star" style="--s:8.2px;left:25.9vw;top:69.3vh;--t:5.8s;--dl:-2.7s"></div>
+  <div class="spark" style="--s:13.5px;left:98.8vw;top:95.5vh;--t:3.8s;--dl:-1.3s"></div>
+  <div class="spark" style="--s:7.8px;left:19.7vw;top:20.4vh;--t:4.7s;--dl:-5.4s"></div>
+  <div class="spark star" style="--s:12.7px;left:47.9vw;top:65.3vh;--t:5.3s;--dl:-0.5s"></div>
+  <div class="spark" style="--s:11.3px;left:91vw;top:78.2vh;--t:5.1s;--dl:-2.9s"></div>
+  <div class="spark" style="--s:7.4px;left:78.9vw;top:33.3vh;--t:5.3s;--dl:-5.8s"></div>
+  <div class="spark star" style="--s:9.2px;left:40.1vw;top:94.7vh;--t:5s;--dl:-1s"></div>
+  <div class="spark" style="--s:7px;left:15.1vw;top:90.5vh;--t:5.3s;--dl:-0.9s"></div>
+  <div class="spark" style="--s:12.6px;left:98vw;top:65.7vh;--t:3.7s;--dl:-3.3s"></div>
+  <div class="spark star" style="--s:7px;left:1.4vw;top:97.1vh;--t:4.8s;--dl:-3.2s"></div>
+  <div class="spark" style="--s:13.5px;left:43.4vw;top:87.2vh;--t:5.4s;--dl:-1.3s"></div>
+  <div class="spark" style="--s:8px;left:29.3vw;top:24.1vh;--t:4.6s;--dl:-1.6s"></div>
+  <div class="spark star" style="--s:9.4px;left:13.1vw;top:91vh;--t:3.7s;--dl:-2.7s"></div>
+  <div class="spark" style="--s:10.7px;left:90.4vw;top:42.1vh;--t:5.7s;--dl:-3s"></div>
+  <div class="spark" style="--s:10.3px;left:52.4vw;top:1.9vh;--t:4s;--dl:-1.1s"></div>
+  <div class="spark star" style="--s:6px;left:79.9vw;top:17.2vh;--t:4.2s;--dl:-4.4s"></div>
+  <div class="spark" style="--s:10.5px;left:32.6vw;top:51.8vh;--t:4.4s;--dl:-4.7s"></div>
+  <div class="spark" style="--s:6.8px;left:56vw;top:24.8vh;--t:3.5s;--dl:-4.6s"></div>
+  <div class="spark star" style="--s:10.1px;left:56.2vw;top:76vh;--t:5.7s;--dl:-2.7s"></div>
+  <div class="spark" style="--s:10.9px;left:50.6vw;top:51.2vh;--t:4.9s;--dl:-2.7s"></div>
+  <div class="spark" style="--s:10.3px;left:47.8vw;top:94.2vh;--t:4.9s;--dl:-5.3s"></div>
+  <div class="petal" style="--s:clamp(47px,6.6vw,98px);--o:0.9;--x0:94.2vw;--x1:88.6vw;--t:22.2s;--t2:7.7s;--dl:-2.9s"><svg viewBox="-40 -40 80 80"><use href="#flP"/></svg></div>
+  <div class="petal" style="--s:clamp(44px,6.8vw,95px);--o:0.9;--x0:24.1vw;--x1:19vw;--t:32.9s;--t2:9s;--dl:-5.7s"><svg viewBox="-40 -40 80 80"><use href="#flW"/></svg></div>
+  <div class="petal" style="--s:clamp(55px,5.9vw,99px);--o:0.7;--x0:88.3vw;--x1:93.9vw;--t:37.8s;--t2:10s;--dl:-6.5s"><svg viewBox="-40 -40 80 80"><use href="#flO"/></svg></div>
+  <div class="petal" style="--s:clamp(29px,3.3vw,43px);--o:0.7;--x0:43.2vw;--x1:56.3vw;--t:20.4s;--t2:8.3s;--dl:-17.6s"><svg viewBox="-40 -40 80 80"><use href="#petalP"/></svg></div>
+  <div class="petal" style="--s:clamp(27px,3.6vw,47px);--o:0.6;--x0:1.8vw;--x1:23.3vw;--t:34.2s;--t2:10.8s;--dl:-4.2s"><svg viewBox="-40 -40 80 80"><use href="#leafL2"/></svg></div>
+  <div class="petal" style="--s:clamp(26px,3.8vw,44px);--o:0.6;--x0:26.6vw;--x1:30.1vw;--t:36.4s;--t2:9.9s;--dl:-10.3s"><svg viewBox="-40 -40 80 80"><use href="#petalW"/></svg></div>
+  <div class="petal" style="--s:clamp(55px,6.6vw,94px);--o:0.6;--x0:14.9vw;--x1:6.8vw;--t:32.4s;--t2:7.6s;--dl:-2.9s"><svg viewBox="-40 -40 80 80"><use href="#flP"/></svg></div>
+  <div class="petal" style="--s:clamp(29px,3.8vw,42px);--o:0.9;--x0:93.8vw;--x1:86vw;--t:35.5s;--t2:7.7s;--dl:-13.6s"><svg viewBox="-40 -40 80 80"><use href="#leafE"/></svg></div>
+  <div class="petal" style="--s:clamp(55px,6vw,82px);--o:0.8;--x0:55.3vw;--x1:52.9vw;--t:22s;--t2:6s;--dl:-2s"><svg viewBox="-40 -40 80 80"><use href="#flW"/></svg></div>
+  <div class="petal" style="--s:clamp(27px,3.3vw,49px);--o:0.7;--x0:20.2vw;--x1:26.2vw;--t:23.2s;--t2:7.1s;--dl:-0.7s"><svg viewBox="-40 -40 80 80"><use href="#petalO"/></svg></div>
+  <div class="petal" style="--s:clamp(26px,3.7vw,47px);--o:0.7;--x0:25vw;--x1:30.2vw;--t:36.8s;--t2:5.6s;--dl:-32.8s"><svg viewBox="-40 -40 80 80"><use href="#leafR"/></svg></div>
+  <div class="petal" style="--s:clamp(49px,7.2vw,87px);--o:0.8;--x0:43.2vw;--x1:55.2vw;--t:37.7s;--t2:7.1s;--dl:-33.3s"><svg viewBox="-40 -40 80 80"><use href="#flO"/></svg></div>
+  <div class="petal" style="--s:clamp(51px,6.3vw,86px);--o:0.6;--x0:70.7vw;--x1:64.8vw;--t:21.3s;--t2:9.4s;--dl:-10.2s"><svg viewBox="-40 -40 80 80"><use href="#flP"/></svg></div>
+  <div class="petal" style="--s:clamp(45px,7.2vw,97px);--o:0.8;--x0:16.3vw;--x1:15.3vw;--t:24.4s;--t2:6.8s;--dl:-18.4s"><svg viewBox="-40 -40 80 80"><use href="#flW"/></svg></div>
+  <div class="petal" style="--s:clamp(49px,6vw,99px);--o:0.9;--x0:15.8vw;--x1:23.3vw;--t:24.4s;--t2:10.8s;--dl:-12.4s"><svg viewBox="-40 -40 80 80"><use href="#flO"/></svg></div>
+  <div class="petal" style="--s:clamp(26px,3.4vw,46px);--o:0.8;--x0:35.7vw;--x1:32.1vw;--t:29.1s;--t2:5s;--dl:-10.6s"><svg viewBox="-40 -40 80 80"><use href="#petalP"/></svg></div>
+  <div class="petal" style="--s:clamp(28px,3vw,42px);--o:0.7;--x0:9vw;--x1:6.4vw;--t:30.5s;--t2:8.2s;--dl:-30s"><svg viewBox="-40 -40 80 80"><use href="#leafL2"/></svg></div>
+  <div class="petal" style="--s:clamp(30px,3.9vw,45px);--o:0.7;--x0:65.8vw;--x1:87.3vw;--t:22.7s;--t2:9.3s;--dl:-25.7s"><svg viewBox="-40 -40 80 80"><use href="#petalW"/></svg></div>
+  <div class="petal" style="--s:clamp(54px,7.3vw,92px);--o:0.8;--x0:4.4vw;--x1:20.4vw;--t:22.5s;--t2:8.1s;--dl:-20.2s"><svg viewBox="-40 -40 80 80"><use href="#flP"/></svg></div>
+  <div class="petal" style="--s:clamp(30px,3.8vw,47px);--o:0.9;--x0:83.5vw;--x1:95.3vw;--t:32.5s;--t2:6.4s;--dl:-1.2s"><svg viewBox="-40 -40 80 80"><use href="#leafE"/></svg></div>
+  <div class="petal" style="--s:clamp(48px,5.7vw,96px);--o:0.8;--x0:13.3vw;--x1:23.4vw;--t:31.3s;--t2:9.1s;--dl:-19.6s"><svg viewBox="-40 -40 80 80"><use href="#flW"/></svg></div>
+  <div class="petal" style="--s:clamp(30px,3.7vw,47px);--o:0.8;--x0:0.3vw;--x1:11.4vw;--t:21.2s;--t2:9.4s;--dl:-10.1s"><svg viewBox="-40 -40 80 80"><use href="#petalO"/></svg></div>
+  <div class="petal" style="--s:clamp(27px,3.7vw,44px);--o:0.8;--x0:7.4vw;--x1:28.7vw;--t:28.9s;--t2:7.3s;--dl:-19.2s"><svg viewBox="-40 -40 80 80"><use href="#leafR"/></svg></div>
+  <div class="petal" style="--s:clamp(53px,6.7vw,92px);--o:0.6;--x0:68.4vw;--x1:63.1vw;--t:24.6s;--t2:9.5s;--dl:-12.2s"><svg viewBox="-40 -40 80 80"><use href="#flO"/></svg></div>
+  <div class="petal" style="--s:clamp(44px,5.6vw,85px);--o:0.8;--x0:56.8vw;--x1:68.9vw;--t:32.2s;--t2:6.7s;--dl:-20.7s"><svg viewBox="-40 -40 80 80"><use href="#flP"/></svg></div>
+  <div class="petal" style="--s:clamp(49px,5.7vw,97px);--o:0.7;--x0:46.5vw;--x1:67.8vw;--t:36.9s;--t2:5.1s;--dl:-18.4s"><svg viewBox="-40 -40 80 80"><use href="#flW"/></svg></div>
+  <div class="fly" style="--s:41px;--y:77.9vh;--a:40px;--w:3s;--t:24.5s;--dl:-28.4s"><i><svg viewBox="-30 -30 60 60"><use href="#bfly"/></svg></i></div>
+  <div class="fly" style="--s:32px;--y:52.8vh;--a:29px;--w:3.3s;--t:33.4s;--dl:-4s"><i><svg viewBox="-30 -30 60 60"><use href="#bfly"/></svg></i></div>
+  <div class="fly" style="--s:41px;--y:48.1vh;--a:56px;--w:3.6s;--t:24.8s;--dl:-26.9s"><i><svg viewBox="-30 -30 60 60"><use href="#bfly"/></svg></i></div>
+</div>
 
 <!-- =====================================================================
   ДАННЫЕ МАГАЗИНА — меняются здесь и в блоке CONFIG внизу страницы.
@@ -552,7 +606,7 @@ main, footer { position: relative; z-index: 1; }
     <div class="bg ph"><img src="img/hero.jpg" alt="Букет из 15 розовых хризантем от «Эвкалипта»" fetchpriority="high"></div>
     <div class="wrap">
       <div class="hero-inner">
-        <h1 class="split">Цветы</h1>
+        <h1 class="split" aria-label="Цветы"><span aria-hidden="true" style="--i:0">Ц</span><span aria-hidden="true" style="--i:1">в</span><span aria-hidden="true" style="--i:2">е</span><span aria-hidden="true" style="--i:3">т</span><span aria-hidden="true" style="--i:4">ы</span></h1>
         <div class="hero-kicker">Эвкалипт</div>
         <div class="hero-glass">которые делают вас счастливее</div>
         <p style="margin:0;max-width:520px;font-size:17px;opacity:.95">Авторские букеты только из отборных, всегда свежих цветов. Доставка по Балаково за 1 час.</p>
@@ -571,6 +625,8 @@ main, footer { position: relative; z-index: 1; }
 
   <!-- ====== КАТАЛОГ / ХИТЫ ====== -->
   <section id="catalog" data-bloom="tr bl">
+    <div class="bloom tr" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
+    <div class="bloom bl" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>любимое покупателями</em>Хиты сезона</h2>
@@ -678,6 +734,8 @@ main, footer { position: relative; z-index: 1; }
 
   <!-- ====== АССОРТИМЕНТ ====== -->
   <section id="assortment" data-bloom="tl br">
+    <div class="bloom tl" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
+    <div class="bloom br" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>что у нас есть</em>Ассортимент</h2>
@@ -698,6 +756,8 @@ main, footer { position: relative; z-index: 1; }
 
   <!-- ====== О НАС ====== -->
   <section class="about" id="about" data-bloom="tr bl">
+    <div class="bloom tr" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
+    <div class="bloom bl" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
     <div class="wrap about-grid">
       <div class="about-pics rv">
         <div class="ph p1"><img src="img/work-11.jpg" alt="Букет в шляпной коробке с лентами" loading="lazy"></div>
@@ -721,6 +781,7 @@ main, footer { position: relative; z-index: 1; }
 
   <!-- ====== КАК ЗАКАЗАТЬ ====== -->
   <section id="how" data-bloom="tr">
+    <div class="bloom tr" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>просто и быстро</em>Как заказать</h2>
@@ -737,6 +798,8 @@ main, footer { position: relative; z-index: 1; }
 
   <!-- ====== ДОСТАВКА И ОПЛАТА ====== -->
   <section class="delivery" id="delivery" data-bloom="tl br">
+    <div class="bloom tl" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
+    <div class="bloom br" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>условия</em>Доставка и оплата</h2>
@@ -774,6 +837,7 @@ main, footer { position: relative; z-index: 1; }
 
   <!-- ====== ГАЛЕРЕЯ ====== -->
   <section id="works" data-bloom="bl">
+    <div class="bloom bl" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>из нашей мастерской</em>Наши работы</h2>
@@ -796,6 +860,7 @@ main, footer { position: relative; z-index: 1; }
 
   <!-- ====== FAQ ====== -->
   <section id="faq" data-bloom="br" style="padding-top:0">
+    <div class="bloom br" aria-hidden="true"><svg viewBox="0 0 300 300"><g><g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s"> <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/> <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/> <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/> </g></g> <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s"> <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/> <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/> </g></g> <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s"> <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/> <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/> </g></g> <g class="part" style="--d:.6s"><g fill="#f1d58e"> <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/> </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g> <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g> <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g> <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g> <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g> <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g></g></svg></div>
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>частые вопросы</em>Подробнее</h2>
@@ -1004,56 +1069,8 @@ const CONFIG = {
   render();
 
 
-  /* Буквы заголовка */
-  $$(".split").forEach(el => { const t = el.textContent; el.setAttribute("aria-label", t); el.innerHTML = [...t].map((c, i) => `<span aria-hidden="true" style="--i:${i}">${c}</span>`).join(""); });
-
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  /* Живой фон: акварельные пятна, веточки, искры, цветы, бабочки */
-  if (!calm) {
-    const box = $("#petals"), R = (a, b) => a + Math.random() * (b - a), mob = innerWidth < 700;
-    const add = (cls, css, html = "") => { const d = document.createElement("div"); d.className = cls; d.style.cssText = css; d.innerHTML = html; box.appendChild(d); return d; };
-    const svg = (id, vb = "-40 -40 80 80") => `<svg viewBox="${vb}"><use href="${id}"/></svg>`;
-
-    // 1. Мягкие акварельные пятна
-    ["#f6cfc6", "#cfdcd2", "#f9dcc6", "#e7d9ee", "#d9e6dc", "#fbe3dc"].slice(0, mob ? 3 : 6).forEach((c, i) =>
-      add("blob", `--c:${c};--s:${R(260, 520)}px;--o:${R(.45, .7)};left:${R(-10, 85)}vw;top:${R(-10, 85)}vh;--dx:${R(4, 10)}vw;--dy:${R(4, 10)}vh;--t:${R(18, 30)}s;--dl:${-R(0, 30)}s`));
-
-    // 2. Ботанические веточки и контурные рисунки, медленно покачиваются
-    const drifts = ["#lineArt", "#sprig", "#spray", "#lineArt", "#sprig", "#spray", "#lineArt", "#spray"];
-    drifts.slice(0, mob ? 4 : 8).forEach((id, i) => {
-      const r0 = R(-40, 40);
-      add("drift", `--s:${R(mob ? 70 : 90, mob ? 110 : 160)}px;--o:${id === "#lineArt" ? R(.25, .4) : R(.4, .6)};left:${(i * 13 + R(0, 8)) % 95}vw;top:${R(5, 85)}vh;--dx:${R(-4, 4)}vw;--dy:${R(-6, 6)}vh;--r0:${r0}deg;--r1:${r0 + R(-25, 25)}deg;--t:${R(14, 24)}s;--dl:${-R(0, 20)}s`, svg(id));
-    });
-
-    // 3. Золотые искорки
-    for (let i = 0; i < (mob ? 14 : 30); i++)
-      add("spark" + (i % 3 === 0 ? " star" : ""), `--s:${R(6, 14)}px;left:${R(0, 100)}vw;top:${R(0, 100)}vh;--t:${R(2.5, 6)}s;--dl:${-R(0, 6)}s`);
-
-    // 4. Падающие цветы, лепестки и листья (крупнее)
-    const kinds = ["#flP", "#flW", "#flO", "#petalP", "#leafL2", "#petalW", "#flP", "#leafE", "#flW", "#petalO", "#leafR", "#flO"];
-    for (let i = 0; i < (mob ? 12 : 26); i++) {
-      const k = kinds[i % kinds.length], fl = k.startsWith("#fl"), x0 = R(0, 100);
-      const sz = fl ? R(56, 100) : R(30, 52);
-      add("petal", `--s:${mob ? sz * .75 : sz}px;--o:${R(.6, .92)};--x0:${x0}vw;--x1:${x0 + R(-10, 22)}vw;--t:${R(20, 38)}s;--t2:${R(5, 11)}s;--dl:${-R(0, 40)}s`, svg(k));
-    }
-
-    // 5. Бабочки
-    const W = innerWidth, H = innerHeight;
-    for (let i = 0; i < (mob ? 1 : 3); i++) {
-      const y = R(.15, .8) * H, a = R(.1, .4) * H;
-      const path = `path('M ${-60} ${y} C ${W * .25} ${y - a}, ${W * .45} ${y + a}, ${W * .6} ${y - a * .5} S ${W * .9} ${y + a}, ${W + 80} ${y - a * .3}')`;
-      add("fly", `--s:${R(30, 44)}px;--path:${path};--t:${R(26, 40)}s;--dl:${-R(0, 30)}s`, svg("#bfly", "-30 -30 60 60"));
-    }
-  }
-  /* Цветочные углы секций: прорастают при прокрутке */
-  $$("[data-bloom]").forEach(sec => sec.dataset.bloom.split(" ").forEach(pos => {
-    const b = document.createElement("div"); b.className = "bloom " + pos; b.setAttribute("aria-hidden", "true");
-    b.innerHTML = '<svg viewBox="0 0 300 300"><use href="#cluster"/></svg>';
-    sec.prepend(b);
-  }));
-  /* <use> не наследует классы для анимации — разворачиваем копию кластера */
-  const tpl = $("#cluster");
-  $$(".bloom svg").forEach(svg => { svg.innerHTML = ""; svg.appendChild(tpl.cloneNode(true)).removeAttribute("id"); });
+  /* Цветочные углы секций: прорастают при прокрутке (без JS — сразу при загрузке) */
   if ("IntersectionObserver" in window) {
     const bo = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("on", e.isIntersecting)), { threshold: .25 });
     $$(".bloom").forEach(b => bo.observe(b));
