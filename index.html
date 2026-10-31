@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Эвкалипт — цветы в Балаково</title>
-<meta name="description" content="Цветочная мастерская «Эвкалипт» в Балаково: авторские букеты, монобукеты, цветы в коробках, сухоцветы, комнатные растения и подарки. Доставка по городу. ул. Ленина, 58г.">
+<title>Эвкалипт — цветочная лавка, Балаково</title>
+<meta name="description" content="Цветочная лавка «Эвкалипт» в Балаково: авторские букеты из отборных свежих цветов, монобукеты, цветы в коробках и корзинах. Доставка за 1 час. ул. Ленина, 56/1.">
 <meta property="og:title" content="Эвкалипт — цветы в Балаково">
-<meta property="og:description" content="Авторские букеты и доставка цветов по Балаково. Заказ по телефону +7 (937) 143-25-54.">
+<meta property="og:description" content="Авторские букеты и доставка цветов по Балаково. Заказ по телефону +7 (927) 119-04-21.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f6f4f0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 58C32 36 22 22 8 14c18 0 30 12 24 44zm0 0c0-22 10-36 24-44-18 0-30 12-24 44z' fill='%236f8f7a'/%3E%3C/svg%3E">
@@ -63,11 +63,13 @@ img.broken { opacity: 0; }
 .btn-outline:hover { border-color: var(--ink); color: var(--ink); }
 
 /* ====== Шапка ====== */
-.top { position: fixed; inset: 0 0 auto; z-index: 50; transition: .3s; }
+.top { position: fixed; inset: 0 0 auto; z-index: 50; transition: .3s; background: rgba(246,244,240,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .top.scrolled { background: rgba(246,244,240,.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
 .top .wrap { display: flex; align-items: center; gap: 24px; height: 72px; }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 .logo svg { width: 30px; height: 30px; flex: none; }
+.logo-img { height: 52px; width: auto; }
+footer .logo-img { height: 46px; background: #f6f4f0; border-radius: 10px; padding: 4px 10px; box-sizing: content-box; }
 .logo b { font: 400 30px/1 var(--f-hand); color: var(--euca); }
 .logo small { display: block; font: 500 10px/1 var(--f-body); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-top: 3px; }
 .nav { display: flex; gap: 30px; margin: 0 auto; }
@@ -84,11 +86,11 @@ img.broken { opacity: 0; }
 .burger { display: none; }
 
 /* ====== Hero ====== */
-.hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; padding: 120px 0 72px; color: #fff; isolation: isolate; overflow: hidden; }
+.hero { position: relative; min-height: 100svh; margin-top: 72px; min-height: calc(100svh - 72px); display: flex; align-items: flex-end; padding: 120px 0 72px; color: #fff; isolation: isolate; overflow: hidden; }
 .hero .bg { position: absolute; inset: 0; z-index: -2; }
-.hero .bg img { transform: scale(1.06); animation: heroZoom 18s ease-out forwards; }
+.hero .bg img { object-position: 50% 68%; transform: scale(1.06); animation: heroZoom 18s ease-out forwards; }
 @keyframes heroZoom { to { transform: scale(1); } }
-.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(40,46,46,.25) 0%, rgba(40,46,46,.05) 35%, rgba(40,46,46,.55) 100%); }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(40,46,46,.62) 0%, rgba(40,46,46,.25) 55%, rgba(40,46,46,.05) 100%), linear-gradient(180deg, rgba(40,46,46,0) 50%, rgba(40,46,46,.45) 100%); }
 .hero > .wrap { width: 100%; }
 .hero-inner { display: grid; gap: 22px; max-width: 760px; }
 .hero-kicker { font: 400 clamp(30px, 4vw, 44px)/1 var(--f-hand); color: var(--lemon); }
@@ -122,8 +124,8 @@ section { padding: 96px 0; }
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
 .card { text-align: center; display: flex; flex-direction: column; }
 .card[hidden] { display: none; }
-.card .ph { position: relative; aspect-ratio: 4/4.4; border-radius: var(--radius); overflow: hidden; }
-.card .ph img { transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.card .ph { position: relative; aspect-ratio: 4/5.2; border-radius: var(--radius); overflow: hidden; }
+.card .ph img { object-position: 50% 40%; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
 .card:hover .ph img { transform: scale(1.05); }
 .fav { position: absolute; top: 12px; right: 12px; width: 42px; height: 42px; border-radius: 50%; border: 0; background: rgba(255,255,255,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: grid; place-items: center; color: #fff; transition: .2s; }
 .fav svg { width: 22px; height: 22px; fill: rgba(255,255,255,.9); stroke: none; transition: .2s; }
@@ -138,6 +140,10 @@ section { padding: 96px 0; }
 .bands { padding: 0; }
 .band { position: relative; height: clamp(200px, 26vw, 300px); display: grid; place-items: center; overflow: hidden; color: #fff; isolation: isolate; }
 .band .ph { position: absolute; inset: 0; z-index: -2; }
+.band .strip { position: absolute; inset: 0; z-index: -2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.band .strip img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s ease; }
+.band:hover .strip img { transform: scale(1.06); }
+.band-light::after { background: rgba(60,66,66,.45); }
 .band .ph img { transition: transform 1.2s ease; }
 .band::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(60,66,66,.28); transition: .5s; }
 .band:hover::after { background: rgba(60,66,66,.5); }
@@ -188,10 +194,8 @@ section { padding: 96px 0; }
 .note { margin-top: 22px; font-size: 14px; color: var(--ink-2); }
 
 /* ====== Галерея ====== */
-.gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 220px; gap: 12px; }
-.gallery .ph { border-radius: 14px; overflow: hidden; }
-.gallery .ph:nth-child(1) { grid-row: span 2; grid-column: span 2; }
-.gallery .ph:nth-child(4) { grid-row: span 2; }
+.gallery { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.gallery .ph { border-radius: 14px; overflow: hidden; aspect-ratio: 9/14; }
 .gallery .ph img { transition: transform .8s; }
 .gallery .ph:hover img { transform: scale(1.05); }
 
@@ -279,8 +283,9 @@ footer a:hover { color: #fff; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
   .about-grid, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: 44px; }
   .deliv-grid { grid-template-columns: minmax(0, 1fr); }
-  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 170px; }
-  .gallery .ph:nth-child(4) { grid-row: span 1; }
+  .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .band .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .band .strip img:nth-child(n+3) { display: none; }
   .hero-facts { display: none; }
   section { padding: 72px 0; }
 }
@@ -292,7 +297,8 @@ footer a:hover { color: #fff; }
   .card .acts .btn { flex: 1; }
   .hero { padding-bottom: 64px; }
   .hero-cta .btn { flex: 1 1 100%; }
-  .logo small { display: none; }
+  .logo-img { height: 44px; }
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .map-frame { min-height: 340px; }
 }
 </style>
@@ -307,9 +313,8 @@ footer a:hover { color: #fff; }
 
 <header class="top" id="top">
   <div class="wrap">
-    <a class="logo" href="#home" aria-label="Эвкалипт — на главную">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60C32 38 23 22 8 13c19 1 30 14 24 47z" fill="#6f8f7a"/><path d="M32 60c0-22 9-38 24-47-19 1-30 14-24 47z" fill="#9db5a4"/><path d="M32 60V20" stroke="#4f5858" stroke-width="2"/></svg>
-      <span><b>Эвкалипт</b><small>цветы · Балаково</small></span>
+    <a class="logo" href="#home" aria-label="Эвкалипт — цветочная лавка, на главную">
+      <img class="logo-img" src="img/logo.png" alt="Эвкалипт — цветочная лавка" width="520" height="246">
     </a>
     <nav class="nav" id="nav" aria-label="Основное меню">
       <a href="#catalog">Каталог</a>
@@ -318,7 +323,7 @@ footer a:hover { color: #fff; }
       <a href="#contacts">Контакты</a>
     </nav>
     <div class="top-actions">
-      <a class="top-phone" data-phone-link href="tel:+79371432554" data-phone-text>+7 (937) 143-25-54</a>
+      <a class="top-phone" data-phone-link href="tel:+79271190421" data-phone-text>+7 (927) 119-04-21</a>
       <button class="icon-btn" id="favOpen" aria-label="Избранное">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg>
         <span class="badge" id="favCount">0</span>
@@ -336,29 +341,30 @@ footer a:hover { color: #fff; }
 <main>
   <!-- ====== HERO ====== -->
   <section class="hero" id="home">
-    <div class="bg ph"><img src="img/hero.jpg" data-fb="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=2000&q=80" alt="Букет из пионовидных роз и эвкалипта" fetchpriority="high"></div>
+    <div class="bg ph"><img src="img/hero.jpg" alt="Букет из 15 розовых хризантем от «Эвкалипта»" fetchpriority="high"></div>
     <div class="wrap">
       <div class="hero-inner">
         <div class="hero-kicker">Эвкалипт</div>
         <h1>Цветы</h1>
         <div class="hero-glass">которые делают вас счастливее</div>
+        <p style="margin:0;max-width:520px;font-size:17px;opacity:.95">Авторские букеты только из отборных, всегда свежих цветов. Доставка по Балаково за 1 час.</p>
         <div class="hero-cta">
           <a class="btn btn-light" href="#catalog">Перейти в каталог</a>
-          <a class="btn btn-ghost" data-phone-link href="tel:+79371432554">Позвонить и заказать</a>
+          <a class="btn btn-ghost" data-phone-link href="tel:+79271190421">Позвонить и заказать</a>
         </div>
       </div>
     </div>
     <div class="hero-facts" aria-hidden="true">
-      <div><span>каждый день</span>свежие поставки</div>
-      <div><span>по городу</span>доставка букетов</div>
+      <div><span>за 1 час</span>доставка по городу</div>
+      <div><span>фото букета</span>перед доставкой</div>
     </div>
     <div class="scroll-hint" aria-hidden="true"></div>
   </section>
 
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>Для цветов не нужен повод</span><span>Свежие цветы каждый день</span><span>Букеты с душой и характером</span><span>Доставка по Балаково</span><span>Соберём букет по вашему референсу</span>
-      <span>Для цветов не нужен повод</span><span>Свежие цветы каждый день</span><span>Букеты с душой и характером</span><span>Доставка по Балаково</span><span>Соберём букет по вашему референсу</span>
+      <span>Ваши моменты счастья — наша главная забота</span><span>Самые нежные цветы с доставкой за 1 час</span><span>Цветочные истории для важных моментов</span><span>Только отборные, всегда свежие цветы</span><span>Фото букета перед доставкой</span>
+      <span>Ваши моменты счастья — наша главная забота</span><span>Самые нежные цветы с доставкой за 1 час</span><span>Цветочные истории для важных моментов</span><span>Только отборные, всегда свежие цветы</span><span>Фото букета перед доставкой</span>
     </div>
   </div>
 
@@ -375,13 +381,12 @@ footer a:hover { color: #fff; }
         <button class="chip" data-filter="bouquet">Букеты</button>
         <button class="chip" data-filter="box">В коробке и корзине</button>
         <button class="chip" data-filter="mono">Монобукеты</button>
-        <button class="chip" data-filter="gift">Подарки и растения</button>
-      </div>
+              </div>
 
       <div class="grid" id="grid">
         <article class="card rv" data-cat="bouquet">
           <div class="ph"><span class="tag">Хит</span><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-1.jpg" data-fb="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=900&q=80" alt="Сборный букет" loading="lazy"></div>
+            <img src="img/hit-1.jpg" alt="Сборный букет в розовой упаковке" loading="lazy"></div>
           <h3>Букет сборный</h3>
           <p>Соберём букет по вашим референсам или на вкус флориста</p>
           <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Букет сборный">Заказать</button></div>
@@ -389,7 +394,7 @@ footer a:hover { color: #fff; }
 
         <article class="card rv" data-cat="bouquet">
           <div class="ph"><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-2.jpg" data-fb="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=900&q=80" alt="Авторский букет" loading="lazy"></div>
+            <img src="img/hit-2.jpg" alt="Авторский букет с пионовидными розами" loading="lazy"></div>
           <h3>Дизайнерский</h3>
           <p>Авторская работа флориста — необычные сочетания и фактуры</p>
           <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Дизайнерский букет">Заказать</button></div>
@@ -397,47 +402,47 @@ footer a:hover { color: #fff; }
 
         <article class="card rv" data-cat="mono">
           <div class="ph"><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-3.jpg" data-fb="https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=900&q=80" alt="Монобукет из роз" loading="lazy"></div>
+            <img src="img/hit-3.jpg" alt="Красные розы с топпером «С днём рождения»" loading="lazy"></div>
           <h3>Монобукет из роз</h3>
-          <p>Классика, которая всегда к месту: от 7 до 101 розы</p>
+          <p>Классика, которая всегда к месту. Добавим топпер с надписью</p>
           <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Монобукет из роз">Заказать</button></div>
         </article>
 
         <article class="card rv" data-cat="box">
           <div class="ph"><span class="tag">Удобно дарить</span><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-4.jpg" data-fb="https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=900&q=80" alt="Цветы в шляпной коробке" loading="lazy"></div>
+            <img src="img/hit-4.jpg" alt="Яркая композиция в коробке" loading="lazy"></div>
           <h3>Цветы в коробке</h3>
-          <p>Композиция во флористической губке — не нужна ваза</p>
+          <p>Яркая композиция в коробке — не нужна ваза</p>
           <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Цветы в коробке">Заказать</button></div>
         </article>
 
         <article class="card rv" data-cat="mono">
           <div class="ph"><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-5.jpg" data-fb="https://images.unsplash.com/photo-1520763185298-1b434c919102?w=900&q=80" alt="Букет тюльпанов" loading="lazy"></div>
+            <img src="img/hit-5.jpg" alt="Букет гладиолусов" loading="lazy"></div>
           <h3>Сезонный монобукет</h3>
-          <p>Тюльпаны, пионы, хризантемы, гортензии — что цветёт сейчас</p>
+          <p>Гладиолусы, хризантемы, тюльпаны — то, что цветёт сейчас</p>
           <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Сезонный монобукет">Заказать</button></div>
-        </article>
-
-        <article class="card rv" data-cat="gift">
-          <div class="ph"><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-6.jpg" data-fb="https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=900&q=80" alt="Комнатные растения в горшках" loading="lazy"></div>
-          <h3>Растения и сухоцветы</h3>
-          <p>Комнатные растения, сухоцветы и мягкие игрушки к букету</p>
-          <div class="acts"><a class="btn btn-sm btn-outline" href="#assortment">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Растения / сухоцветы / подарок">Заказать</button></div>
         </article>
 
         <article class="card rv" data-cat="box">
           <div class="ph"><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-7.jpg" data-fb="https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?w=900&q=80" alt="Цветочная корзина" loading="lazy"></div>
+            <img src="img/hit-6.jpg" alt="Белые розы в шляпной коробке" loading="lazy"></div>
+          <h3>Розы в шляпной коробке</h3>
+          <p>Белые розы с эвкалиптом — элегантно и долго стоят</p>
+          <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Розы в шляпной коробке">Заказать</button></div>
+        </article>
+
+        <article class="card rv" data-cat="box">
+          <div class="ph"><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
+            <img src="img/hit-7.jpg" alt="Большая цветочная корзина" loading="lazy"></div>
           <h3>Цветочная корзина</h3>
-          <p>Пышная композиция на юбилей, годовщину или для коллег</p>
+          <p>Пышная композиция с лентами на юбилей, годовщину или для коллег</p>
           <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Цветочная корзина">Заказать</button></div>
         </article>
 
         <article class="card rv" data-cat="bouquet">
           <div class="ph"><span class="tag">К празднику</span><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-8.jpg" data-fb="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=900&q=80" alt="Нежный букет к празднику" loading="lazy"></div>
+            <img src="img/hit-8.jpg" alt="Две корзины с цветами" loading="lazy"></div>
           <h3>На праздник</h3>
           <p>8 Марта, день рождения, 1 сентября, выпускной — идеально к поводу</p>
           <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Букет на праздник">Заказать</button></div>
@@ -445,10 +450,10 @@ footer a:hover { color: #fff; }
 
         <article class="card rv" data-cat="bouquet">
           <div class="ph"><button class="fav" aria-label="В избранное"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20z"/></svg></button>
-            <img src="img/hit-9.jpg" data-fb="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=900&q=80" alt="Белый свадебный букет" loading="lazy"></div>
-          <h3>Букет невесты</h3>
-          <p>Свадебная флористика: букет, бутоньерка, оформление</p>
-          <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Букет невесты / свадебная флористика">Заказать</button></div>
+            <img src="img/hit-9.jpg" alt="Букет из белых орхидей" loading="lazy"></div>
+          <h3>Нежность</h3>
+          <p>Белые орхидеи и розы — для невесты или самого близкого человека</p>
+          <div class="acts"><a class="btn btn-sm btn-outline" href="#faq">Подробнее</a><button class="btn btn-sm btn-dark" data-order="Букет «Нежность»">Заказать</button></div>
         </article>
       </div>
     </div>
@@ -457,16 +462,16 @@ footer a:hover { color: #fff; }
   <!-- ====== ЛЕНТЫ ====== -->
   <section class="bands" aria-label="Наши принципы">
     <div class="band" tabindex="0">
-      <div class="ph"><img src="img/band-1.jpg" data-fb="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=2000&q=80" alt="" loading="lazy"></div>
-      <div class="band-txt"><h3>Креатив</h3><p>Не повторяем шаблоны: каждый букет — новая история, собранная под человека и повод.</p></div>
+      <div class="strip"><img src="img/work-08.jpg" alt="" loading="lazy"><img src="img/work-09.jpg" alt="" loading="lazy"><img src="img/work-16.jpg" alt="" loading="lazy"><img src="img/work-07.jpg" alt="" loading="lazy"></div>
+      <div class="band-txt"><h3>Креатив</h3><p>Авторские букеты и оригинальные композиции — от классических роз до дизайнерских решений.</p></div>
+    </div>
+    <div class="band band-light" tabindex="0">
+      <div class="ph"><img src="img/band-cover.jpg" alt="" loading="lazy"></div>
+      <div class="band-txt"><h3>Эстетика</h3><p>Нежные оттенки, живая зелень эвкалипта и внимание к каждой детали.</p></div>
     </div>
     <div class="band" tabindex="0">
-      <div class="ph"><img src="img/band-2.jpg" data-fb="https://images.unsplash.com/photo-1457089328109-e5d9bd499191?w=2000&q=80" alt="" loading="lazy"></div>
-      <div class="band-txt"><h3>Эстетика</h3><p>Благородные оттенки, живая зелень эвкалипта и аккуратная упаковка.</p></div>
-    </div>
-    <div class="band" tabindex="0">
-      <div class="ph"><img src="img/band-3.jpg" data-fb="https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=2000&q=80" alt="" loading="lazy"></div>
-      <div class="band-txt"><h3>Качество</h3><p>Только свежие цветы, правильная обработка и советы по уходу к каждому букету.</p></div>
+      <div class="strip"><img src="img/work-06.jpg" alt="" loading="lazy"><img src="img/work-11.jpg" alt="" loading="lazy"><img src="img/work-17.jpg" alt="" loading="lazy"><img src="img/work-19.jpg" alt="" loading="lazy"></div>
+      <div class="band-txt"><h3>Качество</h3><p>Эксклюзивные букеты из элитных цветов наивысшего качества — с уверенностью в 100% свежести.</p></div>
     </div>
   </section>
 
@@ -475,17 +480,17 @@ footer a:hover { color: #fff; }
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>что у нас есть</em>Ассортимент</h2>
-        <p class="sec-lead">Живые цветы и всё, что делает подарок завершённым — в одном месте.</p>
+        <p class="sec-lead">Широкий ассортимент — от классических роз до дизайнерских композиций.</p>
       </div>
       <div class="assort">
         <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="13" r="6"/><circle cx="12" cy="18" r="5"/><circle cx="28" cy="18" r="5"/><path d="M20 19v17M14 36h12M16 26l4 4 4-4"/></svg><h4>Авторские букеты</h4><p>Сборные букеты из сезонных цветов и зелени — по референсу или на вкус флориста.</p></div>
         <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 6c-4 3-6 7-6 11a6 6 0 0 0 12 0c0-4-2-8-6-11z"/><path d="M20 23v13M20 30c-4 0-7-2-8-5M20 32c4 0 7-2 8-5"/></svg><h4>Монобукеты</h4><p>Розы, кустовые розы, тюльпаны, хризантемы, пионы, гортензии, эустома.</p></div>
         <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="8" y="20" width="24" height="15" rx="2"/><path d="M6 20h28M14 20c0-6 2-10 6-12 4 2 6 6 6 12"/><circle cx="20" cy="14" r="2"/></svg><h4>Коробки и корзины</h4><p>Композиции в шляпных коробках и корзинах — стоят долго и не требуют вазы.</p></div>
-        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 36V14M20 22c-6 0-9-4-10-9 6 0 10 3 10 9zM20 18c5 0 8-3 9-8-5 0-9 3-9 8z"/><path d="M12 36h16"/></svg><h4>Сухоцветы</h4><p>Интерьерные композиции из сухоцветов и стабилизированной зелени.</p></div>
-        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M11 24h18l-2 12H13l-2-12z"/><path d="M20 24V12M20 16c-4-1-7-4-7-8 4 0 7 3 7 8zM20 14c4-1 7-4 7-8-4 0-7 3-7 8z"/></svg><h4>Комнатные растения</h4><p>Растения в горшках для дома и офиса, поможем с выбором и уходом.</p></div>
-        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="22" r="10"/><circle cx="12" cy="12" r="4"/><circle cx="28" cy="12" r="4"/><circle cx="16.5" cy="20" r="1" fill="currentColor"/><circle cx="23.5" cy="20" r="1" fill="currentColor"/><path d="M17 26c2 2 4 2 6 0"/></svg><h4>Мягкие игрушки</h4><p>Плюшевые мишки и игрушки — приятное дополнение к букету.</p></div>
-        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="8" y="16" width="24" height="18" rx="2"/><path d="M6 12h28v4H6zM20 12v22M20 12c-3-5-9-5-8-1 1 2 5 1 8 1zm0 0c3-5 9-5 8-1-1 2-5 1-8 1z"/></svg><h4>Подарки и открытки</h4><p>Открытки с вашим текстом, воздушные шары, сладости — дополним по запросу.</p></div>
-        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="14" r="7"/><path d="M13 14c-3 6-3 14 7 22 10-8 10-16 7-22"/><path d="M17 13l2 2 4-4"/></svg><h4>Свадьба и оформление</h4><p>Букет невесты, бутоньеры, оформление зала и фотозоны — по договорённости.</p></div>
+        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 6l4 9 10 1-7.5 7 2 10L20 28l-8.5 5 2-10L6 16l10-1z"/></svg><h4>Элитные цветы</h4><p>Эксклюзивные букеты из цветов наивысшего качества: розы, орхидеи, пионовидные розы.</p></div>
+        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 36V18"/><rect x="8" y="6" width="24" height="12" rx="2"/><path d="M13 12h14"/></svg><h4>Топперы и ленты</h4><p>Добавим топпер с надписью «С днём рождения» и красивые ленты к букету.</p></div>
+        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="20" r="14"/><path d="M20 11v9l6 4"/></svg><h4>Доставка за 1 час</h4><p>Бережная доставка по Балаково точно в срок.</p></div>
+        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="6" y="12" width="28" height="20" rx="3"/><circle cx="20" cy="22" r="6"/><path d="M14 12l2-4h8l2 4"/></svg><h4>Фото перед доставкой</h4><p>Отправим фото букета или подарка, чтобы вы были уверены в качестве.</p></div>
+        <div class="assort-item rv"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="10" width="30" height="20" rx="3"/><path d="M5 16h30M10 25h8"/></svg><h4>Любая оплата</h4><p>Оплата любым удобным для вас способом.</p></div>
       </div>
     </div>
   </section>
@@ -494,20 +499,20 @@ footer a:hover { color: #fff; }
   <section class="about" id="about">
     <div class="wrap about-grid">
       <div class="about-pics rv">
-        <div class="ph p1"><img src="img/about-1.jpg" data-fb="https://images.unsplash.com/photo-1487070183336-b863922373d4?w=1200&q=80" alt="Флорист собирает букет" loading="lazy"></div>
-        <div class="ph p2"><img src="img/about-2.jpg" data-fb="https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=900&q=80" alt="Ветки эвкалипта" loading="lazy"></div>
+        <div class="ph p1"><img src="img/work-11.jpg" alt="Букет в шляпной коробке с лентами" loading="lazy"></div>
+        <div class="ph p2"><img src="img/work-14.jpg" alt="Букет из белых орхидей" loading="lazy"></div>
         <div class="hand">с любовью ✿</div>
       </div>
       <div class="about-text rv">
-        <h2 class="sec-title"><em>цветочная мастерская</em>О нас</h2>
-        <p style="margin-top:28px">«Эвкалипт» — цветочный магазин в самом центре Балаково, на улице Ленина. Мы собираем букеты, которые хочется дарить без повода: живые, лёгкие, с той самой ароматной зеленью эвкалипта, в честь которой назван магазин.</p>
-        <p>Работаем со свежими цветами, внимательно подбираем сочетания и упаковку, а к каждому букету даём рекомендации по уходу — чтобы он радовал как можно дольше.</p>
-        <div class="quote">«Для цветов не нужен повод — достаточно желания сделать кого-то счастливее».</div>
-        <p>Хотите что-то особенное? Пришлите фото-референс, назовите бюджет и повод — флорист предложит варианты и соберёт букет к нужному времени.</p>
+        <h2 class="sec-title"><em>цветочная лавка</em>О нас</h2>
+        <p style="margin-top:28px">🌿 «Эвкалипт» — это авторские букеты только из отборных, всегда свежих цветов и великолепные композиции. Цветочная лавка в центре Балаково, на улице Ленина.</p>
+        <p>Здесь вас ждут эксклюзивные букеты из элитных цветов наивысшего качества, оригинальные цветочные композиции и бережная доставка точно в срок. Перед доставкой мы отправим вам фото букета или подарка — для уверенности в качестве.</p>
+        <div class="quote">«Ваши моменты счастья — наша главная забота!»</div>
+        <p>Спасибо, что доверяете нам создавать цветочные истории для самых важных моментов вашей жизни 🌸</p>
         <div class="stats">
-          <div><b>центр</b><span>города, ул. Ленина</span></div>
-          <div><b>фото</b><span>букета перед отправкой</span></div>
-          <div><b>любой</b><span>бюджет и повод</span></div>
+          <div><b>1 час</b><span>доставка по городу</span></div>
+          <div><b>фото</b><span>букета перед доставкой</span></div>
+          <div><b>100%</b><span>свежие цветы</span></div>
         </div>
       </div>
     </div>
@@ -522,7 +527,7 @@ footer a:hover { color: #fff; }
       </div>
       <div class="steps">
         <div class="step rv"><h4>Выберите букет</h4><p>В каталоге, в группе ВК или пришлите свой референс.</p></div>
-        <div class="step rv"><h4>Свяжитесь с нами</h4><p>Позвоните <a data-phone-link data-phone-text href="tel:+79371432554">+7 (937) 143-25-54</a> или напишите в ВК.</p></div>
+        <div class="step rv"><h4>Свяжитесь с нами</h4><p>Позвоните <a data-phone-link data-phone-text href="tel:+79271190421">+7 (927) 119-04-21</a> или напишите в ВК.</p></div>
         <div class="step rv"><h4>Согласуем детали</h4><p>Состав, бюджет, открытка, адрес и время доставки.</p></div>
         <div class="step rv"><h4>Получите букет</h4><p>Заберите в магазине или ждите курьера в назначенное время.</p></div>
       </div>
@@ -539,16 +544,16 @@ footer a:hover { color: #fff; }
         <div class="deliv-card rv">
           <h4>Доставка</h4>
           <ul>
-            <li>Доставляем букеты по Балаково</li>
+            <li>Самые нежные цветы для ваших любимых — за 1 час</li>
+            <li>Бережная доставка по Балаково точно в срок</li>
             <li>Можно заказать к точному времени или сюрпризом</li>
-            <li>Доставим анонимно, если попросите</li>
             <li>Стоимость зависит от района — уточняйте при заказе</li>
           </ul>
         </div>
         <div class="deliv-card rv">
           <h4>Самовывоз</h4>
           <ul>
-            <li>Из магазина: ул. Ленина, 58г</li>
+            <li>Из магазина: ул. Ленина, 56/1</li>
             <li>Соберём букет заранее к вашему приходу</li>
             <li>Можно выбрать цветы на месте вместе с флористом</li>
           </ul>
@@ -556,9 +561,9 @@ footer a:hover { color: #fff; }
         <div class="deliv-card rv">
           <h4>Оплата</h4>
           <ul>
-            <li>Наличными или картой в магазине</li>
-            <li>Переводом при заказе по телефону или в ВК</li>
-            <li>Отправим фото готового букета перед доставкой</li>
+            <li>Любым удобным для вас способом</li>
+            <li>Заказ по телефону или в сообщениях ВК</li>
+            <li>Перед доставкой отправим фото букета или подарка</li>
           </ul>
         </div>
       </div>
@@ -574,13 +579,16 @@ footer a:hover { color: #fff; }
         <a class="btn btn-dark" data-vk-link href="https://vk.com/eucalipt_balakovo" target="_blank" rel="noopener">Больше фото в ВКонтакте</a>
       </div>
       <div class="gallery rv">
-        <div class="ph"><img src="img/work-1.jpg" data-fb="https://images.unsplash.com/photo-1562690868-60bbe7293e94?w=1200&q=80" alt="Работа флориста" loading="lazy"></div>
-        <div class="ph"><img src="img/work-2.jpg" data-fb="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=700&q=80" alt="Работа флориста" loading="lazy"></div>
-        <div class="ph"><img src="img/work-3.jpg" data-fb="https://images.unsplash.com/photo-1567696153798-9111f9cd3d0d?w=700&q=80" alt="Работа флориста" loading="lazy"></div>
-        <div class="ph"><img src="img/work-4.jpg" data-fb="https://images.unsplash.com/photo-1477949331575-2763034b5fb5?w=700&q=80" alt="Работа флориста" loading="lazy"></div>
-        <div class="ph"><img src="img/work-5.jpg" data-fb="https://images.unsplash.com/photo-1533616688419-b7a585564566?w=700&q=80" alt="Работа флориста" loading="lazy"></div>
-        <div class="ph"><img src="img/work-6.jpg" data-fb="https://images.unsplash.com/photo-1444021465936-c6ca81d39b84?w=700&q=80" alt="Работа флориста" loading="lazy"></div>
-        <div class="ph"><img src="img/work-7.jpg" data-fb="https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=700&q=80" alt="Работа флориста" loading="lazy"></div>
+        <div class="ph"><img src="img/work-01.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-02.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-03.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-05.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-10.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-13.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-15.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-17.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-18.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
+        <div class="ph"><img src="img/work-19.jpg" alt="Букет от «Эвкалипта»" loading="lazy"></div>
       </div>
     </div>
   </section>
@@ -594,8 +602,9 @@ footer a:hover { color: #fff; }
       <div class="faq rv">
         <details open><summary>Можно собрать букет по моей картинке?</summary><p>Да. Пришлите фото-референс в сообщения группы ВКонтакте или опишите по телефону. Флорист подберёт похожие цветы из наличия и предложит варианты под ваш бюджет.</p></details>
         <details><summary>Сколько стоит букет?</summary><p>Цена зависит от состава, размера и сезона. Назовите сумму, на которую рассчитываете, — мы соберём лучший букет в её пределах.</p></details>
-        <details><summary>Как быстро можно получить заказ?</summary><p>Букет из наличия соберём в течение короткого времени после звонка. Крупные композиции, свадебные букеты и оформление лучше заказывать заранее.</p></details>
-        <details><summary>Можно ли добавить открытку или подарок?</summary><p>Конечно. Подпишем открытку вашим текстом, добавим мягкую игрушку, сладости или воздушные шары.</p></details>
+        <details><summary>Как быстро можно получить заказ?</summary><p>Доставляем по Балаково за 1 час. Крупные композиции и оформление лучше заказывать заранее.</p></details>
+        <details><summary>Можно ли увидеть букет до доставки?</summary><p>Да. Перед доставкой мы отправим вам фото букета или подарка — для уверенности в качестве.</p></details>
+        <details><summary>Как оплатить заказ?</summary><p>Любым удобным для вас способом — уточните при оформлении заказа.</p></details>
         <details><summary>Как продлить жизнь букету?</summary><p>Подрежьте стебли наискосок острым ножом, поставьте в чистую прохладную воду и меняйте её каждый день. Держите букет вдали от батарей, прямого солнца и фруктов. Для композиций в коробке — подливайте немного воды в губку раз в 1–2 дня.</p></details>
         <details><summary>Вы делаете оформление мероприятий?</summary><p>Да, по предварительной договорённости: свадьбы, юбилеи, фотозоны, корпоративы. Свяжитесь с нами, чтобы обсудить идею и бюджет.</p></details>
       </div>
@@ -612,19 +621,19 @@ footer a:hover { color: #fff; }
         <div class="c-list rv">
           <div class="c-item">
             <small>Телефон для заказа</small>
-            <a class="big" data-phone-link data-phone-text href="tel:+79371432554">+7 (937) 143-25-54</a>
+            <a class="big" data-phone-link data-phone-text href="tel:+79271190421">+7 (927) 119-04-21</a>
           </div>
           <div class="c-item">
             <small>Адрес</small>
-            <p data-address>Саратовская обл., г. Балаково, ул. Ленина, 58г</p>
+            <p data-address>Саратовская обл., г. Балаково, ул. Ленина, 56/1</p>
             <div class="map-btns">
               <a class="map-btn" data-yandex-link href="#" target="_blank" rel="noopener"><i class="ya">Я</i>Яндекс Карты</a>
               <a class="map-btn" data-2gis-link href="#" target="_blank" rel="noopener"><i class="gis">2</i>2ГИС</a>
             </div>
           </div>
           <div class="c-item">
-            <small>Режим работы</small>
-            <p data-hours>Ежедневно, до 20:00</p>
+            <small>Доставка</small>
+            <p data-hours>По Балаково за 1 час</p>
           </div>
           <div class="c-item">
             <small>Мы в соцсетях</small>
@@ -644,16 +653,13 @@ footer a:hover { color: #fff; }
 
 <footer>
   <div class="wrap">
-    <a class="logo" href="#home">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 60C32 38 23 22 8 13c19 1 30 14 24 47z" fill="#9db5a4"/><path d="M32 60c0-22 9-38 24-47-19 1-30 14-24 47z" fill="#c7d6cb"/></svg>
-      <span><b>Эвкалипт</b><small>цветы · Балаково</small></span>
-    </a>
-    <div>ул. Ленина, 58г · <a data-phone-link data-phone-text href="tel:+79371432554">+7 (937) 143-25-54</a> · <a data-vk-link href="https://vk.com/eucalipt_balakovo" target="_blank" rel="noopener">ВКонтакте</a></div>
+    <a class="logo" href="#home"><img class="logo-img" src="img/logo.png" alt="Эвкалипт — цветочная лавка" width="520" height="246" loading="lazy"></a>
+    <div>ул. Ленина, 56/1 · <a data-phone-link data-phone-text href="tel:+79271190421">+7 (927) 119-04-21</a> · <a data-vk-link href="https://vk.com/eucalipt_balakovo" target="_blank" rel="noopener">ВКонтакте</a></div>
     <div>© <span id="year">2026</span> «Эвкалипт»</div>
   </div>
 </footer>
 
-<a class="fab" data-phone-link href="tel:+79371432554" aria-label="Позвонить и заказать букет">
+<a class="fab" data-phone-link href="tel:+79271190421" aria-label="Позвонить и заказать букет">
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
 </a>
 
@@ -664,9 +670,9 @@ footer a:hover { color: #fff; }
     <h3 id="orderTitle">Заказать</h3>
     <div class="what" id="orderWhat">Букет</div>
     <p>Позвоните или напишите нам — флорист уточнит состав, бюджет и время доставки.</p>
-    <a class="tel" data-phone-link data-phone-text href="tel:+79371432554">+7 (937) 143-25-54</a>
+    <a class="tel" data-phone-link data-phone-text href="tel:+79271190421">+7 (927) 119-04-21</a>
     <div class="row">
-      <a class="btn btn-dark" data-phone-link href="tel:+79371432554">Позвонить</a>
+      <a class="btn btn-dark" data-phone-link href="tel:+79271190421">Позвонить</a>
       <a class="btn btn-outline" data-vk-msg href="https://vk.me/eucalipt_balakovo" target="_blank" rel="noopener" id="orderVk">Написать в ВКонтакте</a>
     </div>
   </div>
@@ -679,7 +685,7 @@ footer a:hover { color: #fff; }
     <h3 id="favTitle">Избранное</h3>
     <p id="favEmpty">Пока пусто — отмечайте сердечком понравившиеся букеты.</p>
     <ul class="fav-list" id="favList"></ul>
-    <div class="row"><a class="btn btn-dark" data-phone-link href="tel:+79371432554">Заказать по телефону</a></div>
+    <div class="row"><a class="btn btn-dark" data-phone-link href="tel:+79271190421">Заказать по телефону</a></div>
   </div>
 </div>
 
@@ -688,12 +694,12 @@ footer a:hover { color: #fff; }
    CONFIG — контакты магазина. Поменяйте здесь, и всё обновится на сайте.
 ===================================================================== */
 const CONFIG = {
-  phone: "+79371432554",                 // для ссылок tel:
-  phoneText: "+7 (937) 143-25-54",       // как показывать
+  phone: "+79271190421",                 // для ссылок tel:
+  phoneText: "+7 (927) 119-04-21",       // как показывать
   city: "Балаково",
-  address: "Саратовская обл., г. Балаково, ул. Ленина, 58г",
-  addressShort: "Балаково, улица Ленина, 58г",
-  hours: "Ежедневно, до 20:00",
+  address: "Саратовская обл., г. Балаково, ул. Ленина, 56/1",
+  addressShort: "Балаково, улица Ленина, 56/1",
+  hours: "По Балаково за 1 час",
   vk: "https://vk.com/eucalipt_balakovo",
   vkMessage: "https://vk.me/eucalipt_balakovo",
   // Если найдёте точную карточку магазина — вставьте прямые ссылки сюда:
@@ -708,7 +714,7 @@ const CONFIG = {
 
   /* Контакты и ссылки на карты */
   const ySearch = CONFIG.yandexUrl || "https://yandex.ru/maps/?text=" + q("Эвкалипт, цветы, " + CONFIG.addressShort);
-  const gis = CONFIG.gisUrl || "https://2gis.ru/balakovo/search/" + q("Эвкалипт, Ленина 58г");
+  const gis = CONFIG.gisUrl || "https://2gis.ru/balakovo/search/" + q("Эвкалипт, Ленина 56/1");
   $$("[data-phone-link]").forEach(a => a.href = "tel:" + CONFIG.phone);
   $$("[data-phone-text]").forEach(a => a.textContent = CONFIG.phoneText);
   $$("[data-address]").forEach(a => a.textContent = CONFIG.address);
