@@ -93,8 +93,14 @@ footer .logo-img { height: 46px; background: #f6f4f0; border-radius: 10px; paddi
 .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(40,46,46,.62) 0%, rgba(40,46,46,.25) 55%, rgba(40,46,46,.05) 100%), linear-gradient(180deg, rgba(40,46,46,0) 50%, rgba(40,46,46,.45) 100%); }
 .hero > .wrap { width: 100%; }
 .hero-inner { display: grid; gap: 22px; max-width: 760px; }
-.hero-kicker { font: 400 clamp(30px, 4vw, 44px)/1 var(--f-hand); color: var(--lemon); }
-.hero h1 { margin: 0; font: 400 clamp(52px, 12.5vw, 170px)/.85 var(--f-display); letter-spacing: .02em; text-transform: uppercase; }
+.hero-kicker { font: 400 clamp(34px, 4.6vw, 54px)/1 var(--f-hand); color: var(--lemon); margin: -14px 0 0 clamp(40px, 9vw, 150px); clip-path: inset(0 100% 0 0); animation: write 1.6s .9s cubic-bezier(.6,.1,.3,1) forwards; }
+@keyframes write { to { clip-path: inset(0 -5% 0 0); } }
+.split span { display: inline-block; opacity: 0; transform: translateY(.35em) rotate(4deg); filter: blur(8px); animation: letter .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i) * 90ms + .15s); }
+@keyframes letter { to { opacity: 1; transform: none; filter: none; } }
+.hero-glass, .hero-inner > p, .hero-cta { opacity: 0; animation: up .9s 1.4s ease forwards; }
+.hero-inner > p { animation-delay: 1.55s; } .hero-cta { animation-delay: 1.7s; }
+@keyframes up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.hero h1 { margin: 0; font: 400 clamp(76px, 15vw, 190px)/.85 var(--f-display); letter-spacing: .02em; text-transform: uppercase; }
 .hero-glass { display: inline-block; padding: 16px 26px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 14px; font-size: clamp(15px, 1.6vw, 19px); letter-spacing: .06em; text-transform: uppercase; width: fit-content; max-width: 100%; }
 .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
 .hero-facts { position: absolute; right: max(16px, calc((100vw - 1200px) / 2 + 16px)); bottom: 72px; display: grid; gap: 10px; text-align: right; font-size: 14px; }
@@ -103,11 +109,6 @@ footer .logo-img { height: 46px; background: #f6f4f0; border-radius: 10px; paddi
 .scroll-hint::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: #fff; animation: hint 1.8s infinite; }
 @keyframes hint { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(10px); } }
 
-/* ====== Бегущая строка ====== */
-.marquee { background: var(--euca); color: #fff; overflow: hidden; padding: 14px 0; }
-.marquee-track { display: flex; gap: 48px; width: max-content; animation: run 38s linear infinite; font: 400 22px/1 var(--f-serif); font-style: italic; }
-.marquee-track span::before { content: "✿"; margin-right: 48px; font-style: normal; opacity: .7; }
-@keyframes run { to { transform: translateX(-50%); } }
 
 /* ====== Секции ====== */
 section { padding: 96px 0; }
@@ -163,12 +164,12 @@ section { padding: 96px 0; }
 .assort-item p { margin: 0; color: var(--ink-3); font-size: 14.5px; line-height: 1.5; }
 
 /* ====== О нас ====== */
-.about { background: var(--paper); }
+.about { background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.75)); }
 .about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 64px; align-items: center; }
 .about-pics { position: relative; aspect-ratio: 1/1.05; }
 .about-pics .ph { position: absolute; border-radius: var(--radius); overflow: hidden; }
 .about-pics .p1 { inset: 0 22% 14% 0; }
-.about-pics .p2 { inset: 46% 0 0 46%; border: 8px solid var(--paper); }
+.about-pics .p2 { inset: 46% 0 0 46%; border: 8px solid #fff; }
 .about-pics .hand { position: absolute; left: -6px; bottom: 2%; font: 400 clamp(34px, 4vw, 48px)/1 var(--f-hand); color: var(--euca); transform: rotate(-6deg); }
 .about-text p { color: var(--ink-2); margin: 0 0 16px; }
 .about-text .quote { font: italic 400 clamp(24px, 2.6vw, 32px)/1.3 var(--f-serif); color: var(--ink); margin: 28px 0; padding-left: 22px; border-left: 2px solid var(--peach); }
@@ -184,7 +185,7 @@ section { padding: 96px 0; }
 .step p { margin: 0; color: var(--ink-3); font-size: 15px; }
 
 /* ====== Доставка ====== */
-.delivery { background: var(--euca-soft); }
+.delivery { background: rgba(223,231,225,.72); }
 .deliv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
 .deliv-card { background: rgba(255,255,255,.7); border-radius: var(--radius); padding: 30px 28px; }
 .deliv-card h4 { margin: 0 0 12px; font: 400 30px/1.05 var(--f-display); text-transform: uppercase; color: var(--slate-dark); }
@@ -267,6 +268,52 @@ footer a:hover { color: #fff; }
   .rv { opacity: 1; transform: none; }
 }
 
+
+/* ====== Живой фон: цветы и лепестки ====== */
+main > section:not(.hero):not(.bands):not(.contacts) { position: relative; isolation: isolate; }
+main > section > .wrap { position: relative; z-index: 2; }
+.petals { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+main, footer { position: relative; z-index: 1; }
+.petal { position: absolute; top: -12vh; left: 0; width: var(--s); height: var(--s); opacity: var(--o); animation: fall var(--t) linear var(--dl) infinite; will-change: transform; }
+.petal svg { width: 100%; height: 100%; animation: spin var(--t2) ease-in-out infinite alternate; }
+@keyframes fall { from { transform: translate3d(var(--x0), 0, 0); } to { transform: translate3d(var(--x1), 125vh, 0); } }
+@keyframes spin { from { transform: rotate(-40deg) scale(.9); } to { transform: rotate(220deg) scale(1.05); } }
+
+.bloom { position: absolute; z-index: 1; width: clamp(170px, 24vw, 360px); aspect-ratio: 1; pointer-events: none; }
+.bloom.tr { top: 0; right: 0; }
+.bloom.tl { top: 0; left: 0; transform: scaleX(-1); }
+.bloom.br { bottom: 0; right: 0; transform: scaleY(-1); }
+.bloom.bl { bottom: 0; left: 0; transform: scale(-1); }
+.bloom svg { width: 100%; height: 100%; overflow: visible; }
+.bloom .part { transform: scale(0) rotate(-25deg); opacity: 0; transform-origin: 300px 0; transition: transform 1.6s cubic-bezier(.2,.8,.2,1), opacity 1s ease; transition-delay: var(--d); }
+.bloom.on .part { transform: none; opacity: 1; }
+.bloom .sway { transform-origin: 300px 0; animation: sway 7s ease-in-out infinite alternate; animation-delay: var(--sd, 0s); }
+@keyframes sway { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+.bloom .bob { transform-box: fill-box; transform-origin: center; animation: bob 5s ease-in-out infinite alternate; animation-delay: var(--sd, 0s); }
+@keyframes bob { from { transform: rotate(-6deg) scale(.97); } to { transform: rotate(6deg) scale(1.03); } }
+
+/* ====== Дополнительные эффекты ====== */
+.card .ph { transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s; }
+.card:hover .ph { transform: translateY(-6px); box-shadow: 0 26px 50px -28px rgba(47,52,52,.55); }
+.card .ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.45) 50%, transparent 65%); transform: translateX(-120%); transition: transform 1s ease; pointer-events: none; }
+.card:hover .ph::after { transform: translateX(120%); }
+.btn-dark, .btn-light { position: relative; overflow: hidden; }
+.btn-dark::after, .btn-light::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent); transform: skewX(-20deg); transition: left .7s ease; }
+.btn-dark:hover::after, .btn-light:hover::after { left: 130%; }
+.sec-title { overflow: hidden; }
+.rv .sec-title em, .sec-head.rv .sec-title em { transition: opacity 1s .1s, transform 1s .1s; }
+.sec-head.rv:not(.in) .sec-title em { opacity: 0; transform: translateX(-24px); }
+.ph.reveal { clip-path: inset(0 0 100% 0 round var(--radius)); transition: clip-path 1.2s cubic-bezier(.7,0,.2,1); }
+.in .ph.reveal, .ph.reveal.in { clip-path: inset(0 0 0 0 round var(--radius)); }
+.gallery .ph { transition: transform .5s, box-shadow .5s; }
+.gallery .ph:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: 0 22px 40px -24px rgba(47,52,52,.5); }
+.assort-item { background: rgba(255,255,255,.82); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.assort-item svg { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.assort-item:hover svg { transform: rotate(-12deg) scale(1.12); }
+.hero .bg { will-change: transform; }
+@media (max-width: 560px) { .bloom { width: 150px; opacity: .85; } }
+@media (prefers-reduced-motion: reduce) { .petals { display: none; } .bloom .part { transform: none; opacity: 1; } .split span, .hero-kicker, .hero-glass, .hero-inner > p, .hero-cta { opacity: 1; clip-path: none; filter: none; transform: none; } }
+
 /* ====== Адаптив ====== */
 @media (max-width: 1080px) {
   .top-phone { display: none; }
@@ -304,6 +351,49 @@ footer a:hover { color: #fff; }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gPink" cx="50%" cy="80%" r="80%"><stop offset="0" stop-color="#e98f8a"/><stop offset=".55" stop-color="#f4bdb5"/><stop offset="1" stop-color="#fbe3dc"/></radialGradient>
+    <radialGradient id="gPeach" cx="50%" cy="80%" r="80%"><stop offset="0" stop-color="#eba57f"/><stop offset=".6" stop-color="#f7cdb2"/><stop offset="1" stop-color="#fde9dc"/></radialGradient>
+    <radialGradient id="gWhite" cx="50%" cy="85%" r="85%"><stop offset="0" stop-color="#e3e2d6"/><stop offset=".5" stop-color="#f7f5ee"/><stop offset="1" stop-color="#ffffff"/></radialGradient>
+    <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a9c0b0"/><stop offset="1" stop-color="#5f8370"/></linearGradient>
+    <linearGradient id="gLeaf2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c3d3c7"/><stop offset="1" stop-color="#7f9e8c"/></linearGradient>
+    <g id="petalP"><path d="M0 0C-9-10-10-26 0-34 10-26 9-10 0 0z" fill="url(#gPink)"/></g>
+    <g id="petalW"><path d="M0 0C-10-9-12-27 0-36 12-27 10-9 0 0z" fill="url(#gWhite)" stroke="#d9d6c8" stroke-width=".6"/></g>
+    <g id="petalO"><path d="M0 0C-9-10-10-26 0-34 10-26 9-10 0 0z" fill="url(#gPeach)"/></g>
+    <g id="flP"><use href="#petalP"/><use href="#petalP" transform="rotate(72)"/><use href="#petalP" transform="rotate(144)"/><use href="#petalP" transform="rotate(216)"/><use href="#petalP" transform="rotate(288)"/><circle r="6" fill="#f3d27a"/><g fill="#b86a3c"><circle cx="-3" cy="-2" r="1.3"/><circle cx="3" cy="-1" r="1.3"/><circle cx="0" cy="3" r="1.3"/></g></g>
+    <g id="flO"><use href="#petalO"/><use href="#petalO" transform="rotate(72)"/><use href="#petalO" transform="rotate(144)"/><use href="#petalO" transform="rotate(216)"/><use href="#petalO" transform="rotate(288)"/><circle r="6" fill="#f0cf6d"/></g>
+    <g id="flW"><use href="#petalW"/><use href="#petalW" transform="rotate(60)"/><use href="#petalW" transform="rotate(120)"/><use href="#petalW" transform="rotate(180)"/><use href="#petalW" transform="rotate(240)"/><use href="#petalW" transform="rotate(300)"/><circle r="7" fill="#e9d48a"/><circle r="3" fill="#6f8f7a"/></g>
+    <g id="leafE"><path d="M0 0c-6-6-6-16 0-22 6 6 6 16 0 22z" fill="url(#gLeaf)" opacity=".9"/></g>
+    <g id="leafR"><ellipse rx="10" ry="8" fill="url(#gLeaf2)" opacity=".9"/></g>
+    <g id="leafL"><path d="M0 0C10-14 30-24 58-26 38-14 18-6 0 0z" fill="url(#gLeaf)" opacity=".85"/></g>
+    <g id="cluster">
+      <g class="part" style="--d:.0s"><g class="sway" style="--sd:-1s">
+        <path d="M300 0C250 40 210 70 150 90" stroke="#7d9a88" stroke-width="2" fill="none"/>
+        <use href="#leafR" x="268" y="26"/><use href="#leafR" x="240" y="44"/><use href="#leafR" x="212" y="60"/><use href="#leafR" x="184" y="74"/><use href="#leafR" x="158" y="86"/>
+        <use href="#leafR" x="280" y="8"/><use href="#leafR" x="226" y="34"/><use href="#leafR" x="198" y="50"/>
+      </g></g>
+      <g class="part" style="--d:.25s"><g class="sway" style="--sd:-3s">
+        <path d="M300 0C290 60 270 110 230 160" stroke="#7d9a88" stroke-width="1.6" fill="none"/>
+        <use href="#leafL" transform="translate(292 40) rotate(120)"/><use href="#leafL" transform="translate(282 80) rotate(105)"/><use href="#leafL" transform="translate(262 122) rotate(115)"/>
+        <use href="#leafL" transform="translate(290 50) rotate(200) scale(.8)"/><use href="#leafL" transform="translate(276 96) rotate(190) scale(.8)"/>
+      </g></g>
+      <g class="part" style="--d:.45s"><g class="sway" style="--sd:-2s">
+        <path d="M300 0C240 10 180 20 120 18" stroke="#7d9a88" stroke-width="1.6" fill="none"/>
+        <use href="#leafE" transform="translate(250 6) rotate(-60)"/><use href="#leafE" transform="translate(250 8) rotate(-130)"/><use href="#leafE" transform="translate(205 14) rotate(-60)"/><use href="#leafE" transform="translate(205 15) rotate(-130)"/><use href="#leafE" transform="translate(160 18) rotate(-60)"/><use href="#leafE" transform="translate(160 18) rotate(-130)"/><use href="#leafE" transform="translate(124 18) rotate(-90)"/>
+      </g></g>
+      <g class="part" style="--d:.6s"><g fill="#f1d58e">
+        <circle cx="200" cy="112" r="4"/><circle cx="190" cy="124" r="3"/><circle cx="214" cy="126" r="3.5"/><circle cx="178" cy="110" r="2.6"/><circle cx="204" cy="140" r="2.6"/><circle cx="96" cy="40" r="3"/><circle cx="108" cy="30" r="3.6"/><circle cx="86" cy="28" r="2.4"/>
+      </g><path d="M300 0C250 60 220 90 200 112M300 0C220 20 140 30 108 30" stroke="#b5a37a" stroke-width=".8" fill="none" opacity=".7"/></g>
+      <g class="part" style="--d:.8s"><g class="bob" style="--sd:-1s"><use href="#flW" transform="translate(262 36) scale(1.25)"/></g></g>
+      <g class="part" style="--d:.95s"><g class="bob" style="--sd:-2.5s"><use href="#flP" transform="translate(212 84) scale(1.05)"/></g></g>
+      <g class="part" style="--d:1.1s"><g class="bob" style="--sd:-4s"><use href="#flO" transform="translate(288 112) scale(.85)"/></g></g>
+      <g class="part" style="--d:1.2s"><g class="bob" style="--sd:-3s"><use href="#flP" transform="translate(160 30) scale(.8)"/></g></g>
+      <g class="part" style="--d:1.3s"><g class="bob" style="--sd:-.5s"><use href="#flW" transform="translate(236 140) scale(.7)"/></g></g>
+    </g>
+  </defs>
+</svg>
+<div class="petals" id="petals" aria-hidden="true"></div>
 
 <!-- =====================================================================
   ДАННЫЕ МАГАЗИНА — меняются здесь и в блоке CONFIG внизу страницы.
@@ -344,8 +434,8 @@ footer a:hover { color: #fff; }
     <div class="bg ph"><img src="img/hero.jpg" alt="Букет из 15 розовых хризантем от «Эвкалипта»" fetchpriority="high"></div>
     <div class="wrap">
       <div class="hero-inner">
-        <div class="hero-kicker">Цветы</div>
-        <h1>Эвкалипт</h1>
+        <h1 class="split">Цветы</h1>
+        <div class="hero-kicker">Эвкалипт</div>
         <div class="hero-glass">которые делают вас счастливее</div>
         <p style="margin:0;max-width:520px;font-size:17px;opacity:.95">Авторские букеты только из отборных, всегда свежих цветов. Доставка по Балаково за 1 час.</p>
         <div class="hero-cta">
@@ -361,15 +451,8 @@ footer a:hover { color: #fff; }
     <div class="scroll-hint" aria-hidden="true"></div>
   </section>
 
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-      <span>Ваши моменты счастья — наша главная забота</span><span>Самые нежные цветы с доставкой за 1 час</span><span>Цветочные истории для важных моментов</span><span>Только отборные, всегда свежие цветы</span><span>Фото букета перед доставкой</span>
-      <span>Ваши моменты счастья — наша главная забота</span><span>Самые нежные цветы с доставкой за 1 час</span><span>Цветочные истории для важных моментов</span><span>Только отборные, всегда свежие цветы</span><span>Фото букета перед доставкой</span>
-    </div>
-  </div>
-
   <!-- ====== КАТАЛОГ / ХИТЫ ====== -->
-  <section id="catalog">
+  <section id="catalog" data-bloom="tr bl">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>любимое покупателями</em>Хиты сезона</h2>
@@ -476,7 +559,7 @@ footer a:hover { color: #fff; }
   </section>
 
   <!-- ====== АССОРТИМЕНТ ====== -->
-  <section id="assortment">
+  <section id="assortment" data-bloom="tl br">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>что у нас есть</em>Ассортимент</h2>
@@ -496,7 +579,7 @@ footer a:hover { color: #fff; }
   </section>
 
   <!-- ====== О НАС ====== -->
-  <section class="about" id="about">
+  <section class="about" id="about" data-bloom="tr bl">
     <div class="wrap about-grid">
       <div class="about-pics rv">
         <div class="ph p1"><img src="img/work-11.jpg" alt="Букет в шляпной коробке с лентами" loading="lazy"></div>
@@ -519,7 +602,7 @@ footer a:hover { color: #fff; }
   </section>
 
   <!-- ====== КАК ЗАКАЗАТЬ ====== -->
-  <section id="how">
+  <section id="how" data-bloom="tr">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>просто и быстро</em>Как заказать</h2>
@@ -535,7 +618,7 @@ footer a:hover { color: #fff; }
   </section>
 
   <!-- ====== ДОСТАВКА И ОПЛАТА ====== -->
-  <section class="delivery" id="delivery">
+  <section class="delivery" id="delivery" data-bloom="tl br">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>условия</em>Доставка и оплата</h2>
@@ -572,7 +655,7 @@ footer a:hover { color: #fff; }
   </section>
 
   <!-- ====== ГАЛЕРЕЯ ====== -->
-  <section id="works">
+  <section id="works" data-bloom="bl">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>из нашей мастерской</em>Наши работы</h2>
@@ -594,7 +677,7 @@ footer a:hover { color: #fff; }
   </section>
 
   <!-- ====== FAQ ====== -->
-  <section id="faq" style="padding-top:0">
+  <section id="faq" data-bloom="br" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head rv">
         <h2 class="sec-title"><em>частые вопросы</em>Подробнее</h2>
@@ -800,6 +883,45 @@ const CONFIG = {
   }));
   $("#favOpen").addEventListener("click", () => openModal($("#favModal")));
   render();
+
+
+  /* Буквы заголовка */
+  $$(".split").forEach(el => { const t = el.textContent; el.setAttribute("aria-label", t); el.innerHTML = [...t].map((c, i) => `<span aria-hidden="true" style="--i:${i}">${c}</span>`).join(""); });
+
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* Плывущие цветы и лепестки на фоне */
+  if (!calm) {
+    const box = $("#petals"), kinds = ["#flP", "#flW", "#flO", "#petalP", "#petalW", "#leafE", "#flP", "#petalO"];
+    const n = innerWidth < 700 ? 10 : 22;
+    for (let i = 0; i < n; i++) {
+      const k = kinds[i % kinds.length], small = k.startsWith("#petal") || k === "#leafE";
+      const d = document.createElement("div"); d.className = "petal";
+      const x0 = Math.random() * 100, drift = (Math.random() * 30 - 10);
+      d.style.cssText = `--s:${(small ? 22 : 38) + Math.random() * (small ? 16 : 30)}px;--o:${.55 + Math.random() * .35};--x0:${x0}vw;--x1:${x0 + drift}vw;--t:${22 + Math.random() * 20}s;--t2:${5 + Math.random() * 6}s;--dl:${-Math.random() * 40}s`;
+      d.innerHTML = `<svg viewBox="-40 -40 80 80"><use href="${k}"/></svg>`;
+      box.appendChild(d);
+    }
+  }
+  /* Цветочные углы секций: прорастают при прокрутке */
+  $$("[data-bloom]").forEach(sec => sec.dataset.bloom.split(" ").forEach(pos => {
+    const b = document.createElement("div"); b.className = "bloom " + pos; b.setAttribute("aria-hidden", "true");
+    b.innerHTML = '<svg viewBox="0 0 300 300"><use href="#cluster"/></svg>';
+    sec.prepend(b);
+  }));
+  /* <use> не наследует классы для анимации — разворачиваем копию кластера */
+  const tpl = $("#cluster");
+  $$(".bloom svg").forEach(svg => { svg.innerHTML = ""; svg.appendChild(tpl.cloneNode(true)).removeAttribute("id"); });
+  if ("IntersectionObserver" in window) {
+    const bo = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("on", e.isIntersecting)), { threshold: .25 });
+    $$(".bloom").forEach(b => bo.observe(b));
+  } else $$(".bloom").forEach(b => b.classList.add("on"));
+
+  /* Параллакс главного фото */
+  const heroBg = $(".hero .bg");
+  if (!calm && heroBg) addEventListener("scroll", () => { const y = scrollY; if (y < innerHeight * 1.2) heroBg.style.transform = `translate3d(0, ${y * .3}px, 0)`; }, { passive: true });
+
+  /* Проявление фото в «О нас» */
+  $$(".about-pics .ph").forEach(p => p.classList.add("reveal"));
 
   /* Появление блоков при прокрутке */
   if ("IntersectionObserver" in window) {
