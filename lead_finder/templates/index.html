@@ -89,6 +89,11 @@ td a { color: var(--accent); }
       </div>
     </div>
     <label class="check"><input type="checkbox" name="allow_no_phone" {% if form.allow_no_phone %}checked{% endif %}> Показывать организации без телефона</label>
+    {% if websearch_ready %}
+    <label class="check"><input type="checkbox" name="check_web" {% if form.check_web or not form %}checked{% endif %}> Проверить сайт через Яндекс Поиск (убирает тех, у кого сайт нашёлся)</label>
+    {% else %}
+    <label class="check"><input type="checkbox" disabled> Проверка через Яндекс Поиск выключена: нужны YANDEX_SEARCH_API_KEY и YANDEX_FOLDER_ID на сервере</label>
+    {% endif %}
     <p class="hint">Ключ не сохраняется. Можно задать его заранее через TWOGIS_API_KEY / YANDEX_MAPS_API_KEY.</p>
     <div class="actions"><button class="btn" type="submit">Найти</button></div>
   </form>
@@ -115,7 +120,7 @@ td a { color: var(--accent); }
   {% if rows is defined %}
   <section class="results">
     <header>
-      <h2>Найдено: {{ rows|length }}{% if stats %} <span class="sub">из {{ stats.fetched }} проверенных</span>{% endif %}</h2>
+      <h2>Найдено: {{ rows|length }}{% if stats %} <span class="sub">из {{ stats.fetched }} проверенных{% if stats.site_found %}, у {{ stats.site_found }} сайт нашёлся в Яндексе{% endif %}</span>{% endif %}</h2>
       {% if rows %}<button type="button" class="btn" id="download-csv" data-filename="{{ csv_filename }}">Скачать CSV</button>{% endif %}
     </header>
     {% for note in (stats.notes if stats else []) %}<p class="note">{{ note }}</p>{% endfor %}

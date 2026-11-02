@@ -12,8 +12,8 @@ import tempfile
 import requests
 from flask import Flask, Response, redirect, render_template, request
 
-from . import egrul, maps
-from .common import csv_text
+from . import egrul, maps, websearch
+from .common import csv_text, translit
 
 COLUMN_LABELS = {
     "source": "Источник", "source_id": "ID", "name": "Название", "category": "Категория",
@@ -40,17 +40,9 @@ def require_password():
     return Response("Нужен логин и пароль", 401, {"WWW-Authenticate": 'Basic realm="lead_finder", charset="UTF-8"'})
 
 
-TRANSLIT = dict(zip(
-    "абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
-    ["a", "b", "v", "g", "d", "e", "e", "zh", "z", "i", "y", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "f",
-     "h", "ts", "ch", "sh", "sch", "", "y", "", "e", "yu", "ya"],
-))
-
-
 def safe_filename(*parts):
     # браузеры заменяют имя файла с кириллицей на «download», поэтому переводим в латиницу
-    text = "_".join(parts).lower()
-    text = "".join(TRANSLIT.get(ch, ch) for ch in text)
+    text = translit("_".join(parts))
     text = "".join(ch if ch.isascii() and (ch.isalnum() or ch in "-_") else "_" for ch in text)
     return "_".join(filter(None, text.split("_"))) + ".csv"
 
@@ -69,6 +61,7 @@ def render(**context):
     context.setdefault("form", {})
     context["labels"] = COLUMN_LABELS
     context["env_keys"] = {source: bool(os.environ.get(env)) for source, env in maps.API_KEY_ENV.items()}
+    context["websearch_ready"] = websearch.is_configured()
     return render_template("index.html", **context)
 
 
@@ -114,6 +107,15 @@ def search_maps():
                 " Новый ключ Яндекса начинает работать примерно через 15 минут."
             )
         return render(error=error, **context)
+
+    if form.get("check_web") and websearch.is_configured():
+        try:
+            rows, stats["site_found"], notes = websearch.drop_with_official_site(
+                rows, city, os.environ[websearch.API_KEY_ENV].strip(), os.environ[websearch.FOLDER_ENV].strip()
+            )
+        except RuntimeError as exc:
+            return render(error=f"Ошибка проверки через Яндекс Поиск: {exc}", **context)
+        stats["notes"].extend(notes)
 
     return render_results(rows, maps.FIELDS, safe_filename(source, query, city), stats=stats, **context)
 

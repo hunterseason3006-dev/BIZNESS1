@@ -74,6 +74,44 @@ class WebTest(unittest.TestCase):
             self.assertEqual(resp.headers["Location"], "/")
 
 
+class WebSearchCheckTest(unittest.TestCase):
+    def setUp(self):
+        self.client = web.app.test_client()
+        self.env = mock.patch.dict(web.os.environ, {"YANDEX_SEARCH_API_KEY": "sk", "YANDEX_FOLDER_ID": "f"}, clear=True)
+        self.env.start()
+        self.addCleanup(self.env.stop)
+
+    def post(self, **extra):
+        stats = {"fetched": 2, "with_contacts": 2, "notes": []}
+        with mock.patch.object(web.maps, "find_without_website", return_value=([MAPS_ROW, {**MAPS_ROW, "name": "Другая"}], stats)), \
+                mock.patch.object(web.websearch, "drop_with_official_site", return_value=([MAPS_ROW], 1, [])) as drop:
+            html = self.client.post("/maps", data={
+                "source": "yandex", "query": "q", "city": "Москва", "api_key": "k", **extra,
+            }).get_data(as_text=True)
+        return html, drop
+
+    def test_checkbox_is_on_by_default_when_configured(self):
+        html = self.client.get("/").get_data(as_text=True)
+        self.assertIn('name="check_web" checked', html)
+
+    def test_check_drops_companies_with_found_site(self):
+        html, drop = self.post(check_web="on")
+        drop.assert_called_once()
+        self.assertEqual(drop.call_args.args[1:], ("Москва", "sk", "f"))
+        self.assertIn("Найдено: 1", html)
+        self.assertIn("у 1 сайт нашёлся в Яндексе", html)
+
+    def test_check_is_skipped_when_unchecked(self):
+        html, drop = self.post()
+        drop.assert_not_called()
+        self.assertIn("Найдено: 2", html)
+
+    def test_checkbox_disabled_without_env(self):
+        with mock.patch.dict(web.os.environ, {}, clear=True):
+            html = self.client.get("/").get_data(as_text=True)
+        self.assertIn("Проверка через Яндекс Поиск выключена", html)
+
+
 class PasswordTest(unittest.TestCase):
     def setUp(self):
         self.client = web.app.test_client()
