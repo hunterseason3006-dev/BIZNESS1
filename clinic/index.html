@@ -440,23 +440,7 @@ body.bg-pattern .pattern { opacity: .8; }
 body.bg-pattern .facts::before { opacity: 0; }
 .contact { position: relative; overflow: hidden; }
 
-/* Switcher panel (temporary) */
-.bgsw { position: fixed; left: 20px; bottom: 20px; z-index: 70; background: #fff; box-shadow: 0 20px 50px -20px rgba(20,20,30,.35), 0 0 0 1px var(--line); font-size: 12px; width: 220px; transition: transform .6s var(--ease); }
-.bgsw-head { display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; background: none; padding: 12px 16px; font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
-.bgsw-head i { width: 6px; height: 6px; border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); transform: rotate(-135deg) translate(-2px, -2px); transition: transform .5s var(--ease); }
-.bgsw.min .bgsw-head i { transform: rotate(45deg); }
-.bgsw-body { padding: 0 16px 14px; display: grid; gap: 4px; overflow: hidden; max-height: 200px; transition: max-height .6s var(--ease), padding .6s var(--ease); }
-.bgsw.min .bgsw-body { max-height: 0; padding-bottom: 0; }
-.tg { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 7px 0; cursor: pointer; color: var(--ink-2); }
-.tg input { position: absolute; opacity: 0; pointer-events: none; }
-.tg b { font-weight: 500; }
-.tg span { flex: none; width: 32px; height: 18px; border-radius: 9px; background: var(--gray-2); position: relative; transition: background .5s var(--ease); }
-.tg span::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform .5s var(--ease); }
-.tg input:checked + span { background: var(--red); }
-.tg input:checked + span::after { transform: translateX(14px); }
-.tg input:focus-visible + span { outline: 2px solid var(--red); outline-offset: 2px; }
-.bgsw small { color: var(--muted); font-size: 10px; line-height: 1.4; margin-top: 4px; }
-@media (max-width: 860px) { .bgsw { left: 12px; bottom: 12px; width: 200px; } .blob { --s: 380px; } }
+@media (max-width: 860px) { .blob { --s: 380px; } }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1080px) {
@@ -794,17 +778,6 @@ body.bg-pattern .facts::before { opacity: 0; }
 </aside>
 
 <div class="toast" id="toast" role="status"></div>
-
-<!-- Temporary panel for comparing background options -->
-<div class="bgsw" id="bgsw">
-  <button class="bgsw-head" id="bgswHead" aria-expanded="true">Фон <i aria-hidden="true"></i></button>
-  <div class="bgsw-body">
-    <label class="tg"><b>Тёмная полоса</b><input type="checkbox" data-bg="bg-dark" checked><span></span></label>
-    <label class="tg"><b>Красные пятна</b><input type="checkbox" data-bg="bg-blobs" checked><span></span></label>
-    <label class="tg"><b>Паттерн крестиков</b><input type="checkbox" data-bg="bg-pattern" checked><span></span></label>
-    <small>Временная панель для сравнения — уберём, когда выберем.</small>
-  </div>
-</div>
 
 <script>
 (() => {
@@ -1228,19 +1201,7 @@ body.bg-pattern .facts::before { opacity: 0; }
   burger.addEventListener("click", () => { const o = mnav.classList.toggle("open"); burger.setAttribute("aria-expanded", o); document.body.style.overflow = o ? "hidden" : ""; });
   mnav.addEventListener("click", e => { if (e.target.closest("a")) { mnav.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); document.body.style.overflow = ""; } });
 
-  /* ---------- Background options ---------- */
-  const bgKey = "puls-bg";
-  let bgSaved = null; try { bgSaved = JSON.parse(localStorage.getItem(bgKey)); } catch (e) {}
-  document.querySelectorAll("#bgsw input[data-bg]").forEach(inp => {
-    if (bgSaved && inp.dataset.bg in bgSaved) inp.checked = bgSaved[inp.dataset.bg];
-    document.body.classList.toggle(inp.dataset.bg, inp.checked);
-    inp.addEventListener("change", () => {
-      document.body.classList.toggle(inp.dataset.bg, inp.checked);
-      const v = {}; document.querySelectorAll("#bgsw input[data-bg]").forEach(i => v[i.dataset.bg] = i.checked);
-      try { localStorage.setItem(bgKey, JSON.stringify(v)); } catch (e) {}
-    });
-  });
-  $("#bgswHead").addEventListener("click", () => { const m = $("#bgsw").classList.toggle("min"); $("#bgswHead").setAttribute("aria-expanded", !m); });
+  /* ---------- Background: pattern parallax ---------- */
   const patterns = [...document.querySelectorAll(".pattern")];
   let pTick = false;
   const parallax = () => { pTick = false; patterns.forEach(el => { const r = el.parentNode.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) el.style.setProperty("--py", (r.top * -0.12).toFixed(1) + "px"); }); };
