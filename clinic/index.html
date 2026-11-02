@@ -406,6 +406,58 @@ footer a:hover { color: var(--red); }
 .mnav.open { opacity: 1; visibility: visible; transform: none; transition: opacity .6s var(--ease), transform .6s var(--ease), visibility 0s; }
 .mnav a { font-size: 22px; font-weight: 600; padding: 12px 0; border-bottom: 1px solid var(--line); }
 
+
+/* ================= Background variations (toggle via body classes) ================= */
+/* 1 — dark band */
+.how { position: relative; overflow: hidden; transition: background 1s var(--ease), color 1s var(--ease), padding 1s var(--ease); }
+.how .wrap { position: relative; z-index: 1; }
+.dpill { position: absolute; width: 150px; height: 52px; border-radius: 26px; background: linear-gradient(180deg, #4a4d55 0%, #2b2d33 55%, #1a1b1f 100%); box-shadow: 0 30px 40px -20px rgba(0,0,0,.8); opacity: 0; transition: opacity 1.2s var(--ease); animation: drift var(--t, 18s) ease-in-out infinite; animation-delay: var(--dl, 0s); filter: blur(var(--b, 0px)); }
+.dpill::after { content: ""; position: absolute; top: 8px; left: 18px; right: 18px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.12); }
+body.bg-dark .how { background: #1e2025; color: #fff; padding: 120px 0; }
+body.bg-dark .how .dpill { opacity: 1; }
+body.bg-dark .how .step { border-top-color: rgba(255,255,255,.14); }
+body.bg-dark .how .step p { color: rgba(255,255,255,.62); }
+body.bg-dark .how .step .n { color: #ff4d5e; }
+body.bg-dark .how .step::before { background: #ff4d5e; }
+body.bg-dark .booking { padding-top: 110px; }
+
+/* 2 — soft red blobs */
+.blobs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 1.4s var(--ease); }
+body.bg-blobs .blobs { opacity: 1; }
+.blob { position: absolute; width: var(--s, 560px); height: var(--s, 560px); border-radius: 50%; background: radial-gradient(closest-side, rgba(200,16,46,var(--a, .12)), rgba(200,16,46,0)); animation: blob var(--t, 30s) ease-in-out infinite; animation-delay: var(--dl, 0s); }
+.blob.warm { background: radial-gradient(closest-side, rgba(255,150,140,var(--a, .14)), rgba(255,150,140,0)); }
+@keyframes blob { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(var(--x1, 60px), var(--y1, -40px)) scale(1.08); } 66% { transform: translate(var(--x2, -40px), var(--y2, 50px)) scale(.94); } }
+.hero .wrap, .facts .wrap, .contact .wrap, .counter .wrap { position: relative; z-index: 1; }
+
+/* 3 — medical cross pattern with parallax */
+.pattern { position: absolute; left: 0; right: 0; top: -80px; bottom: -80px; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 1.4s var(--ease);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cpath d='M15 11v8M11 15h8' stroke='%23c3c4c9' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-size: 30px 30px; transform: translate3d(0, var(--py, 0px), 0);
+  -webkit-mask-image: radial-gradient(ellipse var(--mw, 45%) var(--mh, 55%) at var(--mx, 70%) var(--my, 50%), #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse var(--mw, 45%) var(--mh, 55%) at var(--mx, 70%) var(--my, 50%), #000 20%, transparent 75%); }
+body.bg-pattern .pattern { opacity: .8; }
+.facts::before { transition: opacity 1.2s var(--ease); }
+body.bg-pattern .facts::before { opacity: 0; }
+.contact { position: relative; overflow: hidden; }
+
+/* Switcher panel (temporary) */
+.bgsw { position: fixed; left: 20px; bottom: 20px; z-index: 70; background: #fff; box-shadow: 0 20px 50px -20px rgba(20,20,30,.35), 0 0 0 1px var(--line); font-size: 12px; width: 220px; transition: transform .6s var(--ease); }
+.bgsw-head { display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; background: none; padding: 12px 16px; font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.bgsw-head i { width: 6px; height: 6px; border-right: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); transform: rotate(-135deg) translate(-2px, -2px); transition: transform .5s var(--ease); }
+.bgsw.min .bgsw-head i { transform: rotate(45deg); }
+.bgsw-body { padding: 0 16px 14px; display: grid; gap: 4px; overflow: hidden; max-height: 200px; transition: max-height .6s var(--ease), padding .6s var(--ease); }
+.bgsw.min .bgsw-body { max-height: 0; padding-bottom: 0; }
+.tg { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 7px 0; cursor: pointer; color: var(--ink-2); }
+.tg input { position: absolute; opacity: 0; pointer-events: none; }
+.tg b { font-weight: 500; }
+.tg span { flex: none; width: 32px; height: 18px; border-radius: 9px; background: var(--gray-2); position: relative; transition: background .5s var(--ease); }
+.tg span::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform .5s var(--ease); }
+.tg input:checked + span { background: var(--red); }
+.tg input:checked + span::after { transform: translateX(14px); }
+.tg input:focus-visible + span { outline: 2px solid var(--red); outline-offset: 2px; }
+.bgsw small { color: var(--muted); font-size: 10px; line-height: 1.4; margin-top: 4px; }
+@media (max-width: 860px) { .bgsw { left: 12px; bottom: 12px; width: 200px; } .blob { --s: 380px; } }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1080px) {
   .menu { gap: 24px; }
@@ -471,7 +523,7 @@ footer a:hover { color: var(--red); }
 }
 </style>
 </head>
-<body>
+<body class="bg-dark bg-blobs bg-pattern">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-arrow" viewBox="0 0 34 10"><path d="M0 5h32M28 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
@@ -528,6 +580,11 @@ footer a:hover { color: var(--red); }
 <main>
 <!-- HERO -->
 <section class="hero">
+  <div class="blobs" aria-hidden="true">
+    <i class="blob" style="left:-180px;top:-160px;--s:620px;--a:.10;--t:34s"></i>
+    <i class="blob warm" style="right:-140px;top:40px;--s:640px;--a:.16;--t:38s;--dl:-12s;--x1:-70px;--y1:40px;--x2:30px;--y2:-50px"></i>
+    <i class="blob" style="left:30%;bottom:-260px;--s:520px;--a:.07;--t:42s;--dl:-20s"></i>
+  </div>
   <div class="wrap">
     <div>
       <h1 class="reveal">Запись к врачу —<br><span class="red">просто и быстро</span></h1>
@@ -594,6 +651,10 @@ footer a:hover { color: var(--red); }
 
 <!-- HOW -->
 <section class="how">
+  <i class="dpill" style="right:6%;top:18%;--r:-25deg;--t:19s" aria-hidden="true"></i>
+  <i class="dpill" style="right:22%;bottom:-14px;--r:15deg;--t:23s;--dl:-6s;--b:2px" aria-hidden="true"></i>
+  <i class="dpill" style="left:-40px;bottom:16%;--r:40deg;--t:21s;--dl:-11s;--b:3px" aria-hidden="true"></i>
+  <i class="dpill" style="left:38%;top:-20px;--r:-60deg;--t:25s;--dl:-3s;--b:5px" aria-hidden="true"></i>
   <div class="wrap how-grid">
     <h2 class="h2 reveal">Как работает бронь</h2>
     <div class="step reveal" style="--d:0"><div class="n">01</div><h3>Выберите врача</h3><p>Смотрите специализацию, опыт и стоимость приёма — как меню перед визитом.</p></div>
@@ -628,6 +689,8 @@ footer a:hover { color: var(--red); }
 
 <!-- FACTS -->
 <section class="facts" id="facts">
+  <div class="blobs" aria-hidden="true"><i class="blob warm" style="right:8%;top:-120px;--s:560px;--a:.14;--t:36s"></i></div>
+  <div class="pattern" aria-hidden="true" style="--mx:72%;--my:50%"></div>
   <div class="wrap">
     <h2 class="h2 reveal">Клиника<br>в цифрах</h2>
     <div class="fact-stage">
@@ -650,6 +713,7 @@ footer a:hover { color: var(--red); }
 
 <!-- COUNTER -->
 <section class="counter" aria-label="Онлайн-записи">
+  <div class="pattern" aria-hidden="true" style="--mx:50%;--my:50%;--mw:38%;--mh:60%"></div>
   <span class="pill" style="left:12%;top:20%;--r:-20deg;--b:2px;--t:17s"></span>
   <span class="pill" style="left:78%;top:24%;--r:30deg;--b:4px;--t:14s;--dl:-5s"></span>
   <span class="pill" style="left:70%;top:70%;--r:-60deg;--b:1px;--t:19s;--dl:-8s"></span>
@@ -692,6 +756,8 @@ footer a:hover { color: var(--red); }
 
 <!-- CONTACT -->
 <section class="contact" id="contacts">
+  <div class="blobs" aria-hidden="true"><i class="blob" style="left:-200px;bottom:-240px;--s:600px;--a:.08;--t:40s"></i></div>
+  <div class="pattern" aria-hidden="true" style="--mx:18%;--my:30%;--mw:35%;--mh:60%"></div>
   <div class="wrap">
     <div>
       <h2 class="h2 reveal">Остались вопросы?</h2>
@@ -728,6 +794,17 @@ footer a:hover { color: var(--red); }
 </aside>
 
 <div class="toast" id="toast" role="status"></div>
+
+<!-- Temporary panel for comparing background options -->
+<div class="bgsw" id="bgsw">
+  <button class="bgsw-head" id="bgswHead" aria-expanded="true">Фон <i aria-hidden="true"></i></button>
+  <div class="bgsw-body">
+    <label class="tg"><b>Тёмная полоса</b><input type="checkbox" data-bg="bg-dark" checked><span></span></label>
+    <label class="tg"><b>Красные пятна</b><input type="checkbox" data-bg="bg-blobs" checked><span></span></label>
+    <label class="tg"><b>Паттерн крестиков</b><input type="checkbox" data-bg="bg-pattern" checked><span></span></label>
+    <small>Временная панель для сравнения — уберём, когда выберем.</small>
+  </div>
+</div>
 
 <script>
 (() => {
@@ -1150,6 +1227,25 @@ footer a:hover { color: var(--red); }
   const burger = $("#burger"), mnav = $("#mnav");
   burger.addEventListener("click", () => { const o = mnav.classList.toggle("open"); burger.setAttribute("aria-expanded", o); document.body.style.overflow = o ? "hidden" : ""; });
   mnav.addEventListener("click", e => { if (e.target.closest("a")) { mnav.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); document.body.style.overflow = ""; } });
+
+  /* ---------- Background options ---------- */
+  const bgKey = "puls-bg";
+  let bgSaved = null; try { bgSaved = JSON.parse(localStorage.getItem(bgKey)); } catch (e) {}
+  document.querySelectorAll("#bgsw input[data-bg]").forEach(inp => {
+    if (bgSaved && inp.dataset.bg in bgSaved) inp.checked = bgSaved[inp.dataset.bg];
+    document.body.classList.toggle(inp.dataset.bg, inp.checked);
+    inp.addEventListener("change", () => {
+      document.body.classList.toggle(inp.dataset.bg, inp.checked);
+      const v = {}; document.querySelectorAll("#bgsw input[data-bg]").forEach(i => v[i.dataset.bg] = i.checked);
+      try { localStorage.setItem(bgKey, JSON.stringify(v)); } catch (e) {}
+    });
+  });
+  $("#bgswHead").addEventListener("click", () => { const m = $("#bgsw").classList.toggle("min"); $("#bgswHead").setAttribute("aria-expanded", !m); });
+  const patterns = [...document.querySelectorAll(".pattern")];
+  let pTick = false;
+  const parallax = () => { pTick = false; patterns.forEach(el => { const r = el.parentNode.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) el.style.setProperty("--py", (r.top * -0.12).toFixed(1) + "px"); }); };
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) addEventListener("scroll", () => { if (!pTick) { pTick = true; requestAnimationFrame(parallax); } }, { passive: true });
+  parallax();
 
   /* ---------- Init ---------- */
   const hasFree = i => DOCTORS.some(d => { const s = slotsFor(d, DAYS[i]); return s && s.some(x => !x.taken); });
